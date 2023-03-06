@@ -1,0 +1,992 @@
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+  <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+<app-sale-invoice-report *ngIf="printingData" [SaleDetails]="printingData"></app-sale-invoice-report>
+<app-sale-preview-report *ngIf="printingDataPreview" [SaleDetails]="printingDataPreview"></app-sale-preview-report>
+
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<div class="p-col-12 p-m-0 p-p-0 p-shadow-2">
+  <div class="card">
+    <p-toolbar styleClass="p-mb-4">
+      <ng-template pTemplate="left">
+        <span *ngIf="!btnAddDisabled">
+        <button pButton pRipple label="Save" icon="fas fa-plus" class="p-button-raised p-mr-2"
+          (click)="AddSale(false,false)"></button>
+        </span>
+        <span *ngIf="!btnAddDisabled">
+        <button pButton pRipple label="Save And Print" icon="fas fa-print" class="p-button-raised p-mr-2"
+          (click)="AddSale(false,true)"></button>
+        </span>
+        <span *ngIf="!btnAddDisabled">
+        <button pButton pRipple label="Save And Email" icon="fas fa-mail-forward" class="p-button-raised p-mr-2"
+          (click)="SaveAndEmail()"></button>
+        </span>
+        <span *ngIf="!btnAddDisabled">
+        <button pButton pRipple label="Hold" icon="fas fa-sticky-note" class="p-button-raised p-mr-2"
+          (click)="ConfirmHold()"></button>
+        </span>
+        <button pButton pRipple label="Close" icon="fas fa-close" class="p-button-raised p-mr-2"
+          (click)="Close()"></button>
+        <button pButton pRipple label="Review" icon="fas fa-sticky-note" class="p-button-raised p-mr-2"
+          (click)="SaleOrderReview()"></button>
+      </ng-template>
+    </p-toolbar>
+
+    <div class="p-fluid p-formgrid p-grid">
+
+      <div class="p-field p-lg-3 pad-0">
+        <p-fieldset  legend="{{'REPORTS.ORDERBY'| translate}}" [transitionOptions]="'0ms'" toggleable="true">
+          <div class="p-field p-col-12">
+            <label for="firstname1">{{'REPORTS.ORDEREDBY'| translate}}</label>
+
+            <div class="p-grid" style="margin-top: 0px;">
+              <div class="p-col-11 ngSelectWidth">
+                <ng-select [items]="filteredOrderBy" [virtualScroll]="true" bindLabel="label"
+                  [(ngModel)]="selectedOrderBy" [searchFn]="dataFunc" (ngModelChange)="BindOrderByAddress($event)">
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span>{{item.label}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="p-col-1"><i class="pi pi-search search" (click)="OpenOrderByDialog();"></i>
+              </div>
+            </div>
+            <label for="phon">{{ customerName }}</label> <br>
+            <label for="phon">{{ orderByContact }}</label>
+          </div>
+
+          <div class="p-field p-col-10" style="margin-left: -10px;" class="ngSelectWidth">
+            <label for="firstname1">{{'REPORTS.ORDEREDBYADDRESS'| translate}}</label>
+            <p-dropdown placeholder="Select OrderBy Address" [options]="orderByAddressDropdown"
+              [(ngModel)]="selectedOrderByAddress" autoWidth="false" required filter="true">
+              <ng-template let-item pTemplate="selectedItem">
+                <span style="vertical-align: middle; margin-left: 0.5em">{{
+                  item.label
+                  }}</span>
+              </ng-template>
+            </p-dropdown>
+          </div>
+
+          <div class="p-field p-col-12" style="margin-left: -10px;">
+            <label for="firstname1">{{'REPORTS.PREVOIUSINVOICE'| translate}}</label>
+            <i class="pi pi-search search-pi" (click)="OpenCustomerPreviousInvoiceDialog()"></i><br />
+          </div>
+          <div class="p-field p-col-10" style="margin-left: -10px;">
+            <label for="firstname1">{{'REPORTS.CUSTOMERPREVIOUSBALANCE'| translate}}</label><br />
+            <input id="lastname5" type="text" pInputText [(ngModel)]="customerPreviousBalance" [disabled]="true" />
+          </div>
+          <div class="p-col-12" style="padding-bottom: 25px;">
+            <p-radioButton name="type" value="Cash" [(ngModel)]="PaymentType" inputId="type1"
+              (click)="onClickPaymentType()">
+            </p-radioButton>
+            <label for="city1" style="margin-right: 8px; margin-left: 8px; margin-top: 28px">{{'REPORTS.CASH'| translate}}</label>
+            <p-radioButton name="type" value="Credit" [(ngModel)]="PaymentType" inputId="type2"
+              (click)="onClickPaymentType()">
+            </p-radioButton>
+            <label for="city2" style="margin-right: 8px; margin-left: 8px">{{'REPORTS.CREDIT'| translate}}</label>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="p-md-3 p-lg-3 pad-0">
+        <p-fieldset legend="{{'REPORTS.DELIVERTO'| translate}}" [transitionOptions]="'0ms'" toggleable="true">
+          <div class="p-field p-col-12">
+            <label for="firstname1">{{'REPORTS.DELIVERTO'| translate}}</label>
+            
+            <div class="p-grid" style="margin-top: 0px;">
+              <div class="p-col-10 ngSelectWidth">
+                <ng-select [items]="filteredDeliverTo" [virtualScroll]="true" bindLabel="label"
+                  [(ngModel)]="selectedDeliverTo" [searchFn]="dataFunc"
+                  (ngModelChange)="BindDeliveryToDetails($event.value)">
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span>{{item.label}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="p-col-2"><i class="pi pi-search search" (click)="OpenDeliveryToDialog();"></i>
+              </div>
+            </div>
+            <label for="phon">{{ deliverToContact }}</label> <br />
+            <label for="deliverToAddress" class="deliverToAddress">{{
+              deliverToAddress
+              }}</label>
+          </div>
+
+          <div class="p-field p-col-10 ngSelectWidth" style="margin-left: -10px;">
+            <label for="firstname1">{{'REPORTS.DELIVERYADDRES'| translate}}</label>
+            <p-dropdown placeholder="Select Delivery Address" [options]="deliveryAddressDropdown"
+              [(ngModel)]="selectedDeliveryAddress" autoWidth="false" required filter="true">
+              <ng-template let-item pTemplate="selectedItem">
+                <span style="vertical-align: middle; margin-left: 0.5em">{{
+                  item.label
+                  }}</span>
+              </ng-template>
+            </p-dropdown>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="lastname1">{{'REPORTS.DELIVERYMETHOD'| translate}}</label>
+
+            <div class="p-grid" style="margin-top: 0px;">
+              <div class="p-col-10 ngSelectWidth">
+                <ng-select [items]="filteredDeliveryMethod" [virtualScroll]="true" bindLabel="label"
+                  [(ngModel)]="selectedDeliveryMethod" [searchFn]="dataFunc" (ngModelChange)="BindShipmentCost($event)">
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span>{{item.label}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="p-col-2"><i class="pi pi-search search" (click)="OpenDeliveryMethodDialog();"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-field p-col-12" style="padding-bottom: 10px;">
+            <label for="lastname1">{{'REPORTS.PAYMENTCONDITION'| translate}}</label>
+            
+            <div class="p-grid" style="margin-top: 0px;">
+              <div class="p-col-10 ngSelectWidth">
+                <ng-select [items]="filteredPaymentCondition" [virtualScroll]="true" bindLabel="label"
+                  [(ngModel)]="selectedPaymentCondition" [searchFn]="dataFunc" [disabled]="disabledAgainstPaymentType">
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span>{{item.label}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="p-col-2"><i class="pi pi-search search" (click)="OpenPaymentConditionDialog();"></i>
+              </div>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="p-md-2 p-lg-2 p-mt-3 pad-0">
+        <div class="p-grid">
+          <div class="p-col-12">
+            <p-fieldset legend="{{'REPORTS.DATESECTION'| translate}}" [transitionOptions]="'0ms'" toggleable="true">
+              <div class="p-field p-col-12">
+                <label for="firstname1">{{'REPORTS.DELIVERDATE'| translate}}</label>
+                <p-calendar [(ngModel)]="deliverDate" [showIcon]="true" inputId="icon"></p-calendar>
+              </div>
+              <div class="p-field p-col-12">
+                <label for="firstname1">{{'REPORTS.ORDERDATE'| translate}}</label>
+                <p-calendar [(ngModel)]="orderDate" [showIcon]="true" inputId="icon"></p-calendar>
+              </div>
+            </p-fieldset>
+          </div>
+          <div class="p-col-12 p-mt-4">
+            <p-fieldset legend="{{'REPORTS.REMARKS'| translate}}" [transitionOptions]="'0ms'" toggleable="true">
+              <div class="p-col-12">
+                <textarea id="lastname5" type="text" pInputText [(ngModel)]="remarks" cols="30" rows="4"></textarea>
+              </div>
+            </p-fieldset>
+          </div>
+        </div>
+      </div>
+      <div class="p-md-4 p-lg-4 p-mt-2 pad-0">
+        <p-fieldset legend="{{'REPORTS.CARTSUMMARY'| translate}}" [transitionOptions]="'0ms'" toggleable="true">
+          <div class="p-col-12" style="float: left; padding: 2px; padding-bottom: 58px; padding-top: 40px;">
+
+            <table style="width:100%">
+              <tr>
+                <th class="cart">{{'REPORTS.SUBTOTAL'| translate}}</th>
+                <td style="text-align: right; padding-right: 10px;">{{ subTotal | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <th class="cart">{{'REPORTS.TOTALDISCOUNT'| translate}}</th>
+                <td style="text-align: right; padding-right: 10px;">{{ totalDiscount | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <th class="cart">{{'REPORTS.SHIPPINGCOST'| translate}}</th>
+                <td style="text-align: right; padding-right: 10px;"> <input pInputText style="margin-left: 67px; width: 100px" type="number" [(ngModel)]="shipmentCost"
+                    (blur)="CalculateCartTotals()" /></td>
+              </tr>
+              <tr>
+                <th class="cart">{{'REPORTS.GRANDTOTAL'| translate}}</th>
+                <td style="text-align: right; padding-right: 10px;">{{ grandTotal | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <th class="cart">
+                  <button pButton icon="pi pi-list" label="Payment" class="p-button-raised p-mr-2 pay-btn-w p-mt-4"
+                    (click)="OpenAddPaymentPopup()" [disabled]="!disabledAgainstPaymentType"></button>
+                </th>
+                <td style="text-align: right; padding-right: 10px;"></td>
+              </tr>
+              <tr>
+                <th class="cart">{{'REPORTS.PAID'| translate}}</th>
+                <td style="text-align: right; padding-right: 10px;">{{ paidPayment | number:'1.2-2' }}</td>
+              </tr>
+              <tr>
+                <th class="cart">{{'REPORTS.CUSTOMERCURRENTBALANCE'| translate}}</th>
+                <td style="text-align: right; padding-right: 10px;">{{ customerCurrentBalance | number:'1.2-2' }}</td>
+              </tr>
+            </table>
+
+          </div>
+        </p-fieldset>
+      </div>
+    </div>
+
+    <p-table [value]="cartProducts" dataKey="id" editMode="row" [(contextMenuSelection)]="selectedCartRow"
+      [contextMenu]="cm">
+      <ng-template pTemplate="caption" style="margin-top: 20px">
+
+        <div class="p-d-flex p-ai-center p-jc-between">
+          <h5 class="p-m-0">
+            <button pButton label="Add Multiple Product" class="p-button-raised  p-mr-4"
+              (click)="IsOpenMultiProductDialog = true"></button>
+          </h5>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 70px">{{'REPORTS.ACTION'| translate}}</th>
+          <th class="product-width">{{'REPORTS.PRODUCT'| translate}}</th>
+          <th style="width: 150px ; margin-left: 30px">{{'REPORTS.QUANTITY'| translate}}</th>
+          <th style="width: 70px">{{'REPORTS.UNITPRICE'| translate}}</th>
+          <th style="width: 70px">{{'REPORTS.DSICOUNT'| translate}}(%)</th>
+          <th style="width: 70px">{{'REPORTS.DSICOUNT'| translate}}</th>
+          <th style="width: 70px">{{'REPORTS.NETPRICE'| translate}}</th>
+        </tr>
+        <tr [pContextMenuRow]="item" *ngFor="let item of productInfo" [pEditableRow]="item">
+          <td>
+            <button pButton pRipple type="button" (click)="AddProductToList();" icon="pi pi-plus"
+              class="p-button-rounded p-button-success btn-round"></button>
+          </td>
+          <td pEditableColumn>
+            <div class="p-grid">
+              <div class="p-col-10">
+                <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label" [searchFn]="dataFunc"
+                  [(ngModel)]="item.selectedProductCart" (ngModelChange)="BindProductDetails($event, item)" #focus>
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span>{{item.label}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="p-col-2">
+                <span>
+                  <i class="pi pi-search search-pi" style="margin-top: 10px;" (click)="OpenProductDialog(item)"></i>
+                </span>
+              </div>
+            </div>
+            <!-- <button style="margin-left: 2px" pButton pRipple type="button" icon="pi pi-list"
+              *ngIf="item.IsSelectedTrackables" class="p-button-rounded p-button-outlined"
+              title="Show selected Trackables" (click)="OpenSelectedProductTrackables(ri)"></button>
+          </td> -->
+          <td pEditableColumn>
+            <span *ngIf="RemainingStock > 0"><b> {{RemainingStock}}</b> </span>
+            <input pInputText type="number" [(ngModel)]="item.Quantity" 
+              (keyup)="OnChangeText(item)" (change)="onChangeProductQuantity(item)" [disabled]="item.IsQtyDisable" />
+
+            <!-- <button style="margin-left: 2px; margin-right: 2px" pButton pRipple type="button" *ngIf="item.IsLocation"
+              icon="fa fa-map-marker" class="p-button-rounded p-button-outlined"
+              (click)="OpenProductLocations(item)"></button> -->
+            <button style="margin-right: 2px; margin-right: 2px" pButton pRipple type="button"
+              *ngIf="item.IsLastAvgPrice" icon="pi pi-money-bill" class="p-button-rounded p-button-outlined"
+              title="Last Avarage Purchase Price" (click)="OpenLastAvaragePriceDialog(item)"></button>
+            <button pButton pRipple type="button" icon="pi pi-shopping-cart" *ngIf="item.IsAddToWishList"
+              class="p-button-rounded p-button-outlined" title="Add to wishlist"
+              (click)="OpenAddToWishlistPopup(item)"></button>
+          </td>
+
+          <td pEditableColumn>
+            <input pInputText type="number" [(ngModel)]="item.UnitPrice"
+              (blur)="OnChangeText(item)" />
+          </td>
+          <td pEditableColumn>
+            <input pInputText type="number" [(ngModel)]="item.DiscPer" (blur)="OnChangeText(item)"
+              (keyup.enter)="AddProductToList();" (keydown.Tab)="AddProductToList();" />
+          </td>
+
+          <td pEditableColumn>
+            <input pInputText type="text" [(ngModel)]="item.DiscVal" [disabled]="true" />
+          </td>
+          <td pEditableColumn>
+            <input pInputText type="text" [(ngModel)]="item.NetPrice" [disabled]="true" />
+          </td>
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-cartRow let-editing="editing" let-ri="rowIndex">
+        <tr [pContextMenuRow]="cartRow" [pEditableRow]="cartRow">
+          <td>
+            <button pButton pRipple style="margin-right: 5px" type="button" icon="pi pi-list"
+              *ngIf="cartRow.IsTrackable" class="p-button-rounded p-button-outlined" title="Open Trackables"
+              (click)="OpenProductTrackables(cartRow)"></button>
+            <button pButton pRipple type="button" (click)="RemoveCartProduct(ri)" icon="pi pi-times"
+              class="p-button-rounded p-button-danger btn-round"></button>
+          </td>
+          <td pEditableColumn>
+            <div class="p-grid">
+              <div class="p-col-11">
+                <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label" [searchFn]="dataFunc"
+                  [(ngModel)]="cartRow.selectedProductCart" (ngModelChange)="BindProductDetails($event, cartRow)">
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span>{{item.label}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="p-col-1">
+                <span>
+                  <i class="pi pi-search search-pi" style="margin-top: 10px;" (click)="OpenProductDialog(cartRow)"></i>
+                </span>
+                <button style="margin-left: 2px" pButton pRipple type="button" icon="pi pi-list"
+                  *ngIf="cartRow.IsSelectedTrackables" class="p-button-rounded p-button-outlined"
+                  title="Show selected Trackables" (click)="OpenSelectedProductTrackables(cartRow)"></button>
+              </div>
+            </div>
+          </td>
+          <!-- [ngStyle]="cartRow.QuantityLimitExceeds?{'color': red } : ''" -->
+          <td pEditableColumn>
+            <input pInputText type="number" [(ngModel)]="cartRow.Quantity" [ngStyle]="{'background-color':  cartRow.QuantityLimitExceeds? '#FF0000' : '#ffffff' }"
+              (keyup)="OnChangeText(cartRow)" (change)="onChangeProductQuantity(cartRow)"
+              [disabled]="cartRow.IsQtyDisable" />
+            <button style="margin-left: 2px; margin-right: 2px" pButton pRipple type="button" *ngIf="cartRow.IsLocation"
+              icon="fa fa-map-marker" class="p-button-rounded p-button-outlined"
+              (click)="OpenProductLocations(cartRow)"></button>
+            <button style="margin-right: 2px; margin-right: 2px" pButton pRipple type="button"
+              *ngIf="cartRow.IsLastAvgPrice" icon="pi pi-money-bill" class="p-button-rounded p-button-outlined"
+              title="Last Avarage Purchase Price" (click)="OpenLastAvaragePriceDialog(cartRow)"></button>
+            <button pButton pRipple type="button" icon="pi pi-shopping-cart" *ngIf="cartRow.IsAddToWishList"
+              class="p-button-rounded p-button-outlined" title="Add to wishlist"
+              (click)="OpenAddToWishlistPopup(cartRow)"></button>
+          </td>
+
+          <td pEditableColumn>
+            <input pInputText type="number" [(ngModel)]="cartRow.UnitPrice"
+              (blur)="OnChangeText(cartRow)" />
+          </td>
+          <td pEditableColumn>
+            <input pInputText type="number" [(ngModel)]="cartRow.DiscPer"
+              (blur)="OnChangeText(cartRow)" (keyup.enter)="AddNewRow()" />
+          </td>
+
+          <td pEditableColumn>
+            <input pInputText type="text" [(ngModel)]="cartRow.DiscVal" [disabled]="true" />
+          </td>
+          <td pEditableColumn>
+            <input pInputText type="text" [(ngModel)]="cartRow.NetPrice" [disabled]="true" />
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <div></div>
+  </div>
+</div>
+
+<p-dialog header="Customer" [(visible)]="displayOrderByDialog" modal="modal" showEffect="fade"
+  [style]="{ width: '60vw' }">
+  <div class="primeng-datatable-container">
+    <p-table #dt1 [value]="AllCustomersList" [rows]="rows" [totalRecords]="totalRecords" [(first)]="first"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+      dataKey="id" [rowsPerPageOptions]="[25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+      styleClass="p-datatable-responsive-demo" [filterDelay]="0" [globalFilterFields]="['FirstName', 'LastName']">
+      <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search Customer..." />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <!-- <th pSortableColumn="CustomerID">ID <p-sortIcon field="CustomerID"></p-sortIcon></th> -->
+          <th pSortableColumn="FirstName">
+            Customer <p-sortIcon field="FirstName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="sCompanyName">
+            Company <p-sortIcon field="sCompanyName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Address">
+            Address <p-sortIcon field="Address"></p-sortIcon>
+          </th>
+          <th pSortableColumn="PhoneNo">
+            Phone <p-sortIcon field="PhoneNo"></p-sortIcon>
+          </th>
+          <th pSortableColumn="CurrentBalance">
+            CurrentBalance <p-sortIcon field="CurrentBalance"></p-sortIcon>
+          </th>
+          <!-- <th pSortableColumn="dCreditLimit">CreditLimit <p-sortIcon field="dCreditLimit"></p-sortIcon></th>
+                          <th pSortableColumn="ShippingMethodID">DeliveryMethod <p-sortIcon field="ShippingMethodID"></p-sortIcon></th> -->
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-customer>
+        <tr (click)="SelectRowOrderBy(customer)">
+          <!-- <td > {{customer.CustomerID}}</td> -->
+          <td>{{ customer.FirstName + " " + customer.LastName }}</td>
+          <td>
+            {{
+            customer.sCompanyName === "" || customer.sCompanyName === null
+            ? "None"
+            : customer.sCompanyName
+            }}
+          </td>
+          <td>
+            {{
+            customer.City === "" || customer.City === null
+            ? customer.Address
+            : customer.Address + ", " + customer.City
+            }}
+          </td>
+          <td>{{ customer.PhoneNo }}</td>
+          <td [ngStyle]="{'color': customer.CurrentBalance >= 0 ? '#158e15' : 'red' }">
+            {{
+            customer.CurrentBalance === null ? "0" : customer.CurrentBalance }} </td>
+          <!-- <td > {{customer.dCreditLimit}}</td>
+                      <td > {{customer.ShippingMethodID}}</td> -->
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</p-dialog>
+
+<p-dialog header="Customer" [(visible)]="displayDeliverToDialog" modal="modal" showEffect="fade"
+  [style]="{ width: '60vw' }">
+  <div class="primeng-datatable-container">
+    <p-table #dt [value]="AllCustomersList" [rows]="rows" [totalRecords]="totalRecords" [(first)]="first"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+      dataKey="id" [rowsPerPageOptions]="[25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+      styleClass="p-datatable-responsive-demo" [filterDelay]="0" [globalFilterFields]="['FirstName', 'LastName']">
+      <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search Customer..." />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <!-- <th pSortableColumn="CustomerID">ID <p-sortIcon field="CustomerID"></p-sortIcon></th> -->
+          <th pSortableColumn="FirstName">
+            Customer <p-sortIcon field="FirstName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="sCompanyName">
+            Company <p-sortIcon field="sCompanyName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Address">
+            Address <p-sortIcon field="Address"></p-sortIcon>
+          </th>
+          <th pSortableColumn="PhoneNo">
+            Phone <p-sortIcon field="PhoneNo"></p-sortIcon>
+          </th>
+          <th pSortableColumn="CurrentBalance">
+            CurrentBalance <p-sortIcon field="CurrentBalance"></p-sortIcon>
+          </th>
+          <!-- <th pSortableColumn="dCreditLimit">CreditLimit <p-sortIcon field="dCreditLimit"></p-sortIcon></th>
+                          <th pSortableColumn="ShippingMethodID">DeliveryMethod <p-sortIcon field="ShippingMethodID"></p-sortIcon></th> -->
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-customer>
+        <tr (click)="SelectRow(customer)">
+          <!-- <td > {{customer.CustomerID}}</td> -->
+          <td>{{ customer.FirstName + " " + customer.LastName }}</td>
+          <td>
+            {{
+            customer.sCompanyName === "" || customer.sCompanyName === null
+            ? "None"
+            : customer.sCompanyName
+            }}
+          </td>
+          <td>
+            {{
+            customer.City === "" || customer.City === null
+            ? customer.Address
+            : customer.Address + ", " + customer.City
+            }}
+          </td>
+          <td>{{ customer.PhoneNo }}</td>
+          <td [ngStyle]="{'color': customer.CurrentBalance >= 0 ? '#158e15' : 'red' }">
+            {{
+            customer.CurrentBalance === null ? "0" : customer.CurrentBalance }} </td>
+          <!-- <td > {{customer.dCreditLimit}}</td>
+                      <td > {{customer.ShippingMethodID}}</td> -->
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</p-dialog>
+
+<p-dialog header="DeliveryMethods" *ngIf="displayDeliveryMethod" [(visible)]="displayDeliveryMethod" modal="modal"
+  showEffect="fade" [style]="{ width: '60vw' }">
+  <app-delivery-method (onDeliveryMethodSelectValue)="onDeliveryMethodSelectValue($event)"></app-delivery-method>
+</p-dialog>
+
+<p-dialog header="PaymentCondition" *ngIf="displayPaymentCondition" [(visible)]="displayPaymentCondition" modal="modal"
+  showEffect="fade" [style]="{ width: '60vw' }">
+  <app-payment-condition (onPaymentConditionSelectValue)="onPaymentConditionSelectValue($event)">
+  </app-payment-condition>
+</p-dialog>
+
+<p-dialog header="CustomerPreviousInvoices" *ngIf="displayCustomerPreviousInvoice"
+  [(visible)]="displayCustomerPreviousInvoice" modal="modal" showEffect="fade" [style]="{ width: '60vw' }">
+  <app-customer-previous-invoice [OrderByID]="selectedOrderBy"></app-customer-previous-invoice>
+</p-dialog>
+
+<!-- <p-dialog header="Products" *ngIf="IsOpenProductDialog" [(visible)]="IsOpenProductDialog" modal="modal"
+  showEffect="fade" [style]="{ width: '70vw' }">
+  <app-product-with-stock-new [AllProductList]="AllProductListwithDiscountForSelection"
+    [totalRecords]="totalRecordsForProductTable" (onSelectValue)="onSelectProductValue($event)">
+  </app-product-with-stock-new>
+</p-dialog> -->
+<p-dialog header="Products" [(visible)]="IsOpenProductDialog" modal="modal" showEffect="fade"
+  [style]="{ width: '70vw' }">
+  <!-- [style]="{width: '50vw',height:'460px'}" -->
+  <!-- <app-product-dialog (onSelectValue)='selectValue($event)'></app-product-dialog> -->
+  <app-genric-table (emitRowClick)="onSelectProductValue($event)" [menuItems]="[]"
+    [data]="AllProductListwithDiscountForSelection" [columnsData]="productsColumn">
+  </app-genric-table>
+
+</p-dialog>
+
+<p-dialog header="TrackableCodesfor {{ trackablePopupHeading }}" *ngIf="displayProductTrackables"
+  [(visible)]="displayProductTrackables" modal="modal" showEffect="fade" [style]="{ width: '40vw' }">
+  <!-- <app-product-trackables [selectedProduct]="selectedCartRow.selectedProductCart" [productTrackableList]="productTracablesList"
+    (onTrackableSelectValue)="onTrackableSelectValue($event)"></app-product-trackables> -->
+
+  <p-table #dt [value]="productTracablesList" [rows]="25"
+    [totalRecords]="productTracablesList.length>0?productTracablesList.length:0" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" dataKey="id"
+    [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+    styleClass="p-datatable-responsive-demo" [filterDelay]="0" [globalFilterFields]="['TrackableCode']">
+
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search TrackableCode" />
+        </span>
+
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="TrackableCode">TrackableCode <p-sortIcon field="TrackableCode"></p-sortIcon>
+        </th>
+      </tr>
+
+    </ng-template>
+    <ng-template pTemplate="body" let-trackable>
+      <tr (click)="onTrackableSelectValue(trackable)">
+        <td> {{trackable.TrackableCode }} </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+<p-dialog header="TrackableCodesfor {{ trackablePopupHeading }}" *ngIf="displaySelectedProductTrackables"
+  [(visible)]="displaySelectedProductTrackables" modal="modal" showEffect="fade" [style]="{ width: '40vw' }">
+
+  <p-table #dt [value]="selectedProductTrackables" [rows]="25"
+    [totalRecords]="selectedProductTrackables.length>0?selectedProductTrackables.length:0"
+    [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true" dataKey="id" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"
+    [paginator]="true" [rowHover]="true" styleClass="p-datatable-responsive-demo" [filterDelay]="0"
+    [globalFilterFields]="['TrackableCode']">
+
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search TrackableCode" />
+        </span>
+
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+
+      <tr>
+        <th pSortableColumn="TrackableCode">TrackableCode<p-sortIcon field="TrackableCode"></p-sortIcon>
+        </th>
+        <th>Action </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-trackable>
+      <tr>
+        <td> {{trackable.TrackableCode }} </td>
+        <td> <button pButton label="Remove" class="p-button-raised  p-mr-2"
+            (click)="onRemoveSelectedTrackable(trackable.TrackableCode)"></button> </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+<p-dialog header="ProductInfo " *ngIf="displayLastAvgPrice" [(visible)]="displayLastAvgPrice" modal="modal"
+  showEffect="fade" [style]="{ width: '70vw' }">
+  <app-product-lastaverageprice-dialog [selectedCartRow]="selectedRowForDialogs"></app-product-lastaverageprice-dialog>
+</p-dialog>
+
+<p-dialog header="Add to Wishlist" *ngIf="displayAddToWishlist" [(visible)]="displayAddToWishlist" modal="modal"
+  showEffect="fade" [style]="{ width: '50vw' }">
+  <app-addwishlist-dialog [ProductVariantID]="selectedRowForDialogs.selectedProductCart.value"
+    [ProductName]="selectedRowForDialogs.selectedProductCart.label" (ReturnCall)="CloseDialog($event)">
+  </app-addwishlist-dialog>
+</p-dialog>
+
+<p-dialog header="Payment" *ngIf="displayAddPaymentPopup" [(visible)]="displayAddPaymentPopup" modal="modal"
+  showEffect="fade" [style]="{ width: '50vw' }">
+  <div class="">
+    <p-fieldset legend="Payment" [transitionOptions]="'0ms'" toggleable="true">
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+          <label for="firstname1">AddPaymentInInvoice</label>
+          <input pInputText type="number" [(ngModel)]="payment" />
+        </div>
+        <div class="p-field p-col">
+          <label for="firstname1">Password</label>
+          <input pInputText type="password" [(ngModel)]="password" />
+        </div>
+        <br />
+      </div>
+    </p-fieldset>
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col">
+        <button pButton icon="pi pi-plus" label="Save & Close" style="width: 135px ; float:right"
+          class="p-button-raised p-mr-2" (click)="onClickPaymentPasswordSubmit()"></button>
+        <button pButton icon="pi pi-times" label="Close" style="width: 100px ; float:right"
+          class="p-button-raised p-mr-2" (click)="ClosePaymentPopup()"></button>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+<p-dialog header="Location" *ngIf="displayProductLocations" [(visible)]="displayProductLocations" modal="modal"
+  showEffect="fade" [style]="{ width: '50vw' }">
+  <!-- <app-product-locations [selectedProduct]="selectedCartRow.selectedProductCart" [isAdded]="isAdded"
+    [isLocationChangedByField]="isLocationChangedByField" [quantityField]="selectedCartRow.Quantity"
+    [productLocations]="productLocations" [details]="details"
+    [autoAssignLocationWhenProduct]="autoAssignLocationWhenProduct"></app-product-locations> -->
+
+  <p-table #dt [value]="AllProductLocationList" [rows]="25"
+    [totalRecords]="AllProductLocationList.length>0?AllProductLocationList.length:0"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+    dataKey="id" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+    styleClass="p-datatable-responsive-demo" [filterDelay]="0" [globalFilterFields]="['Location']">
+
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search Location" />
+        </span>
+
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+
+      <tr>
+        <!-- <th pSortableColumn="ID">{{'ID' | translate}} <p-sortIcon field="ID"></p-sortIcon></th>
+              <th pSortableColumn="LevelID">{{'LevelID' | translate}} <p-sortIcon field="LevelID"></p-sortIcon></th> -->
+        <!-- <th pSortableColumn="Location">Location<p-sortIcon field="Location"></p-sortIcon></th>
+              <th pSortableColumn="TrackableCode">Selected <p-sortIcon field="TrackableCode"></p-sortIcon></th>
+              <th pSortableColumn="Quantity">Quantity <p-sortIcon field="Quantity"></p-sortIcon></th> -->
+        <th>Location</th>
+        <th>Selected</th>
+        <th>Quantity</th>
+
+      </tr>
+
+    </ng-template>
+    <ng-template pTemplate="body" let-location>
+      <!-- <tr (click)="SelectRow(location)"> -->
+      <tr>
+        <!-- <td > {{location.ID }} </td>
+          <td > {{location.LevelID }} </td> -->
+        <td> {{location.Location=== null ? 'No location assigned':location.Location }} </td>
+        <td> <input pInputText type="number" [(ngModel)]="location.selectedProductQuantity" style="width: 100px"
+            (change)="onChangeSelectedProductQuantity(location)"> </td>
+        <td> {{location.Quantity }} </td>
+
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+<p-dialog header="Products" *ngIf="IsOpenMultiProductDialog" [(visible)]="IsOpenMultiProductDialog" modal="modal"
+  showEffect="fade" [style]="{width: '70vw'}">
+  <app-multi-product-selection [menuItems]="[]" (emitSelectedProduct)="addMultipleProduct($event)"
+    [data]="AllProductListwithDiscountForSelection" [columnsData]="productsColumn">
+  </app-multi-product-selection>
+</p-dialog>
+
+
+<div class="row" id="printable" style="display: none">
+  <div class="col-12">
+    <div class="row">
+      <div class="col-6">
+        <h1 style="font-size: xx-large; font-weight: 900; margin-top: 50px">
+          PACKING LIST
+        </h1>
+      </div>
+      <div class="col-6 text-right">
+        <div class="row margin-top-5p">
+          <div class="col-9">
+            <label class="font-bold">InvoiceNo </label>
+          </div>
+          <div class="col-3">
+            <label id="txtPrintSaleInvoiceNo">{{ invoiceNo }}</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <label class="font-bold">Invoice Date </label>
+          </div>
+          <div class="col-4">
+            <label id="txtPrintSaleDate">{{ orderDate }}</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <label style="font-size: medium; font-weight: 800">Amount Due:
+            </label>
+          </div>
+          <div class="col-4">
+            <label style="font-size: medium; font-weight: 800" class="txtPrintTotalGrandTotal">{{ grandTotal }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+    <label class="font-bold">Bill To: </label>
+    <br />
+    <label id="txtPrintCustomer">{{ deliverToName }}</label>
+    <br />
+    <label id="txtPrintCompany">{{ deliverToName }}</label>
+    <br />
+    <label id="txtPrintShippingAddress">{{ selectedDeliveryAddressID }}</label>
+
+    <div class="">
+      <table id="tblPrintReport" class="table table-bordered table-bordered dt-responsive nowrap" cellspacing="0"
+        width="100%">
+        <thead class="thead-dark">
+          <tr>
+            <th>SKU</th>
+            <th>ProductName</th>
+            <!-- <th>Location</th> -->
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="printbody"></tbody>
+      </table>
+      <div class="row">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-3">
+          <table class="table table-bordered table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+            <thead class="thead-dark">
+              <tr>
+                <td> SubTotal</td>
+                <td id="txtPrintSubTotal">{{ subTotal }}</td>
+              </tr>
+              <tr>
+                <td>Discount</td>
+                <td id="txtPrintDiscount">{{ totalDiscount }}</td>
+              </tr>
+              <tr>
+                <td>ShipmentCost</td>
+                <td id="txtPrintTotalShipment">
+                  {{ currencySign + " " + shipmentCost }}
+                </td>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>GrandTotal</th>
+                <th class="txtPrintTotalGrandTotal">
+                  {{ currencySign + " " + grandTotal }}
+                </th>
+              </tr>
+              <tr>
+                <th>Payment</th>
+                <th class="txtPrintPayment">
+                  {{ currencySign + " " + payment }}
+                </th>
+              </tr>
+              <tr>
+                <th>Rest Amount</th>
+                <th class="txtPrintRestAmount">
+                  {{ currencySign + " " + restAmount }}
+                </th>
+              </tr>
+            </tfoot>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+    <div class="row">
+      <div class="col-12">
+        <label class="font-bold">Notes</label>
+      </div>
+      <div class="col-12">
+        <label class="font-bold">Thanks for your order, I hope your business will grow and be
+          successful</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog [(visible)]="displayReview" modal="modal" showEffect="fade" [style]="{ width: '70vw' }">
+  <div class="row" id="printableReview">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-6">
+          <h1 style="font-size: xx-large; font-weight: 900; margin-top: 50px">
+            PACKING LIST
+          </h1>
+        </div>
+        <div class="col-6 text-right">
+          <div class="row margin-top-5p">
+            <div class="col-9">
+              <label class="font-bold">InvoiceNo </label>
+            </div>
+            <div class="col-3">
+              <label id="txtPrintSaleInvoiceNo">{{ invoiceNo }}</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-8">
+              <label class="font-bold">Invoice Date </label>
+            </div>
+            <div class="col-4">
+              <label id="txtPrintSaleDate">{{ orderDate }}</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-8">
+              <label style="font-size: medium; font-weight: 800">Amount Due:
+              </label>
+            </div>
+            <div class="col-4">
+              <label style="font-size: medium; font-weight: 800" class="txtPrintTotalGrandTotal">{{ grandTotal
+                }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <label class="font-bold">Bill To: </label>
+      <br />
+      <label id="txtPrintCustomer">{{ deliverToName }}</label>
+      <br />
+      <label id="txtPrintCompany">{{ deliverToName }}</label>
+      <br />
+      <label id="txtPrintShippingAddress">{{
+        selectedDeliveryAddressID
+        }}</label>
+
+      <div class="">
+        <table id="tblReview" class="table table-bordered table-bordered dt-responsive nowrap" cellspacing="0"
+          width="100%">
+          <thead class="thead-dark">
+            <tr>
+              <th>SKU</th>
+              <th>ProductName</th>
+              <!-- <th>Location</th> -->
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="printbodyReview">
+            <tr *ngFor="let col of salePrintDetails">
+              <td>
+                {{ col.ProductVariantID }}
+              </td>
+              <td>
+                {{ col.Product }}
+              </td>
+              <td>
+                {{ col.Quantity }}
+              </td>
+              <td>
+                {{ currencySign + " " + col.dTotalUnitValue }}
+              </td>
+              <td>
+                {{ currencySign + " " + col.dtotal }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row">
+          <div class="col-sm-9"></div>
+          <div class="col-sm-3">
+            <table class="table table-bordered table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+              <thead class="thead-dark">
+                <tr>
+                  <td>SubTotal</td>
+                  <td id="txtPrintSubTotal">{{ subTotal }}</td>
+                </tr>
+                <tr>
+                  <td>Discount</td>
+                  <td id="txtPrintDiscount">{{ totalDiscount }}</td>
+                </tr>
+                <tr>
+                  <td>ShipmentCost</td>
+                  <td id="txtPrintTotalShipment">
+                    {{ currencySign + " " + shipmentCost }}
+                  </td>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>GrandTotal</th>
+                  <th class="txtPrintTotalGrandTotal">
+                    {{ currencySign + " " + grandTotal }}
+                  </th>
+                </tr>
+                <tr>
+                  <th>Payment</th>
+                  <th class="txtPrintPayment">
+                    {{ currencySign + " " + payment }}
+                  </th>
+                </tr>
+                <tr>
+                  <th>Rest Amount</th>
+                  <th class="txtPrintRestAmount">
+                    {{ currencySign + " " + restAmount }}
+                  </th>
+                </tr>
+              </tfoot>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <div class="row">
+        <div class="col-12">
+          <label class="font-bold">Notes</label>
+        </div>
+        <div class="col-12">
+          <label class="font-bold">Thanks for your order, I hope your business will grow and be
+            successful</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="User Captcha" [(visible)]="isCaptchaDisplayed" (onHide)="close()" modal="modal" showEffect="fade"
+    [style]="{width: '50vw'}">
+    <app-captcha-dialog  [firstNumber]='firstNumber'
+    [secondNumber]='secondNumber' (ReturnCall)='ValidateCaptcha($event)'></app-captcha-dialog>
+</p-dialog>

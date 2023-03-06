@@ -1,0 +1,54 @@
+
+
+
+<p-dialog header="Product Image" [(visible)]="displayImage" modal="modal" showEffect="fade">
+    <img src="{{imgSrc}}" height="500" width="500">
+</p-dialog>
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+<p-toast></p-toast>
+
+<!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+                <div class="p-formgroup-inline">
+                <div class="p-field-radiobutton">      
+                    <p-radioButton name="reportfilter1" value="1" [(ngModel)]="selectedFilterImage" (onClick)="filterReport()" inputId="checkb4"></p-radioButton>
+                    <label for="checkb2">{{'ORDERS.WITHIMAGES'| translate}}</label>
+                </div>
+                <div class="p-field-radiobutton">      
+                    <p-radioButton name="reportfilter1" value="0" [(ngModel)]="selectedFilterImage" (onClick)="filterReport()" inputId="checkb5"></p-radioButton>
+                    <label for="checkb3">{{'ORDERS.WITHOUTIMAGES'| translate}}</label>  
+                </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="right">
+                <div class="p-formgroup-inline">
+                        <div class="p-field-radiobutton">      
+                        <p-radioButton name="reportfilter" value="1" [(ngModel)]="selectedFilter" (onClick)="filterReport()" inputId="checkb2"></p-radioButton>
+                        <label for="checkb2">{{'ORDERS.ACTIVE'| translate}}</label>
+                        </div>
+                        <div class="p-field-radiobutton">      
+                        <p-radioButton name="reportfilter" value="0" [(ngModel)]="selectedFilter" (onClick)="filterReport()" inputId="checkb3"></p-radioButton>
+                        <label for="checkb3">{{'ORDERS.INACTIVE'| translate}}</label>  
+                        </div>
+
+                </div>
+            </ng-template>
+        </p-toolbar>
+        <app-ss-generic-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            [data]="AllProductList" [columnsData]="columns"
+            [totalRecords]="totalRecords" (getLazyData)="GetAllProductWithLazyLoadinFunction($event)"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-ss-generic-table>
+    </div>
+</div>

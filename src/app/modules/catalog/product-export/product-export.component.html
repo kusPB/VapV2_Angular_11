@@ -1,0 +1,282 @@
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleclass="p-mb-4">
+            <div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="firstname1">Brands</label>
+                        <p-dropdown placeholder="Select Brand" [options]="BrandDropdown" (onChange)="productBrandChange($event)"
+                            [(ngModel)]="selectedBrandID" autoWidth="false" [style]="{'width':'200px'}" required
+                            filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em;">{{item.label}}</span>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col">
+                        <label for="BrandType"> {{'MANAGEDPRODUCT.BRANDTYPE'| translate}} </label>
+                        <p-dropdown id="BrandType" name="BrandType" placeholder="Select Brand Type" 
+                        [options]="BrandTypeDropdown" [(ngModel)]="selectedBrandTypeID" autoWidth="false"
+                        [style]="{'width':'200px'}" filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+                    </p-dropdown>
+                    </div>  
+                    
+                    <div class="p-field p-col">
+                        <!-- (onChange)="productBrandChange($event)" -->
+                        <label for="Series"> {{'SSGENERIC.PRODUCTSERIES'| translate}} </label>
+                        <p-dropdown id="Series" name="Series" placeholder="Select Series" 
+                            [options]="SeriesDropdown" [(ngModel)]="selectedSeriesID" autoWidth="false"
+                            [style]="{'width':'200px'}" filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+            
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="size"> {{'MANAGEDPRODUCT.SIZE'| translate}} </label>
+                        <p-dropdown name="size" id=size [options]="ProductSizeDD"
+                             [(ngModel)]="selectedProductSizeID" autoWidth="false"
+                            [style]="{'width':'200px'}" required filter="true" placeholder="Select Size">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+            
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="connecterType"> {{'MANAGEDPRODUCT.CONNECTERTYPE'| translate}} </label>
+                        <p-dropdown name="connecterType" id=connecterType [options]="ProductConnecterTypeDD"
+                             [(ngModel)]="selectedProductConnecterTypeID" autoWidth="false"
+                            [style]="{'width':'200px'}" required filter="true" placeholder="Select Connecter Type">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+            
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="packaging"> {{'MANAGEDPRODUCT.PACKAGING'| translate}} </label>
+                        <p-dropdown name="packaging" id=packaging [options]="ProductPackagingDD"
+                             [(ngModel)]="selectedProductPackagingID" autoWidth="false"
+                            [style]="{'width':'200px'}" required filter="true" placeholder="Select Packaging">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+            
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="capacity"> {{'MANAGEDPRODUCT.CAPACITY'| translate}} </label>
+                        <p-dropdown name="capacity" id=capacity [options]="ProductCapacityDD"
+                             [(ngModel)]="selectedProductCapacityID" autoWidth="false"
+                            [style]="{'width':'200px'}" required filter="true" placeholder="Select Capacity">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+            
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="state"> {{'MANAGEDPRODUCT.POWER'| translate}} </label>
+                        <p-dropdown name="power" id=power [options]="ProductPowerDD"
+                             [(ngModel)]="selectedProductPowerID" autoWidth="false"
+                            [style]="{'width':'200px'}" required filter="true" placeholder="Select Power">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+            
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="printlbl"> {{'MANAGEDPRODUCT.PRINT'| translate}} </label>
+                        <p-dropdown name="printlbl" id=printlbl [options]="ProductPrintDD"
+                             [(ngModel)]="selectedProductPrintID" autoWidth="false"
+                            [style]="{'width':'200px'}" required filter="true" placeholder="Select Print">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+            
+                        </p-dropdown>
+                    </div>
+
+                    
+                    <div class="p-field p-col" >
+                        <label for="firstname1">Models </label>
+                        <p-dropdown placeholder="Select Model" [options]="ProductModelDropdown"
+                            [(ngModel)]="selectedProductModelID" (onChange)="productModelChange($event)" autoWidth="false" [style]="{'width':'200px'}"
+                            required filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col">
+                        <label for="state"> {{'MANAGEDPRODUCT.TYPE'| translate}} </label>
+                        <p-dropdown name="subModelNumber" id=subModelNumber [options]="ProductSubModelDD"
+                             [(ngModel)]="selectedProductSubModelID" autoWidth="false"
+                            [style]="{'width':'200px'}" required filter="true" placeholder="Select Sub Model">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+    
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col" >
+                        <label for="firstname1">Quality Label</label>
+                        <p-dropdown placeholder="Select Quality Label" [options]="QualityLabelDropdown"
+                            [(ngModel)]="selectedQualityLabelID" autoWidth="false" [style]="{'width':'200px'}" required
+                            filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col" >
+                        <label for="firstname1">Color</label>
+                        <p-dropdown placeholder="Select Color" [options]="ColorDropdown"
+                            [(ngModel)]="selectedColorID" autoWidth="false" [style]="{'width':'200px'}" required
+                            filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                        <button pButton pRipple type="button" label="Search " style="width:100px" icon="pi pi-refresh"
+                            (click)="Reset();" class="p-button-raised p-mr-2"></button>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </p-toolbar>
+        <app-export-product-selection (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            [data]="Products" [globalFilterFields]="globalFilterFields" [columnsData]="columns"
+            [totalRecords]="totalRecords" (getLazyData)="GetAllProductWithLazyLoadFunction($event)"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-export-product-selection>
+        <!-- <p-table #dt [value]="ProductVariants | searchPipe:'Product': mySearch" [rows]="rows" [totalRecords]="totalRecords" [(first)]="first"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [showCurrentPageReport]="true" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"
+            [paginator]="true" dataKey="ID" styleClass="p-datatable-responsive-demo">
+          
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0">Products Variants</h5>
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText [(ngModel)]="mySearch" type="text" placeholder="Global Search" />
+                    </span>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+
+                    <th style="width: 4.5rem;">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th pSortableColumn="ProductID" style="text-align: center;"> SKU <p-sortIcon field="ProductID">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Product"> Product <p-sortIcon field="Product"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Color" style="text-align: center;"> Color <p-sortIcon field="Color">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Size" style="text-align: center;"> Code <p-sortIcon field="Size"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Barcode" style="text-align: center;"> EAN <p-sortIcon field="Barcode">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="RemainingStock" style="text-align: center;"> Stock <p-sortIcon
+                            field="RemainingStock"></p-sortIcon>
+                    </th>
+                    <th> Actions </th>
+
+                </tr>
+
+                <tr>
+
+                    <th style="width: 4.5rem"> </th>
+
+
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'ProductID', 'contains')"
+                            placeholder="Search by SKU" class="p-column-filter th-input">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Product', 'contains')"
+                            placeholder="Search by Product" class="p-column-filter th-input">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Color', 'contains')"
+                            placeholder="Search by Color" class="p-column-filter th-input">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Size', 'contains')"
+                            placeholder="Search by Code" class="p-column-filter th-input">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Barcode', 'contains')"
+                            placeholder="Search by EAN" class="p-column-filter th-input">
+                    </th>
+                    <th>
+                        <input pInputText type="text"
+                            (input)="dt.filter($event.target.value, 'RemainingStock', 'contains')"
+                            placeholder="Search by Stock" class="p-column-filter th-input">
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body" let-ProductVariant>
+                <tr>
+                    <td>
+
+                        <p-tableCheckbox [value]="ProductVariant"></p-tableCheckbox>
+                    </td>
+
+                    <td style="text-align: center;"> {{ProductVariant.ProductID}} </td>
+                    <td> {{ProductVariant.Product}} </td>
+                    <td style="text-align: center;"> {{ProductVariant.Color}} </td>
+                    <td style="text-align: center;"> {{ProductVariant.Size}} </td>
+                    <td style="text-align: center;"> {{ProductVariant.Barcode}} </td>
+                    <td style="text-align: center;"> {{ProductVariant.RemainingStock}} </td>
+                    <td><button (click)="PostTOShopOrAddProductToOpenCartFunction(ProductVariant.ProductID)" pButton
+                            pRipple title="Post To Shop" icon="fas fa-paper-plane" class="p-button-raised">
+
+                        </button> </td>
+
+
+                </tr>
+            </ng-template>
+
+
+
+        </p-table> -->
+
+
+    </div>
+</div>

@@ -1,0 +1,158 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+  <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<p-toast></p-toast>
+
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+  <div class="card">
+    <!-- <h4>Row Expand</h4> -->
+    <p-toolbar styleClass="p-mb-4">
+      <ng-template pTemplate="left">
+        <ng-template #other>
+          <button pButton pRipple label="{{'MANAGEDPRODUCT.ADDDEVELOPMENTACTIVITY'| translate}}" (click)="AddFolder();"
+            icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+        </ng-template>
+
+        <span *ngIf="IsAdd;else other">
+          <button pButton pRipple type="button" icon="fas fa-plus" label="{{'MANAGEDPRODUCT.SAVE'| translate}}"
+            (click)="save();" icon="fas fa-plus" class="p-button-raised p-mr-2"></button>
+
+          <button pButton pRipple label="{{'MANAGEDPRODUCT.CLOSE'| translate}}" icon="fas fa-times"
+            class="p-button-raised p-mr-2" (click)="CloseAddSection();"></button>
+
+        </span>
+
+
+      </ng-template>
+
+    </p-toolbar>
+    <!-- <p-toolbar styleclass="p-mb-4"> -->
+
+    <div class="card .c-card" *ngIf="IsAdd">
+      <h5>Development Activity</h5>
+
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-3">
+          <!-- <label for="lastname1">{{'MANAGEDPRODUCT.FOLDER'| translate}}</label> -->
+          <!-- <input id="lastname5" type="text" pInputText [(ngModel)]="folderHierarchy.Description"> -->
+          <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-10">
+              <label for="firstname1">Heading*</label>
+              <input id="firstname5" type="text" pInputText [(ngModel)]="helpModel.Heading">
+
+            </div>
+          </div>
+        </div>
+        <div class="p-field p-col-3">
+          <label for="firstname1">Description*</label>
+          <input id="firstname5" type="text" pInputText [(ngModel)]="helpModel.Description">
+        </div>
+        <div class="p-field p-col-1">
+          <label for="firstname1">Icon*</label>
+          <input id="firstname5" type="text" pInputText [(ngModel)]="helpModel.Icon">
+        </div>
+
+        <div class="p-field p-col-3">
+          <label for="firstname1">Image*</label> <br>
+          <input type="file" id="file" accept="image/*" (change)="onUpload($event.target.files)">
+        </div>
+
+
+        <div class="p-field p-col-1">
+          <ng-container *ngIf="helpModel.Attachment && helpModel.Attachment.Base64String != '' ; else elseTemplate1">
+            <img [src]="helpModel.Attachment.Base64String" height="100px" width="100px" alt="" srcset="">
+          </ng-container>
+          <ng-template #elseTemplate1>
+            <img [src]="imageBasePath+helpModel.Image" height="100px" width="100px" alt="" srcset="">
+         
+          </ng-template>
+          <!-- <label for="firstname1">Active</label><br>
+
+          <p-toggleButton [(ngModel)]="helpModel.IsActive" onIcon="pi pi-check" offIcon="pi pi-times"></p-toggleButton> -->
+          <!-- <p-toggleButton [(ngModel)]="helpModel.IsActive"></p-toggleButton> -->
+        </div>
+
+
+      </div>
+      <div class="p-grid">
+
+        <p-table [value]="helpDetailArr" dataKey="id">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Action</th>
+              <th>Description*</th>
+              <th>Detail Description*</th>
+              <th>Icon*</th>
+              <th>Attachment*</th>
+            </tr>
+            <tr>
+              <td>
+                <button pButton pRipple type="button" (click)="AddHelpDetailToList()" icon="pi pi-plus"
+                  class="p-button-rounded p-button-success btn-round"></button>
+              </td>
+              <td pEditableColumn>
+
+                <input pInputText type="text" [(ngModel)]="helpDetails.Description" >
+              </td>
+              <td pEditableColumn>
+                <input pInputText type="text" [(ngModel)]="helpDetails.DetailDescription" >
+              </td>
+              <td pEditableColumn>
+                <input pInputText type="text" [(ngModel)]="helpDetails.Icon" >
+              </td>
+              <td pEditableColumn>
+                <input type="file" id="file" accept="image/*" (change)="onUpload($event.target.files,false)">
+              </td>
+
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-product let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="product">
+              <td>
+                <button pButton pRipple type="button" (click)="deleteItemFromProductArr(ri)" icon="pi pi-times"
+                  class="p-button-rounded p-button-danger btn-round"></button>
+              </td>
+              <td pEditableColumn>
+
+                <input pInputText type="text" [(ngModel)]="product.Description" >
+              </td>
+              <td pEditableColumn>
+                <input pInputText type="text" [(ngModel)]="product.DetailDescription" >
+              </td>
+              <td pEditableColumn>
+                <input pInputText type="text" [(ngModel)]="product.Icon" >
+              </td>
+
+              <td pEditableColumn>
+                <ng-container *ngIf="product.Attachment; else elseTemplate">
+                  <img [src]="product.Attachment.Base64String" height="100px" width="100px" alt="" srcset="">
+                </ng-container>
+                <ng-template #elseTemplate>
+                  <img [src]="imageBasePath+product.Image" height="100px" width="100px" alt="" srcset="">
+               
+                </ng-template>
+                
+                  </td>
+            </tr>
+
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+
+    <app-genric-table (emitMenuAction)="emitAction($event)"
+    (emitSwitch)="UpdateStatus($event)" [menuItems]="genericMenuItems" [data]="helpList"
+      [columnsData]="helpColumn">
+    </app-genric-table>
+  </div>
+</div>

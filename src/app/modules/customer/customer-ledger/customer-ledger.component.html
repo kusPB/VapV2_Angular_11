@@ -1,0 +1,59 @@
+<p-toast></p-toast>
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+                <button pButton pRipple label="cancel" (click)="CloseThis();" icon="pi pi-times"
+                    class="p-button-raised  p-mr-2"></button>
+            </ng-template>
+        </p-toolbar>
+        <div class="card c-card">
+
+            <div class="p-grid">
+                <div class="p-field p-col-4">
+                    <div><b>Customer</b> </div>
+                    <div>{{ txtCustomer }}</div>
+                </div>
+                <div class="p-col-4">
+                    <div><b>Previous Balance</b> </div>
+                    <div> <span >€</span> {{ txtPreviousBalance | number:'1.2-2' }}</div>
+                </div>
+                <div class="p-col-4">
+                    <div><b>Current Balance </b></div>
+                    <div> <span >€</span> {{txtCurrentBalance | number:'1.2-2' }}</div>
+                </div>
+            </div>
+        </div>
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" (emitAttachment)="DisplayAttachment($event)" [menuItems]="genericMenuItems" [data]="AllCustomerlist"
+            [columnsData]="columns" [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
+            [rowGroup]="rowGroup" [row]='25'>
+        </app-genric-table>
+
+        
+    </div>
+</div>
+<p-dialog header="DocumentAttachment" [(visible)]="AttachDocumentPopDisplay" modal="modal" showEffect="fade"
+        [style]="{ width: '65vw' }">
+        <div class="p-grid">
+          <div class="p-col-12">
+            <div class="card">
+              <h5>Document</h5>
+              <!-- customUpload="true" -->
+              <p-fileUpload name="demo[]" (onSelect)="onSelect($event)"  customUpload="true" (uploadHandler)="onUpload(form)" #form (onClear)="onClear(form)" multiple="multiple"
+                maxFileSize="1000000"  >
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+        </div>
+      </p-dialog>

@@ -1,0 +1,76 @@
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+<p-toast></p-toast>
+
+<p-dialog header="Remarks" [(visible)]="displayDialog" [style]="{width: '50vw'}" [baseZIndex]="10000">
+    <p>{{DialogRemarks}}</p>
+</p-dialog>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        
+        <div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+            <div class="top-c">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-6 ">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-6 " style="border-right: 1px solid #e9ecef;">
+                                <div class="text-right">{{'REPORTS.QUANTITY'| translate}}
+                                    <div>{{(preOrderHistory.PurchaseQuantity || 0) }} </div>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col-6">
+                                <div class="text-left">{{'REPORTS.RECEIVEDQUANTITY'| translate}}
+                                    <div> {{(preOrderHistory.ReceivedQuantity || 0)  }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-field p-col-6">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-6" style="border-right: 1px solid #e9ecef;">
+                                <div class="text-right">{{'REPORTS.PREORDERDATE'| translate}}
+                                    <div> {{preOrderHistory.PurchaseDate}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-6">
+                                <div class="text-left">{{'REPORTS.STATUS'| translate}}
+                                    <div> {{preOrderHistory.Status }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                  
+                </div>
+            </div>
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-6">
+                <h5>{{'REPORTS.PURCHASES'| translate}}</h5>
+                <div class="table-border">               
+                    <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="Purchases" (emitHref)="getPurchasesByInvoiceNo($event)"
+                    [globalFilterFields]="purchaseGlobalFilterFields" [columnsData]="purchaseColumns" [rowGroup]="rowGroup"
+                    [totalRecords]="purchaseTotalRecords" (getLazyData)="GetAllPurchaseDataWithLazyLoadinFunction($event)"
+                     [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+                    </app-ss-generic-table>
+                </div>
+            </div>
+            <div class="p-col-6">
+                <h5>{{'REPORTS.PREORDERDETAILS'| translate}}</h5>
+                <div class="table-border">
+                    <app-genric-table  [menuItems]="genericMenuItems" [data]="PreOrderDetails"
+                    [globalFilterFields]="detailGlobalFilterFields" [columnsData]="detailColumn" 
+                     [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+                    </app-genric-table> 
+
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

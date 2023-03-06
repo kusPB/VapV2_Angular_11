@@ -1,0 +1,39 @@
+<div style="height: 800px">
+    <div class="p-grid">
+        <div class="p-col-4">
+            <div class="p-field">
+                <label for="fromDate" class="p-sr-only">From Date</label>
+                <p-calendar [(ngModel)]="fromDate" showTime="true" hourFormat="24" showButtonBar="true"     [showIcon]="true" inputId="icon"></p-calendar>
+            </div>
+        </div>
+        <div class="p-col-4">
+            <div class="p-field">
+                <label for="toDate" class="p-sr-only">To Date</label>
+                <p-calendar [(ngModel)]="toDate" showTime="true" hourFormat="24"  showButtonBar="true"  [showIcon]="true" inputId="icon"></p-calendar>
+            </div>
+        </div>
+        <div class="p-col-4">
+            <button pButton pRipple label="Close" icon="fas fa-times" class="p-button-raised p-mr-2"
+                (click)="SelectDate();" style="float: right;"></button>
+            <button pButton pRipple type="button" icon="fas pi-check" label="Apply" (click)="SelectDate();"
+                icon="fas fa-plus" class="p-button-raised p-mr-2" style="float: right;"></button>
+        </div>
+    </div>
+    <!-- <div class="p-formgroup-inline">
+        <div class="p-field">
+            <label for="fromDate" class="p-sr-only">From Date</label>
+            <p-calendar [(ngModel)]="fromDate" [showIcon]="true" inputId="icon"></p-calendar>
+        </div>
+        <div class="p-field" style="margin-left: 70px">
+            <label for="toDate" class="p-sr-only">To Date</label>
+            <p-calendar [(ngModel)]="toDate" [showIcon]="true" inputId="icon"></p-calendar>
+        </div>
+
+    </div>
+    <div style="margin-left: 160px;margin-top: 30px">
+        <button pButton pRipple type="button" icon="fas pi-check" label="Apply" (click)="SelectDate();"
+            icon="fas fa-plus" class="p-button-raised p-mr-2"></button>
+        <button pButton pRipple label="Close" icon="fas fa-times" class="p-button-raised p-mr-2"
+            (click)="SelectDate();"></button>
+    </div> -->
+</div>

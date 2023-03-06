@@ -1,0 +1,160 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<p-toast></p-toast>
+<p-dialog header="Product Image" [(visible)]="displayImage" modal="modal" showEffect="fade">
+    <img src="{{imgSrc}}" height="500" width="500">
+</p-dialog>
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+
+        <p-toolbar styleclass="p-mb-4">
+            <div>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="firstname1">{{'REPORTS.OUTLET'| translate}}</label>
+                        <p-dropdown placeholder="Select Outlet" [options]="OutletDropdown"
+                            [(ngModel)]="selectedOutletID" autoWidth="false" [style]="{'width':'200px'}" required
+                            filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em;">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col">
+                        <label for="firstname1">{{'GENRIC.SEARCHBYDATE'| translate}}</label>
+                        <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+                            [(ngModel)]="selectedSearchByDateID" autoWidth="false" [style]="{'width':'200px'}"
+                            (onChange)="SearchByDate($event)" required filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+
+                    <!-- <div class="p-field p-col">
+                        <label for="firstname1">{{'REPORTS.SEARCHBY'| translate}}</label>
+                        <p-dropdown placeholder="Select Search By" [options]="SearchByDropdown"
+                            [(ngModel)]="selectedSearchByID" autoWidth="false" [style]="{'width':'200px'}"
+                            (onChange)="SearchBy($event)" required filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div> -->
+
+                    <div class="p-field p-col" *ngIf="IsClassificationSearch">
+                        <label for="firstname1">Classification</label>
+                        <p-dropdown placeholder="Select Classification" [options]="ClassificationDropdown"
+                            [(ngModel)]="selectedClassificationID" autoWidth="false" [style]="{'width':'200px'}"
+                            required filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col" *ngIf="IsDepartmentSearch">
+                        <label for="firstname1">Department</label>
+                        <p-dropdown placeholder="Select Department" [options]="DepartmentDropdown"
+                            [(ngModel)]="selectedDepartmentID" autoWidth="false" [style]="{'width':'200px'}" required
+                            filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col" *ngIf="IsCategorySearch">
+                        <label for="firstname1">Category</label>
+                        <p-dropdown placeholder="Select Category" [options]="CategoryDropdown"
+                            [(ngModel)]="selectedCategoryID" autoWidth="false" [style]="{'width':'200px'}" required
+                            filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col" *ngIf="IsSubCategorySearch">
+                        <label for="firstname1">Sub Category</label>
+                        <p-dropdown placeholder="Select Sub Category" [options]="SubCategroyDropdown"
+                            [(ngModel)]="selectedSubCategoryID" autoWidth="false" [style]="{'width':'200px'}" required
+                            filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-field p-col" *ngIf="IsProductSearch">
+                        <label for="firstname1">Product</label>
+ 
+                        <ng-select title="{{selectedProduct?.label}}" [items]="filteredProduct" [virtualScroll]="true"
+                            bindLabel="label" [(ngModel)]="selectedProduct" [searchFn]="dataFunc" class="prod-d-d"
+                            (ngModelChange)="BindProductVariant(($event))">
+                            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                <span title="{{item.label}}">{{item.label}}</span>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+
+                    <!-- <div class="p-field p-col" *ngIf="IsProductSearch">
+                        <label for="firstname1">Variant</label>
+                        <p-dropdown placeholder="Select Variant" [options]="ProductVariantDropdown"
+                            [(ngModel)]="selectedProductVariantID" autoWidth="false" [style]="{'width':'200px'}"
+                            required>
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div> -->
+
+                    <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                        <button pButton pRipple type="button" label="Search" style="width:80px" icon="pi pi-refresh"
+                            (click)="Reset();" class="p-button-raised p-mr-2"></button>
+                    </div>
+
+                </div>
+            </div>
+
+        </p-toolbar>
+        <app-ss-generic-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" [data]="AllStockList"
+            [columnsData]="columns" [totalRecords]="totalRecords"
+            (getLazyData)="GetAllStockDataWithLazyLoadinFunction($event)" [rowsPerPageOptions]="rowsPerPageOptions"
+            [row]='25'>
+        </app-ss-generic-table>
+        <!-- <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        [data]="AllStockList" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table> -->
+
+    </div>
+</div>
+<p-dialog header="Select Dates" [(visible)]="isCustomDate" modal="modal" showEffect="fade"
+[style]="{width: '50vw',height:'700px'}">
+    <app-datepickerpopup (onSelectValue)='selectValue($event)'></app-datepickerpopup>
+
+</p-dialog>
+<p-dialog header="Add to Wishlist" [(visible)]="isAddToWishlist" modal="modal" showEffect="fade"
+    [style]="{width: '50vw'}">
+    <app-addwishlist-dialog [ProductVariantID]='selectedVariantIDforWishlist'
+        [ProductName]='selectedProductNameforWishlist' (ReturnCall)='CloseDialog($event)'></app-addwishlist-dialog>
+
+</p-dialog>

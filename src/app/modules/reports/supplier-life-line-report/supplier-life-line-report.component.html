@@ -1,0 +1,142 @@
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+<p-toast></p-toast>
+
+<p-dialog header="Remarks" [(visible)]="displayDialog" [style]="{width: '50vw'}" [baseZIndex]="10000">
+    <p>{{DialogRemarks}}</p>
+</p-dialog>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <div class="top-c">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-6">
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col-11">
+                            <label for="firstname1">{{'REPORTS.SUPPLIER'| translate}}</label>
+                            <ng-select [items]="filteredSupplier" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectedSupplier" [searchFn]="dataFunc"
+                                (ngModelChange)="selectValue($event)">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="p-col-1">
+                            <i class="pi pi-search search-pi" (click)="OpenOrderByDialog();"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-3">
+                    <label for="supplier">{{'REPORTS.SUPPLIERDETAIL'| translate}}</label>
+                    <div> {{lifeLineSupplier.FirstName}} {{lifeLineSupplier.LastName}}</div>
+                    <div> {{lifeLineSupplier.Address}}</div>
+                </div>
+                <div class="p-col-3">
+                    <label for="currentBalance">{{'REPORTS.SUPPLIERBALANCE'| translate}}</label>
+                    <div *ngIf="lifeLineSupplier.CurrentBalance"><span >€ </span>
+                        {{lifeLineSupplier.CurrentBalance | number:'1.2-2' }} </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+            <div class="top-c">
+                <div class="p-fluid p-formgrid p-grid">
+                    <!-- <div class="p-field p-col-2 text-center">
+                        <div>{{'REPORTS.CREDITLIMIT'| translate}}</div>
+                        <div *ngIf="lifeLineSupplier.dCreditLimit"><span >€ </span>
+                            {{lifeLineSupplier.dCreditLimit || 0}} </div>
+                    </div>
+                    <div class="p-field p-col-2 text-center">
+                        <div>{{'REPORTS.SHIPPINGMETHOD'| translate}}</div>
+                        <div> {{selectedShippingMethod.Name || 'N/A'}} </div>
+                    </div> -->
+
+                    <div class="p-field p-col-4 text-center">
+                        <div>{{'REPORTS.BESTORDER'| translate}}</div>
+                        <div><span >€ </span>
+                            {{(bestOrder || '0') | number:'1.2-2' }}
+                        </div>
+                    </div>
+                    <div class="p-field p-col-4 text-center">
+                        <div>{{'REPORTS.LASTORDERON'| translate}} </div>
+                        <div> {{lastOrderOn || 'N/A'}} </div>
+                    </div>
+
+                    <div class="p-field p-col-4 text-center">
+                        <div>{{'REPORTS.ORDERCOUNT'| translate}}</div>
+                        <div>
+                            {{orderCount || 0}}
+                        </div>
+                    </div>
+                    <!-- <div class="p-field p-col-2 text-center">
+                        <div>{{'REPORTS.EXTERNAL'| translate}}</div>
+                        <div>
+                            <span *ngIf="lifeLineSupplier?.SupplierID >= 1; else other_content">
+                                {{lifeLineSupplier.IsOrderCreater === null ? 'No' :
+                                lifeLineSupplier.IsOrderCreater === true ? 'Yes' :
+                                'No'}}
+                            </span>
+                            <ng-template #other_content>N/A</ng-template>
+                        </div>
+                    </div> -->
+
+                </div>
+            </div>
+        </div>
+
+        <p-tabView>
+            <p-tabPanel header="Purchase Invoices">
+                <div class="table-border">
+                    <!-- <app-genric-table [data]="Purchases" [columnsData]="purchaseColumn" (emitHref)="getPurchasesByInvoiceNo($event)"
+                        [globalFilterFields]="PurchaseGlobalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"  [rowGroup]="rowGroup"
+                        [row]='25'>
+                    </app-genric-table> -->
+                    <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="Purchases" (emitHref)="getPurchasesByInvoiceNo($event)"
+                    [globalFilterFields]="PurchaseGlobalFilterFields" [columnsData]="purchaseColumn" [rowGroup]="rowGroup"
+                    [totalRecords]="purchaseTotalRecords" (getLazyData)="GetAllPurchaseDataWithLazyLoadinFunction($event)"
+                     [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+                    </app-ss-generic-table>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Top Products">
+                <div class="table-border">
+                    <app-genric-table [data]="TopProducts" [columnsData]="topProductColumn"
+                        [globalFilterFields]="topProductGlobalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
+                        [row]='25'>
+                    </app-genric-table>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Open Payment">
+                <!-- <app-genric-table [data]="openPayments" [columnsData]="openPaymentColumn" [rowGroup]="rowGroup1"
+                    [globalFilterFields]="openPaymentGlobalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
+                    [row]='25'>
+                </app-genric-table> -->
+                <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="openPayments" 
+                [globalFilterFields]="openPaymentGlobalFilterFields" [columnsData]="openPaymentColumn" [rowGroup]="rowGroup1"
+                [totalRecords]="openInvoicesTotalRecords" (getLazyData)="GetAllOpenInvoicesDataWithLazyLoadinFunction($event)"
+                 [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+                </app-ss-generic-table>
+            </p-tabPanel>
+            <p-tabPanel header="Activity Logs">
+                <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="allActivity"
+                [globalFilterFields]="activityGlobalFilterFields" [columnsData]="activityColumns" [rowGroup]="rowGroup2"
+                [totalRecords]="activityTotalRecords" (getLazyData)="GetAllActivityDataWithLazyLoadinFunction($event)"
+                 [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+                </app-ss-generic-table>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+
+
+
+<p-dialog header="Supplier" *ngIf="displaySupplierDialog" [(visible)]="displaySupplierDialog" modal="modal"
+    showEffect="fade" [style]="{ width: '60vw' }">
+    <app-genric-table (emitRowClick)="selectValue($event)" [data]="AllSuppliersList" [columnsData]="supplierColumns"
+        [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+    </app-genric-table>
+</p-dialog>

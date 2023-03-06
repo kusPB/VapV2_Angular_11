@@ -1,0 +1,115 @@
+<!-- 
+ <div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div> -->
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<!-- <p-toast></p-toast> -->
+
+<!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+    
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button *ngxPermissionsOnly="ExtrasPermission.AddClientSource" pButton pRipple label="{{'EXTRAS.ADDCLIENTCOURCE'| translate}}" (click)="AddClientSource();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+                
+            </ng-template>
+
+        </p-toolbar>
+        <p-toolbar styleclass="p-mb-4" *ngIf="IsAdd">
+            
+            <div >
+                <h5>{{'EXTRAS.CLIENTSOURCE'| translate}}</h5>
+
+                <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="firstname1">{{'EXTRAS.NAME'| translate}}</label>
+                            <input id="firstname5" type="text" pInputText [(ngModel)]="clientSource.Name">
+                        </div>
+                        <div class="p-field p-col">
+                            <label for="lastname1">{{'EXTRAS.DESCRIPTION'| translate}}</label>
+                            <input id="lastname5" type="text" pInputText [(ngModel)]="clientSource.Description">
+                        </div>
+                        <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                            <button pButton pRipple type="button" icon="fas fa-plus" label="{{'EXTRAS.SAVE'| translate}}" (click)="SaveUpdateClientSourceDetails();"icon="fas fa-plus" class="p-button-raised p-mr-2"></button>
+                    
+                        </div>
+                        <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                            <button pButton pRipple label="{{'EXTRAS.CLOSE'| translate}}" icon="fas fa-times" class="p-button-raised p-mr-2" (click)="CloseAddSection();"></button>
+                        </div>
+                    </div>
+
+            </div>
+
+        </p-toolbar>
+        <!-- [(selection)]="selectedOneProduct" -->
+        <!-- <p-table #dt [value]="AllClientSourceList"  [rows]="rows"  [totalRecords]="totalRecords" [(first)]="first"   
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+           [loading]="loading"  [showCurrentPageReport]="true"  dataKey="id" 
+           [(contextMenuSelection)]="selectedClientSource"   
+           [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"  
+           [paginator]="true"  [rowHover]="true" styleClass="p-datatable-responsive-demo"
+           [filterDelay]="0"  [globalFilterFields]="['Name','Description']">
+   
+        
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">Client Sources</h5>
+                <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" placeholder="Global Search"/>
+            </span>
+            </div>
+        </ng-template>
+         
+         <ng-template pTemplate="header">
+                <tr>
+                 
+                    <th style="width: 4.5rem;" >Status</th>
+                    <th pSortableColumn="Name"> Name <p-sortIcon field="Name"></p-sortIcon></th> 
+                    <th pSortableColumn="Description"> Description <p-sortIcon field="Description"></p-sortIcon></th>
+                    
+                </tr>
+
+
+                <tr>
+                 
+                    <th style="width: 4.5rem" > </th>
+                    
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Name', 'startsWith')" placeholder="Search by Name" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Description', 'startsWith')" placeholder="Search by Description" class="p-column-filter">
+                    </th>
+                    
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-ClientSource >
+                <tr [pContextMenuRow]="ClientSource">
+                    <td>
+                      <p-inputSwitch  [(ngModel)]="ClientSource.IsActive" (click)="UpdateClientSourceStatus(ClientSource)"></p-inputSwitch>
+                    </td>
+                   
+                    <td>{{ClientSource.Name}}</td>
+                    <td >{{ClientSource.Description}}</td>
+                   
+                </tr>
+            </ng-template>
+
+        </p-table> -->
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        [data]="AllClientSourceList" [columnsData]="columns" (emitSwitch)="UpdateClientSourceStatus($event)">
+        </app-genric-table>
+    </div>
+</div>

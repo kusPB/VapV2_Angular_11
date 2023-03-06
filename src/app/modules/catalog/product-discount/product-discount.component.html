@@ -1,0 +1,88 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<!-- <p-toast></p-toast> -->
+
+<!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button pButton pRipple label="Add Product Discount" (click)="AddProductDiscount();" icon="fas fa-plus"
+                    class="p-button-raised  p-mr-2"></button>
+
+            </ng-template>
+
+        </p-toolbar>
+        <!-- <p-toolbar styleclass="p-mb-4"> -->
+
+        <div class="card c-card" *ngIf="IsAdd">
+            <h5>Discount Group Information</h5>
+
+            <div class="p-fluid p-formgrid p-grid">
+
+                <div class="p-field p-col-4">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label>Product </label>
+                            <ng-select [disabled]="disabledProductDD" [items]="filteredProductList" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectedProduct" [searchFn]="dataFunc" class="prod-d-d dd">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <span>
+                            <i class="pi pi-search search-pi" (click)="OpenProductDialog();"></i>
+                        </span>
+                    </div>
+
+                </div>
+                <div class="p-field p-col-4">
+                    <label for="lastname1">Minimum Discount (%)</label>
+                    <input id="lastname1" type="number" pInputText [(ngModel)]="productDiscount.MinDiscountPerc">
+                </div>
+                <div class="p-field p-col-4">
+                    <label for="lastname2">Maximum Discount (%)</label>
+                    <input id="lastname2" type="number" pInputText 
+                        [(ngModel)]="productDiscount.MaxDiscountPerc">
+                </div>
+            </div>
+
+            <div class="p-field" style="margin-right: 1rem; margin-bottom: 35px;">
+                <button pButton pRipple type="button" icon="fas fa-plus" label="Save"
+                    (click)="SaveUpdateProductDiscountDetails();" icon="fas fa-plus" class="p-button-raised p-mr-2"
+                    style="float: right;"></button>
+
+                <button pButton pRipple label="Close" icon="fas fa-times" class="p-button-raised p-mr-2"
+                    (click)="CloseAddSection();" style="float: right;"></button>
+            </div>
+
+        </div>
+
+        <!-- </p-toolbar> -->
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            (emitSwitch)="UpdateProductDiscountStatus($event)" [data]="AllProductDiscountList" [columnsData]="columns"
+            [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+    </div>
+</div>
+<p-dialog header="Products" [(visible)]="IsOpenProductDialog" modal="modal" showEffect="fade"
+    [style]="{ width: '70vw' }">
+    <app-genric-table (emitRowClick)="selectValue($event)" [menuItems]="[]" [data]="ProductData"
+        [columnsData]="productsColumn">
+    </app-genric-table>
+
+</p-dialog>

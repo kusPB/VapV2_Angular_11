@@ -1,0 +1,205 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+<p-dialog header="Change Password" [(visible)]="displayPasswordPopup" modal="modal" showEffect="fade" [style]="{width: '25vw'}">
+    <div class="p-grid">
+          
+            <!-- <div class="p-field p-col-12 ">
+                <label for="currentpassword" >Current Password</label>
+                <span class="p-input-icon-left"  style="width: 100% !important;">
+                    <i class="fas fa-key"></i>
+                    <input type="password" [(ngModel)]="changepasswordrequest.OldPassword" name= "currentpassword" id="currentpassword"  style="width: 100% !important;" required pInputText placeholder="Enter current password"/>
+                </span>
+            </div> -->
+            <div class="p-field p-col-12 ">
+                <label for="newpassword" >New Password</label>
+                <span class="p-input-icon-left"  style="width: 100% !important;">
+                    <i class="fas fa-key"></i>
+                    <input type="password" [(ngModel)]="changepasswordrequest.NewPassword" name= "newpassword" id="newpassword"  style="width: 100% !important;" required pInputText placeholder="Enter new password"/>
+                </span>
+            </div>
+
+            <div class="p-field p-col-12 ">
+                <label for="confirmnewpassword" >Confirm New Password</label>
+                <span class="p-input-icon-left"  style="width: 100% !important;">
+                    <i class="fas fa-key"></i>
+                    <input type="password" [(ngModel)]="confirmnewpassword" name= "confirmnewpassword" id="confirmnewpassword"  style="width: 100% !important;" required pInputText placeholder="Enter confirm new password"/>
+                </span>
+            </div>
+    </div>
+    <div class="p-grid p-dir-col">
+            <div class="p-col">
+                <p-toolbar>
+                <div class="p-toolbar-group-left">
+                    
+                 </div>
+                 <!-- <div >
+                    <span class="p-buttonset">
+                        <button pButton pRipple label="Confirm" icon="pi pi-check"  class="p-button-raised  p-button-secondary p-mr-2"></button>
+                    </span>
+                 </div> -->
+
+             <div class="p-toolbar-group-right">
+                    <span class="p-buttonset">
+                        <button pButton pRipple label="Cancel" (click)="PasswordClosedPopUp()" icon="pi pi-times"  class="p-button-raised  p-button-secondary p-mr-2"></button>
+                    </span>
+                    <!--  -->
+                    <span class="p-buttonset">
+                        <button  pButton pRipple *ngxPermissionsOnly="ExtrasPermission.ChangePassword" (click)="ChangePassword()" label="Change Password" icon="fas fa-key" class="p-button-raised p p-mr-2"></button>
+                    </span>
+                </div>
+            </p-toolbar>
+
+        </div>
+      
+    </div>   
+
+</p-dialog>
+<p-dialog header="Change Reporting Password" [(visible)]="displayReportingPasswordPopup" modal="modal" showEffect="fade" [style]="{width: '25vw'}">
+    <div class="p-grid">
+          
+            <!-- <div class="p-field p-col-12 ">
+                <label for="currentpassword" >Current Password</label>
+                <span class="p-input-icon-left"  style="width: 100% !important;">
+                    <i class="fas fa-key"></i>
+                    <input type="password" [(ngModel)]="changepasswordrequest.OldPassword" name= "currentpassword" id="currentpassword"  style="width: 100% !important;" required pInputText placeholder="Enter current password"/>
+                </span>
+            </div> -->
+            <div class="p-field p-col-12 ">
+                <label for="newpassword" >New Password</label>
+                <span class="p-input-icon-left"  style="width: 100% !important;">
+                    <i class="fas fa-key"></i>
+                    <input type="password" [(ngModel)]="changepasswordrequest1.NewPassword" name= "newpassword" id="newpassword"  style="width: 100% !important;" required pInputText placeholder="Enter new password"/>
+                </span>
+            </div>
+
+            <div class="p-field p-col-12 ">
+                <label for="confirmnewpassword" >Confirm New Password</label>
+                <span class="p-input-icon-left"  style="width: 100% !important;">
+                    <i class="fas fa-key"></i>
+                    <input type="password" [(ngModel)]="confirmnewpassword1" name= "confirmnewpassword1" id="confirmnewpassword1"  style="width: 100% !important;" required pInputText placeholder="Enter confirm new password"/>
+                </span>
+            </div>
+    </div>
+    <div class="p-grid p-dir-col">
+            <div class="p-col">
+                <p-toolbar>
+                <div class="p-toolbar-group-left">
+                    
+                 </div>
+             
+
+             <div class="p-toolbar-group-right">
+                    <span class="p-buttonset">
+                        <button pButton pRipple label="Cancel" (click)="ReportingPasswordClosedPopUp()" icon="pi pi-times"  class="p-button-raised  p-button-secondary p-mr-2"></button>
+                    </span>
+                    <!--  -->
+                    <span class="p-buttonset">
+                        <button  pButton pRipple *ngxPermissionsOnly="ExtrasPermission.ChangeReportingPassword" (click)="ChangeReportingPassword()" label="Change Reporting Password" icon="fas fa-key" class="p-button-raised p p-mr-2"></button>
+                    </span>
+                </div>
+            </p-toolbar>
+
+        </div>
+      
+    </div>   
+
+</p-dialog>
+<p-toast></p-toast>
+
+<!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+    
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button pButton pRipple *ngxPermissionsOnly="ExtrasPermission.AddUser" label="{{'EXTRAS.ADDUSER'| translate}}" [routerLink]="['/extras/add-user']" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+                <!-- <button pButton pRipple *ngxPermissionsOnly="ExtrasPermission.ChangeReportingPassword" label="{{'EXTRAS.CHANGEREPORTINGPASSWORD'| translate}}" (click)="OpenReportingPasswordDialog();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button> -->
+                
+            </ng-template>
+
+        </p-toolbar>
+        <p-toolbar styleclass="p-mb-4" *ngIf="IsAdd">
+ 
+           
+
+        </p-toolbar>
+        <!-- [(selection)]="selectedOneProduct" --> <!-- [contextMenu]="cm" -->
+        <!-- <p-table #dt [value]="AllUserList"  [rows]="rows"  [totalRecords]="totalRecords" [(first)]="first"   
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+           [loading]="loading"  [showCurrentPageReport]="true"  dataKey="id" 
+           [(contextMenuSelection)]="selectedUser"  
+           [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"  
+           [paginator]="true"  [rowHover]="true" styleClass="p-datatable-responsive-demo"
+           [filterDelay]="0"  [globalFilterFields]="['FirstName','UserName','Role','Address','Outlet']">
+          
+        
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">User</h5>
+                <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" placeholder="Global Search"/>
+            </span>
+            </div>
+        </ng-template>
+         
+         <ng-template pTemplate="header">
+                <tr>
+                 
+                    <th pSortableColumn="FirstName"> Name <p-sortIcon field="FirstName"></p-sortIcon></th> 
+                    <th pSortableColumn="UserName"> User Name <p-sortIcon field="UserName"></p-sortIcon></th>
+                    <th pSortableColumn="Role"> Role <p-sortIcon field="Role"></p-sortIcon></th>
+                    <th pSortableColumn="Address"> Address <p-sortIcon field="Address"></p-sortIcon></th>
+                    <th pSortableColumn="Outlet"> Outlet <p-sortIcon field="Outlet"></p-sortIcon></th>
+
+                </tr>
+                <tr>
+                 
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'FirstName', 'contains')" placeholder="Search by Name" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'UserName', 'contains')" placeholder="Search by UserName" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Role', 'contains')" placeholder="Search by Role" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Address', 'contains')" placeholder="Search by Address" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Outlet', 'contains')" placeholder="Search by Outlet" class="p-column-filter">
+                    </th>
+                   
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-UserModel >
+                <tr [pContextMenuRow]="UserModel">
+                  
+                    <td>{{UserModel.FirstName}}</td>
+                    <td >{{UserModel.UserName}}</td>
+                    <td >{{UserModel.Role}}</td>
+                    <td >{{UserModel.Address}}</td>
+                    <td >{{UserModel.Outlet}}</td>
+
+                </tr>
+            </ng-template>
+
+        </p-table> -->
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        [data]="AllUserList" [columnsData]="columns" (emitSwitch)="UpdateUserStatusFunction($event)">
+        <!-- (emitSwitch)="UpdateClientSourceStatus($event)" -->
+        </app-genric-table>
+    
+    </div>
+</div>

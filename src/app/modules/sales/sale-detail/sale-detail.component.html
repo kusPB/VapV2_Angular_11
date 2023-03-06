@@ -1,0 +1,253 @@
+<button
+*ngIf="!IsNotPermitted"
+  style="margin-left: 2px"
+  pButton
+  pRipple
+  type="button"
+  (click)="Print()"
+  class="p-button p-button-success"
+  icon="pi pi-print"
+  title="Print Packing List"
+  label="Print Packing List"
+></button>
+<button
+*ngIf="!IsNotPermitted"
+  style="margin-left: 2px"
+  pButton
+  pRipple
+  type="button"
+  (click)="Print1()"
+  class="p-button p-button-success"
+  icon="pi pi-print"
+  title="Print Packing Slip"
+  label="Print Packing Slip"
+></button>
+<button
+  style="margin-left: 2px"
+  pButton
+  pRipple
+  type="button"
+  (click)="Close()"
+  class="p-button p-button-secondary"
+  icon="pi pi-times"
+  title="Close"
+  label="Close"
+></button>
+<div style="color: red;margin: 15px; font-size: x-large;" [ngStyle]=" IsPrinted == true && {'color': '#32CD32'}">
+  <strong> <span>This invoice is </span> 
+    {{ IsPrinted==true? "printed": "not printed yet" }}
+  </strong>
+</div>
+
+<!-- PACKING LIST -->
+<app-sale-preview-report
+  *ngIf="SaleDetails"
+  [TotalQuantity]="TotalQuantity"
+  [SaleDetails]="SaleDetails"
+></app-sale-preview-report>
+
+<!-- Paking Slip -->
+<app-vp-sale-packing-report
+ *ngIf="printingData" 
+ [TotalQuantity]="TotalQuantity"
+ [SaleDetails]="printingData"
+ ></app-vp-sale-packing-report>
+
+<div id="printArea" #screen *ngIf="SaleDetails">
+  <p-panel header="Sale Information">
+    <div class="p-grid">
+      <div class="p-col">
+        <label>Order by:</label>
+        {{ SaleDetails.Customer }} <br />
+        {{ customerDetails.Number }} <br />
+        {{ SaleDetails.InvoiceAddress }} <br />
+
+        <label *ngxPermissionsOnly="SalePermission.CurrentBalanceinSaleDetails">Customer Balance: 
+        <span >€ </span> {{ customerDetails.CurrentBalance | number:'1.2-2' }} </label>  <br />
+      </div>
+      <div class="p-col">
+        <label>Deliver To:</label>
+        {{ SaleDetails.DeliveredTo }} <br />
+        {{ DeliverToDetails.Number }} <br />
+        {{ SaleDetails.DeliveryAddress }} <br />
+      </div>
+      <div class="p-col">
+        <label>Invoice No:</label>
+        {{ SaleDetails.ID }} <br />
+
+        <label>Deliver Date :</label>
+        {{ SaleDetails.dtDate | date: "dd.MM.YYYY HH:MM" }} <br />
+        <label>Order Date :</label>
+        {{ SaleDetails.SaleDate | date: "dd.MM.YYYY HH:MM" }} <br />
+        <label>Remarks :</label>
+        {{ SaleDetails.sRemarks }} <br />
+      </div>
+      <div class="p-col">
+        <label>Delivery Method:</label>
+        {{ SaleDetails.ShippingMethod }} <br />
+
+        <label>Type :</label>
+        {{ SaleDetails.Type }} <br />
+        <label>Payment Condition :</label>
+        {{ SaleDetails.PaymentCondition }} <br />
+      </div>
+    </div>
+  </p-panel>
+  <br /><br />
+  <p-panel header="Sale Detail Information">
+    <p-table [value]="SaleDetails.SaleDetails">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Product</th>
+          <th>Model No</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+          <th>Discount</th>
+          <th>Sub Total</th>
+          <th>Net Price</th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>
+            {{
+              product.ProductVariant == null ||
+              product.ProductVariant == "" ||
+              product.ProductVariant == "Color N.A, Size N.A"
+                ? product.Product
+                : product.Product + "  (" + product.ProductVariant + ")"
+            }}
+          </td>
+          <td>{{ product.BLabel }}</td>
+          <td>{{ product.Quantity }}</td>
+          <td><span>€ </span> {{ product.dTotalUnitValue | number:'1.2-2' }}</td>
+          <td>
+            {{
+              product.dTotalDiscount.toFixed(2) +
+                " (" +
+                (product.dDiscountPer || 0).toFixed(2) +
+                "%)"
+            }}
+          </td>
+          <td><span>€ </span> {{ product.dTotalValue | number:'1.2-2'  }}</td>
+          <td>
+            <span>€ </span> {{ product.dTotalValue - product.dTotalDiscount | number:'1.2-2'  }}
+          </td>
+          <td>
+            <button
+              pButton
+              type="button"
+              *ngIf="product.TrackableProductsSaleDetails.length > 0"
+              (click)="product.display = true"
+              label="Show Trackables"
+            ></button>
+            <p-dialog
+              header="Trackable Codes"
+              [style]="{ width: '50vw' }"
+              [(visible)]="product.display"
+            >
+              <p-table
+                #dt1
+                [value]="product.TrackableProductsSaleDetails"
+                [paginator]="true"
+                [rows]="25"
+                [totalRecords]="product.TrackableProductsSaleDetails"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [rowHover]="true"
+                styleClass="p-datatable-responsive-demo"
+                [filterDelay]="0"
+                [globalFilterFields]="['TrackableCode']"
+                #dt
+              >
+                <!-- </p-table> -->
+                <!-- <p-table [value]="trackableIndex!=null? products[trackableIndex].TrackableCodes: productInfo[0].TrackableCodes"> -->
+                <ng-template pTemplate="caption" style="margin-top: 20px">
+                  <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0">
+                      <!-- <p-multiSelect [options]="columns" [(ngModel)]="selectedColumns" optionLabel="header"
+                      selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Choose Columns"></p-multiSelect> -->
+                    </h5>
+                    <span class="p-input-icon-left">
+                      <i class="pi pi-search"></i>
+                      <input
+                        pInputText
+                        (input)="
+                          dt1.filterGlobal($event.target.value, 'contains')
+                        "
+                        type="text"
+                        placeholder="Global Search"
+                      />
+                    </span>
+                  </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Product</th>
+                    <th pSortableColumn="TrackableCode">
+                      Trackable Code
+                      <p-sortIcon field="TrackableCode"></p-sortIcon>
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-xx let-ri="rowIndex">
+                  <tr>
+                    <td>{{ xx.Product }}</td>
+                    <td>{{ xx.TrackableCode }}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </p-dialog>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+  <br />
+  <div class="p-grid">
+    <div class="p-col-8">
+      <!-- <label>Supplier</label>
+      {{purchaseDetail.Supplier}}<br> -->
+    </div>
+
+    <div class="p-col-4">
+      <p-card>
+        <div class="p-grid">
+          <div class="p-col">SubTotal</div>
+          <div class="p-col"><span>€ </span> {{ SaleDetails.subTotal | number:'1.2-2' }}</div>
+        </div>
+        <div class="p-grid">
+          <div class="p-col">Total Discount</div>
+          <div class="p-col">
+            <span>€ </span> {{ SaleDetails.totalDiscount | number:'1.2-2' }}
+          </div>
+        </div>
+        <!-- <div class="p-grid">
+        <div class="p-col"><h4><b>Shipping Method</b></h4></div>
+        <div class="p-col"><h4><b>{{SaleDetails.ShippingMethod}}</b></h4></div>
+      </div> -->
+      <div class="p-grid">
+        <div class="p-col">Shipping Cost</div>
+        <div class="p-col"><span>€ </span>{{SaleDetails.shipment | number:'1.2-2' }}</div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col">Grand Total</div>
+        <div class="p-col"><span>€ </span> {{SaleDetails.grandTotal | number:'1.2-2' }}</div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col">Payment</div>
+        <div class="p-col"><span>€ </span> {{SaleDetails.dTotalPaidValue | number:'1.2-2' }}</div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col">Rest Amount</div>
+        <div class="p-col"><span>€ </span> {{SaleDetails.restAmount | number:'1.2-2' }}</div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col">NGP</div>
+        <div class="p-col"><span>€ </span> {{SaleDetails.NGB | number:'1.2-2' }}</div>
+      </div>
+    </p-card>
+    </div>
+  </div>
+</div>

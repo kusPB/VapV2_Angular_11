@@ -1,0 +1,157 @@
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button pButton pRipple label="{{'MANAGEDPRODUCT.SELECTPOSTTOSHOP'| translate}}"
+                    (click)="PostAllSelectedRows();" icon="fas fa-paper-plane" class="p-button-raised"></button>
+            </ng-template>
+
+            <ng-template pTemplate="right">
+
+                <div class="p-field ">
+                    <label for="PostProduct"> {{'GENRIC.SEARCHBYDATE'| translate}}</label>
+
+                    <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+                        (onChange)="onChangeDate($event)" [(ngModel)]="selectedSearchByDateID" autoWidth="false"
+                        [style]="{'width':'200px'}" required filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+            </ng-template>
+
+        </p-toolbar>
+        <app-ss-generic-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            [data]="ProductVariants" [globalFilterFields]="globalFilterFields" [columnsData]="columns"
+            [totalRecords]="totalRecords" (getLazyData)="GetAllPostTableWithLazyLoadinFunction($event)"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-ss-generic-table>
+        <!-- <p-table #dt [value]="ProductVariants | searchPipe:'Product': mySearch" [rows]="rows" [totalRecords]="totalRecords" [(first)]="first"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [showCurrentPageReport]="true" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"
+            [paginator]="true" dataKey="ID" styleClass="p-datatable-responsive-demo">
+          
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0">Products Variants</h5>
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText [(ngModel)]="mySearch" type="text" placeholder="Global Search" />
+                    </span>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+
+                    <th style="width: 4.5rem;">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th pSortableColumn="ProductID" style="text-align: center;"> SKU <p-sortIcon field="ProductID">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Product"> Product <p-sortIcon field="Product"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Color" style="text-align: center;"> Color <p-sortIcon field="Color">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Size" style="text-align: center;"> Code <p-sortIcon field="Size"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Barcode" style="text-align: center;"> EAN <p-sortIcon field="Barcode">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="RemainingStock" style="text-align: center;"> Stock <p-sortIcon
+                            field="RemainingStock"></p-sortIcon>
+                    </th>
+                    <th> Actions </th>
+
+                </tr>
+
+                <tr>
+
+                    <th style="width: 4.5rem"> </th>
+
+
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'ProductID', 'contains')"
+                            placeholder="Search by SKU" class="p-column-filter th-input">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Product', 'contains')"
+                            placeholder="Search by Product" class="p-column-filter th-input">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Color', 'contains')"
+                            placeholder="Search by Color" class="p-column-filter th-input">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Size', 'contains')"
+                            placeholder="Search by Code" class="p-column-filter th-input">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Barcode', 'contains')"
+                            placeholder="Search by EAN" class="p-column-filter th-input">
+                    </th>
+                    <th>
+                        <input pInputText type="text"
+                            (input)="dt.filter($event.target.value, 'RemainingStock', 'contains')"
+                            placeholder="Search by Stock" class="p-column-filter th-input">
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body" let-ProductVariant>
+                <tr>
+                    <td>
+
+                        <p-tableCheckbox [value]="ProductVariant"></p-tableCheckbox>
+                    </td>
+
+                    <td style="text-align: center;"> {{ProductVariant.ProductID}} </td>
+                    <td> {{ProductVariant.Product}} </td>
+                    <td style="text-align: center;"> {{ProductVariant.Color}} </td>
+                    <td style="text-align: center;"> {{ProductVariant.Size}} </td>
+                    <td style="text-align: center;"> {{ProductVariant.Barcode}} </td>
+                    <td style="text-align: center;"> {{ProductVariant.RemainingStock}} </td>
+                    <td><button (click)="PostTOShopOrAddProductToOpenCartFunction(ProductVariant.ProductID)" pButton
+                            pRipple title="Post To Shop" icon="fas fa-paper-plane" class="p-button-raised">
+
+                        </button> </td>
+
+
+                </tr>
+            </ng-template>
+
+
+
+        </p-table> -->
+
+
+    </div>
+</div>
+<p-dialog header="Password" *ngIf="displayPasswordPopup" [(visible)]="displayPasswordPopup" modal="modal"
+showEffect="fade" [style]="{ width: '25vw' }">
+<div class="">
+  <div class="card">
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-9">
+        <label for="firstname1">Password</label>
+        <input pInputText type="password" [(ngModel)]="password" />
+      </div>
+      <div class="p-field p-col-3">
+        <button pButton pRipple label="" icon="fas fa-paper-plane"
+        (click)="PostToShopPasswordClick()" class="p-button-raised p p-mr-2" style="margin-top: 20px"></button>
+      </div>
+      <br />
+    </div>
+  </div>
+ 
+</div>
+</p-dialog>

@@ -1,0 +1,161 @@
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<div class="p-grid">
+  <div class="p-col">
+    <p-toolbar styleClass="p-mb-4">
+      <ng-template pTemplate="left">
+        <button pButton pRipple *ngIf="isbtnFullPurchaseReturnEnable" label="Full Purchase Order Refund"
+          (click)="fullPurchaseRefund()" icon="fas fa-plus" class="p-button-success  p-mr-2"></button>
+        <button pButton pRipple label="Refund" (click)="refund()" icon="fas fa-plus"
+          class="p-button-success  p-mr-2"></button>
+        <button pButton pRipple label="Close" [routerLink]="['/purchase/purchase-order-report']" icon="fas fa-undo"
+          class="p-button-secondary  p-mr-2"></button>
+      </ng-template>
+      <!-- <ng-template pTemplate="right">
+          <div class="p-field p-col">
+              <label>Search By Date</label>
+              <p-dropdown  placeholder="Select Search By Date" [options]="SearchByDateDropdown" (onChange)="onChangeDate($event)" [(ngModel)]="selectedSearchByDateID" autoWidth="false" [style]="{'width':'200px'}"  required filter="true" >
+                      <ng-template let-item pTemplate="selectedItem">
+                          <span style="vertical-align:middle; margin-left: .5em" >{{item.label}}</span>
+                      </ng-template>
+                      
+                  </p-dropdown> 
+          </div>
+      </ng-template> -->
+    </p-toolbar>
+  </div>
+</div>
+<div class="p-grid">
+  <div class="p-col-9">
+    <p-panel header="Cart">
+
+      <p-table [value]="purchaseDetail.PurchasesDetails" *ngIf="purchaseDetail" [paginator]="true" [rows]="50"
+        [totalRecords]="purchaseDetail.PurchasesDetails.length" [showCurrentPageReport]="true" #dt1 [rowHover]="true"
+        styleClass="p-datatable-sm" [filterDelay]="0" [globalFilterFields]="['Product','Quantity']">
+        <ng-template pTemplate="caption">
+          <div class="p-d-flex">
+            <span class="p-input-icon-left p-ml-auto">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                placeholder="Search keyword" />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th></th>
+            <th>Product</th>
+            <th>Purchase Quantity</th>
+            <th>Returned Quantity</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+         <tr *ngIf="product.Quantity > 0">
+            <td>
+              <p-checkbox [(ngModel)]="product.isNewRefund" binary="true" (onChange)="selectUnselectProduct(product,true)"
+                inputId="binary"></p-checkbox>
+            </td>
+            <td>{{product.Product}}</td>
+            <td>
+              {{product.Quantity}}
+            </td>
+            <td><input id="remarks" type="number" *ngIf="product.TrackableProductsPurchaseDetails.length<=0" style="width: 50%;" (keyup)="changeQuantityOfReturnProduct(product)" (blur)="blurQuantityOfReturnProduct(product)" (change)="refreshRefundSummary(product)"
+                [disabled]="!product.isNewRefund" pInputText [(ngModel)]="product.NewReturnedQuantity">
+              
+              <span *ngIf="product.TrackableProductsPurchaseDetails.length>0"> {{getTrackable(product)}}</span>
+              </td>
+            <td> <span>€ </span> {{product.dTotalAmount | number:'1.2-2' }}</td>
+            <td>
+              <button pButton pRipple label="trackable codes" *ngIf="product.displayTrackableBtn" icon="fas fa-plus" class="p-button-secondary  p-mr-2"
+                (click)="refreshTrackablesDetailsTable(product)"></button>
+              <button pButton pRipple type="button" icon="pi pi-info" class="p-button-rounded"
+                (click)="displayInfo = true"></button>
+              <p-dialog header="Product Information" [style]="{width: '50vw'}" [baseZIndex]="10000"
+                [(visible)]="displayInfo">
+                Product: {{product.Product}}<br>
+                Quantity: {{product.Quantity}}<br>
+                Returned Quantity: {{product.ReturnedQuantity}}<br>
+                Total Discount: <span>€ </span> {{product.dTotalDiscount | number:'1.2-2' }}<br>
+                Tax: <span>€ </span> {{product.TaxAmount | number:'1.2-2' }}<br>
+              </p-dialog>
+
+              <p-dialog header="Trackable Product Information" [style]="{width: '50vw'}" [baseZIndex]="10000"
+                [(visible)]="product.displayTrackable">
+                <p-table #dt12 [value]="product.TrackableProductsPurchaseDetails" [paginator]="true" [rows]="25"
+                   [showCurrentPageReport]="true"
+                  
+                  [rowsPerPageOptions]="[25, 50, 100]" [rowHover]="true" styleClass="p-datatable-responsive-demo"
+                  [filterDelay]="0" [globalFilterFields]="['TrackableCode']" >
+                  <!-- </p-table> -->
+                  <!-- <p-table [value]="trackableIndex!=null? products[trackableIndex].TrackableCodes: productInfo[0].TrackableCodes"> -->
+                  <ng-template pTemplate="caption" style="margin-top: 20px">
+
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                      <h5 class="p-m-0">
+                        <!-- <p-multiSelect [options]="columns" [(ngModel)]="selectedColumns" optionLabel="header"
+                        selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" placeholder="Choose Columns"></p-multiSelect> -->
+                      </h5>
+                      <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText (input)="dt12.filterGlobal($event.target.value, 'contains')" type="text"
+                          placeholder="Global Search" />
+                      </span>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="header">
+          <tr>
+            <th>Select</th>
+            <th pSortableColumn="TrackableCode">Trackable Code <p-sortIcon field="TrackableCode"></p-sortIcon>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item let-ri="rowIndex">
+          <tr>
+            <td>
+              <p-checkbox [(ngModel)]="item.IsReturnedItem" binary="true" (onChange)="selectUnselectTrackableCode(product,item)" inputId="binary"></p-checkbox>
+            </td>
+            <td>{{item.TrackableCode}}</td>
+
+          </tr>
+        </ng-template>
+      </p-table>
+      </p-dialog>
+      </td>
+      </tr>
+      </ng-template>
+      </p-table>
+    </p-panel>
+  </div>
+  <div class="p-col-3">
+    <p-panel header="Refund Information">
+      <div class="p-grid">
+        <div class="p-col">Total Products</div>
+        <div class="p-col" style="text-align: right;">{{totalProducts}}</div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col">SubTotal</div>
+        <div class="p-col" style="text-align: right;"> <span>€ </span> {{subTotal | number:'1.2-2' }}</div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col">Total Discount</div>
+        <div class="p-col" style="text-align: right;"><span>€ </span> {{totalDiscount | number:'1.2-2' }}</div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col">Total Tax</div>
+        <div class="p-col" style="text-align: right;"><span>€ </span> {{totalTax | number:'1.2-2' }}</div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col">Grand Total</div>
+        <div class="p-col" style="text-align: right;"><span>€ </span> {{grandTotal | number:'1.2-2' }}</div>
+      </div>
+    </p-panel>
+  </div>
+</div>
+
+<p-dialog header="User Captcha" [(visible)]="isCaptchaDisplayed" (onHide)="close()" modal="modal" showEffect="fade"
+    [style]="{width: '50vw'}">
+    <app-captcha-dialog  [firstNumber]='firstNumber'
+    [secondNumber]='secondNumber' (ReturnCall)='ValidateCaptcha($event)'></app-captcha-dialog>
+</p-dialog>

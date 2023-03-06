@@ -1,0 +1,179 @@
+<p-contextMenu #cm [model]="items" (onShow)="showMenuItems($event)"></p-contextMenu>
+
+<p-table [columns]="selectedColumns" [value]="data | searchPipe:Column: mySearch" [paginator]="true" [rows]="row"
+  [totalRecords]="totalRecords" [showCurrentPageReport]="true" [contextMenu]="cm"
+  [(contextMenuSelection)]="selectedStock" [rowsPerPageOptions]="rowsPerPageOptions" [rowHover]="true"
+  styleClass="p-datatable-responsive-demo" [filterDelay]="0" [lazy]="true" (onLazyLoad)="loadCustomers($event)"
+  [globalFilterFields]="selectedColumns" #dt>
+  <ng-template pTemplate="caption" style="margin-top: 20px">
+    <div class="p-d-flex p-ai-center p-jc-between">
+
+      <h5 class="p-m-0" *ngIf="multiSelect">
+        <p-multiSelect [options]="columns" [(ngModel)]="selectedColumns" optionLabel="header"
+          selectedItemsLabel="{0} columns selected"  placeholder="Choose Columns">
+        </p-multiSelect>
+        <!-- <button type="button" pButton pRipple icon="pi pi-file-o" (click)="exportData.exportCSV()" class="p-mr-2 p-ml-2 font"
+          pTooltip="CSV" tooltipPosition="bottom"></button> -->
+        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+          class="p-button-success p-mr-2 p-ml-2 font" pTooltip="XLS" tooltipPosition="bottom"></button>
+        <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+           class="p-button-warning p-mr-2  p-ml-2 font" pTooltip="PDF" tooltipPosition="bottom"></button>
+      </h5>
+
+
+      <span class="p-input-icon-left" *ngIf="filterGlobal">
+        <i class="pi pi-search"></i>
+        <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text"
+          placeholder="Global Search" />
+      </span>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <!-- <button type="button" pButton class="export-btn" label="Export" (click)="exportCSV()"></button> -->
+    <tr>
+
+      <th *ngFor="let col of selectedColumns" [pSortableColumn]="col.sorting" >
+        <!-- {{'EXTRAS.PROFILEIMAGE'| translate}} -->
+       {{ col.translateCol ? (col.translateCol | translate): col.header }}
+        <p-sortIcon *ngIf="col.sorting && col.sorting != ''" [field]="col.field"></p-sortIcon>
+        <!-- <p-sortIcon *ngIf="!col.disableSorting" [field]="col.field"></p-sortIcon> -->
+      </th>
+    </tr>
+    <tr>
+      <th *ngFor="let col of selectedColumns">
+        <input pInputText type="text" *ngIf="col.searching" [(ngModel)]="col.data"
+          (input)="columnSearch($event.target.value, col.field)" placeholder="Search by {{ col.header }}"
+          class="p-column-filter" />
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-cols let-rowIndex="rowIndex">
+    <tr *ngIf="rowGroup.enableRowGroup && checkMyData(cols,rowIndex)">
+      <td [attr.colspan]="selectedColumns.length" style="background-color: lightgray;">
+        <div [ngSwitch]="rowGroup.propertyType">
+          <div *ngSwitchCase="rowGroupType.STRING">
+            {{cols[rowGroup.property] }}
+          </div>
+          <div *ngSwitchCase="rowGroupType.DATE">
+            <!-- <p-inputSwitch  [(ngModel)]="cols[col.field]"  (click)="emitInputSwitch(cols)"></p-inputSwitch> -->
+            {{cols[rowGroup.property] | date}}
+          </div>
+          <div *ngSwitchDefault>
+            {{cols[rowGroup.property]}}
+          </div>
+        </div>
+        <!-- <span class="p-text-bold p-ml-2">{{cols[rowGroup.property]}}</span> -->
+      </td>
+    </tr>
+    <tr [pContextMenuRow]="cols">
+      <td *ngFor="let col of selectedColumns">
+        <div [ngSwitch]="col.type">
+          <div *ngSwitchCase="columnsType.TOGGLE_BUTTON">
+            <!-- <p-inputSwitch [(ngModel)]="cols[col.field]" (click)="emitInputSwitch(cols)"></p-inputSwitch> -->
+            <p-toggleButton onIcon="pi pi-check" offIcon="pi pi-times" [(ngModel)]="cols[col.field]"
+              (click)="emitInputSwitch(cols)"></p-toggleButton>
+          </div>
+          <div *ngSwitchCase="columnsType.IMAGE">
+            <img
+              (click)="popUpImageFuction(cols[col.field] ? imageBasePath + cols[col.field] : '../../../../assets/layout/images/no-image.png')"
+              [src]="cols[col.field] ? imageBasePath + cols[col.field] : '../../../../assets/layout/images/no-image.png'"
+              alt="Image Not Found" width="45" height="45" class="p-shadow-2" />
+          </div>
+          <div *ngSwitchCase="columnsType.MULTIPLEIMAGES">
+            <img
+              (click)="popUpImageFuctionMultiple(cols[col.field])"
+              [src]="cols[col.field] ? cols[col.field] != '' ? imageBasePath + cols[col.field].split('|')[0]:'../../../../assets/layout/images/no-image.png' : '../../../../assets/layout/images/no-image.png'"
+              alt="Image Not Found" width="45" height="45" class="p-shadow-2" />
+          </div>
+          <div *ngSwitchCase="columnsType.CASH_REGISTER">
+            <i class="pi pi-lock" style="padding-right: 5px" [ngStyle]="{
+                color: cols[col.field] ? 'lightgreen' : 'lightcoral'}"></i>
+            {{ cols[col.field] === true ? "Opened" : "Closed" }}
+          </div>
+          <div *ngSwitchCase="columnsType.PRINT_STATUS">
+            <span class="p-tag p-component" [ngClass]="cols[col.field]==true ? 'p-tag-success p-tag-rounded' : 'p-tag-warning p-tag-rounded'" >
+              <span class="p-tag-value">
+              {{ cols[col.field] === true ? " Printed " : " Not Printed " }}
+            </span>
+            </span>
+          </div>
+          
+          <!--new cases starts here from simple generic table-->
+          <div *ngSwitchCase="columnsType.CHECKBOX_COLUMN">
+            <p-checkbox [(ngModel)]="cols[col.field]" (onChange)="emitCheckBoxChange(cols)" [binary]="true">
+            </p-checkbox>
+          </div>
+          <div *ngSwitchCase="columnsType.EXPORT_COLUMN">
+            <p-checkbox [(ngModel)]="cols[col.field]" (onChange)="AddDataToExportList(cols)" [binary]="true">
+            </p-checkbox>
+          </div>
+          <div *ngSwitchCase="columnsType.REDIRECTION_COLUMN">
+            <a href="javascript:void(0)" (click)="emitRedirection(cols)">{{cols[col.field]}}</a>
+          </div>
+          <div *ngSwitchCase="columnsType.REDIRECTION_COLUMN_2">
+            <a href="javascript:void(0)" (click)="emitRedirection2(cols)">{{cols[col.field]}}</a>
+          </div>
+          <div *ngSwitchCase="columnsType.LOCATION_CHECK">
+            <i class="pi pi-lock" style="padding-right: 5px"
+              [ngStyle]="{'color': cols[col.field] ? 'lightgreen' : 'lightcoral' }"></i>
+            {{cols[col.field] === null || cols[col.field] === "" ? "Unassigned" : cols[col.field]}}
+          </div>
+          <div *ngSwitchCase="columnsType.COMBINED_COLUMN">
+            {{ cols[col.field] }} {{cols[col.secondfield]}}
+          </div>
+          <div *ngSwitchCase="columnsType.CURRENCY_SYMBOL">
+            <span>€</span> {{ +cols[col.field] | number:'1.2-2' }}
+          </div>
+          <div *ngSwitchCase="columnsType.BALANCE_COLUMN"
+            [ngStyle]="{'color': cols[col.field] >= 0 ? '#158e15' : 'red' }">
+            <span [ngStyle]="{'color': cols[col.field] >= 0 ? '#158e15' : 'red'}" style="padding-right: 5px;">€</span>
+            {{+cols[col.field] | number:'1.2-2' }}
+          </div>
+          <div *ngSwitchCase="columnsType.REMARKS">
+            <button type="button" (click)="emitRemarkDialog(cols)" *ngIf="cols[col.field]" pButton icon="pi pi-comments"
+              label=""></button>
+          </div>
+          <div *ngSwitchCase="columnsType.DATE_FORMAT">
+            <!-- {{ cols[col.field] | date: 'dd.MM.yyyy HH:MM' }} -->
+            {{ cols[col.field] | date:'medium' }}
+          </div>
+          <div *ngSwitchCase="columnsType.DATE_ONLY">
+            <!-- {{ cols[col.field] | date: 'dd.MM.yyyy HH:MM' }} -->
+            {{ cols[col.field] |date:'longDate' }}
+            </div>
+          <div *ngSwitchCase="columnsType.ORDER_TYPE">
+            {{cols[col.field] === false ? 'System order' : 'Shop order'}}
+          </div>
+          <div *ngSwitchCase="columnsType.ATTACHMENT">
+            {{cols[col.field] === null || cols[col.field] === "" ? "No Document Attached" : cols[col.field]}}
+          </div>
+          
+        <div *ngSwitchCase="columnsType.LOCATION_ROWS">
+          <div *ngFor="let loc of cols[col.field].split(';')">
+            {{loc || 'un assigned (0)'}}
+        </div>
+        </div>
+          <!--new cases ended here from simple generic table-->
+          <div *ngSwitchCase="columnsType.NORMAL">{{ cols[col.field] }}</div>
+          <div *ngSwitchDefault>{{ cols[col.field] }}</div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+<!-- <p-dialog header="Image" [(visible)]="displayImage" [style]="{width: '50vw'}">
+  <img [src]="imgSrc"
+              alt="Image Not Found" width="100%" height="100%" class="p-shadow-2" />
+</p-dialog> -->
+<p-galleria [(value)]="imgSrc" [(visible)]="displayImage" [containerStyle]="{'max-width': '850px'}" [numVisible]="7"
+  [circular]="true" [fullScreen]="true" [showItemNavigators]="true" [showThumbnails]="false" [baseZIndex]="100000">
+  <ng-template pTemplate="item" let-item>
+    <img [src]="item" style="width: 100%; display: block;" />
+  </ng-template>
+  <ng-template pTemplate="thumbnail" let-item>
+    <div class="p-grid p-nogutter p-justify-center">
+      <img [src]="item" style="display: block;" />
+    </div>
+  </ng-template>
+</p-galleria>

@@ -1,0 +1,152 @@
+<button
+  style="margin-left: 2px"
+  pButton
+  pRipple
+  type="button"
+  (click)="Print()"
+  class="p-button p-button-success"
+  icon="pi pi-print"
+  title="Print"
+  label="Print"
+></button>
+<button
+  style="margin-left: 2px"
+  pButton
+  pRipple
+  type="button"
+  (click)="Close()"
+  class="p-button p-button-secondary"
+  icon="pi pi-times"
+  title="Close"
+  label="Close"
+></button>
+
+<app-online-order-preview-report
+  *ngIf="SaleDetails"
+  [SaleDetails]="SaleDetails"
+></app-online-order-preview-report>
+<div id="printArea" #screen *ngIf="SaleDetails">
+  <p-panel header="Online Order Information">
+    <div class="p-grid">
+      <div class="p-col">
+        <label>Order by:</label>
+        {{ SaleDetails.CustomerName }} <br />
+        {{ customerDetails.Number }} <br />
+        {{ SaleDetails.ShippingAddress }} <br />
+        <!-- <label>Customer Balance:</label>
+        <span>€ </span> {{ customerDetails.CurrentBalance }} <br /> -->
+      </div>
+      <div class="p-col">
+        <label>Deliver To:</label>
+        {{ SaleDetails.DeliveredToName }} <br />
+        {{ customerDetails.DeliveredToCompanyName }} <br />
+        {{ SaleDetails.InvoiceAddress }} <br />
+      </div>
+      <div class="p-col">
+        <label>Invoice No:</label>
+        {{ SaleDetails.InvoiceNo }} <br />
+
+       
+        <label>Order Date :</label>
+        {{ SaleDetails.Date |date  }} <br />
+        <label>Remarks :</label>
+        {{ SaleDetails.sRemarks }} <br />
+      </div>
+      <div class="p-col">
+        <label>Delivery Method:</label>
+        {{ SaleDetails.ShippingMethod }} <br />
+
+        <label>Type :</label>
+        {{ SaleDetails.PaymentType }} <br />
+        <!-- <label>Payment Condition :</label>
+        {{ SaleDetails.PaymentCondition }} <br /> -->
+      </div>
+    </div>
+  </p-panel>
+  <br /><br />
+  <p-panel header="Online Order Detail Information">
+    <p-table [value]="SaleDetails.PackingSlipDetails">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Product</th>
+          <th>Model No</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+          <!-- <th>Discount</th> -->
+          <!-- <th>Sub Total</th> -->
+          <th>Total</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>
+            {{
+              product.ProductName
+            }}
+          </td>
+          <td>{{ product.BLabel }}</td>
+          <td>{{ product.Quantity }}</td>
+          <td><span>€ </span> {{ product.dTotalUnitValue | number:'1.2-2' }}</td>
+          <!-- <td>
+            {{
+              product.dTotalDiscount.toFixed(2) 
+            }}
+          </td> -->
+          <td><span>€ </span> {{ product.dTotalValue - product.dTotalTaxValue | number:'1.2-2' }}</td>
+          <!-- <td>
+            <span>€ </span> {{ product.dTotalValue - product.dTotalDiscount | number:'1.2-2' }}
+          </td> -->
+          
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+  <br />
+  <div class="p-grid">
+    <div class="p-col-8">
+      <!-- <label>Supplier</label>
+      {{purchaseDetail.Supplier}}<br> -->
+    </div>
+
+    <div class="p-col-4">
+      <p-card>
+        <div class="p-grid">
+          <div class="p-col">SubTotal</div>
+          <div class="p-col"><span>€ </span> {{ SaleDetails.subTotal | number:'1.2-2' }}</div>
+        </div>
+        <div class="p-grid">
+          <div class="p-col">Total Discount</div>
+          <div class="p-col">
+            <span>€ </span> {{ SaleDetails.dTotalDiscountValue | number:'1.2-2' }}
+          </div>
+        </div>
+        <!-- <div class="p-grid">
+        <div class="p-col"><h4><b>Shipping Method</b></h4></div>
+        <div class="p-col"><h4><b>{{SaleDetails.ShippingMethod}}</b></h4></div>
+      </div> -->
+        <div class="p-grid">
+          <div class="p-col">Shipping Cost</div>
+          <div class="p-col"><span>€ </span>{{ SaleDetails.shipment | number:'1.2-2' }}</div>
+        </div>
+        <div class="p-grid">
+          <div class="p-col">Tax 21%</div>
+          <div class="p-col"><span>€ </span>{{ SaleDetails.dTotalTaxValue | number:'1.2-2' }}</div>
+        </div>
+        <div class="p-grid">
+          <div class="p-col">Grand Total</div>
+          <div class="p-col"><span>€ </span> {{ SaleDetails.grandTotal | number:'1.2-2' }}</div>
+        </div>
+        <div class="p-grid">
+          <div class="p-col">Payment</div>
+          <div class="p-col">
+            <span>€ </span> {{ SaleDetails.dTotalPaidValue | number:'1.2-2' }}
+          </div>
+        </div>
+        <!-- <div class="p-grid">
+          <div class="p-col">Rest Amount</div>
+          <div class="p-col"><span>€ </span> {{ SaleDetails.restAmount | number:'1.2-2' }}</div>
+        </div> -->
+      </p-card>
+    </div>
+  </div>
+</div>

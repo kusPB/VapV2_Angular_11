@@ -1,0 +1,43 @@
+<div class="primeng-datatable-container">
+                     
+        <p-table #dt [value]="AllProductLocationList"  [rows]="rows"  [totalRecords]="totalRecords" [(first)]="first"   
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+       [showCurrentPageReport]="true"  dataKey="id" 
+        [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"  
+        [paginator]="true"  [rowHover]="true" styleClass="p-datatable-responsive-demo"
+        [filterDelay]="0"  [globalFilterFields]="['TrackableCode']">
+
+ <ng-template pTemplate="caption">
+    <div class="p-d-flex p-ai-center p-jc-between">
+        
+        <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search Trackable Product..." />
+       </span>
+
+    </div>
+</ng-template>
+    <ng-template  pTemplate="header">
+        
+        <tr >
+                <!-- <th pSortableColumn="ID">{{'ID' | translate}} <p-sortIcon field="ID"></p-sortIcon></th>
+                <th pSortableColumn="LevelID">{{'LevelID' | translate}} <p-sortIcon field="LevelID"></p-sortIcon></th> -->
+                <th pSortableColumn="TrackableCode">Location<p-sortIcon field="TrackableCode"></p-sortIcon></th>
+                <th pSortableColumn="TrackableCode">Selected <p-sortIcon field="TrackableCode"></p-sortIcon></th>
+                <th pSortableColumn="Quantity">Quantity <p-sortIcon field="Quantity"></p-sortIcon></th>
+                
+            </tr>
+       
+    </ng-template>
+    <ng-template pTemplate="body" let-location >
+        <tr (click)="SelectRow(location)">
+            <!-- <td > {{location.ID }} </td>
+            <td > {{location.LevelID }} </td> -->
+            <td > {{location.Location=== null ? 'No location assigned':location.Location }} </td>
+            <td > <input pInputText type="text" [(ngModel)]="location.selectedProductQuantity" style="width: 100px" (onChange)="onChangeSelectedProductQuantity()"  > </td>
+            <td > {{location.Quantity }} </td>
+              
+        </tr>
+    </ng-template>
+</p-table>
+</div>

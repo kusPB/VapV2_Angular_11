@@ -1,0 +1,19 @@
+
+    <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+                <button *ngxPermissionsOnly="ExtrasPermission.AddDbBackup" pButton pRipple label="{{'EXTRAS.ADDBACKUPDATABASE'| translate}}" (click)="AddDatabaseBackup();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+                <button *ngxPermissionsOnly="ExtrasPermission.DeleteDatabaseBackups" pButton pRipple label= "{{'REPORTS.2DaysOld'| translate}}" (click)="DeleteLastDaysReports();" icon="fas fa-trash" class="p-button-raised  p-mr-2"></button>
+
+            </ng-template>
+        </p-toolbar>
+      
+        <app-genric-table [menuItems]="genericMenuItems" 
+        [data]="AllBackupHistoryList" [columnsData]="columns" >
+        </app-genric-table>
+    
+    </div>
+</div>

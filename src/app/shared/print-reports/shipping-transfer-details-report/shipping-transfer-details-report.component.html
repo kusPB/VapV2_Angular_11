@@ -1,0 +1,288 @@
+<button style="margin-left: 2px" pButton pRipple type="button" (click)="Print()" class="p-button p-button-success"
+  icon="pi pi-print" title="Print" label="Print" *ngIf='isHidden'></button>
+<div id="printA4" [hidden]="true" style="width: 95%;margin:0 auto;" *ngIf="selectedshipping">
+  <div style="width: 93%; margin: auto;">
+    <div style="width: 100%;display: table;">
+      <!-- <div style="width: 100%;">
+        <div style="float: left; margin: 10px 36px;">
+          <img src="https://emcparts.shop/image/cache/webp/catalog/logos/emc-logo-new-123x60-123x60.png" alt="*"
+            style="width: 120px;display: block;margin: auto;">
+        </div>
+        <div style="float: right;;">
+          <h3 style="font-family: Georgia, 'Times New Roman', Times, serif;margin: 28px 30px 0px 0px; font-size: 24px;">
+            SHIPPING TRANSFER DETAILS</h3>
+        </div>
+      </div>
+      <br>
+      <hr style="border-top: solid #d3d4d5; border-width: 3px 0 0 0; margin: 1rem 0;margin: 65px 15px 0 15px"> -->
+
+      <div style="width: 100%;display: table;">
+        <div style="width: 63%;float: left;">
+
+          <div style="padding:10px 5px;display: table;">
+            <h3 style="font-family: sans-serif !important;color: #8d9092; margin: 5px 30px 0px 0px; font-size: 25px;">
+              INCOMING SHIPMENT INVOICE</h3>
+            <!-- <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.companyName}}
+                </span>
+              </p>
+            </div>
+            <br>
+            <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.companyAddress}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  VAT NO:
+                  {{environmentData.vatNo}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  TELEPHONE:
+                  {{environmentData.telephone}}
+                </span>
+
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.email}}
+                </span>
+
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.website}}
+                </span>
+
+              </p>
+            </div> -->
+          </div>
+
+        </div>
+
+        <div style="width: 35%;float: left;">
+          <div style="padding:10px 5px;display: table; width: 100%;">
+            <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>SHIPPING DATE:</b>
+                </span>
+                <span style="float: right;">
+                  {{ selectedshipping?.dtDate | date: 'M/dd/yyyy h:m:s a'}}
+                </span>
+              </p>
+            </div>
+            <br>
+            <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>Receive Date:</b>
+                </span>
+                <span style="float: right;">
+                  {{ selectedshipping?.dtDateString ?
+                  (selectedshipping?.dtDateString | date: 'M/dd/yyyy h:m:s a') : 'Not yet received'}}
+                </span>
+              </p>
+            </div>
+            <br>
+            <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>Tracking Code:</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{selectedshipping?.TrackingCode}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>Tracking Website:</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{selectedshipping?.TrackingWebsite}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>Delivery Method:</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{selectedshipping?.ShippingMethod}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: Georgia, 'Times New Roman', Times, serif;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>Remarks:</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{selectedshipping.sRemarks}}
+                </span>
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table style="width: 100%;margin-top: 10px; " cellspacing="0">
+      <tr style="border-top:none;page-break-inside:avoid;">
+        <th
+          style="background-color: #d3d4d5;font-family: Georgia, 'Times New Roman', Times, serif; padding: 15px !important; border: 1px solid #d3d4d5; ">
+          TO</th>
+          <th
+          style="background-color: #d3d4d5;font-family: Georgia, 'Times New Roman', Times, serif; padding: 15px !important; border: 1px solid #d3d4d5; ">
+          FROM</th>
+      </tr>
+      <tr>
+        <td
+          style="font-family: Georgia, 'Times New Roman', Times, serif; text-align: left; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; font-size: 12px;">
+          {{ToOutLetData.Name}} <br>
+          {{ToOutLetData.PhoneNo}}<br>
+          {{ToOutLetData.City}}<br>
+        </td>
+        <td
+        style="font-family: Georgia, 'Times New Roman', Times, serif; text-align: left; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; font-size: 12px;">
+        {{FromOutLetData.Name}} <br>
+        {{FromOutLetData.PhoneNo}}<br>
+        {{FromOutLetData.City}}<br>
+      </td>
+      </tr>
+
+    </table>
+
+    <table style="width: 100%;margin-top: 10px; " cellspacing="0">
+      <thead>
+        <tr style="border-top:none;page-break-inside:avoid;">
+          <th
+            style="background-color: #d3d4d5;font-family: Georgia, 'Times New Roman', Times, serif; padding: 15px !important; border: 1px solid #d3d4d5;  text-align: left;">
+            Product</th>
+            <th
+            style="background-color: #d3d4d5;font-family: Georgia, 'Times New Roman', Times, serif; padding: 15px !important; border: 1px solid #d3d4d5; border-left: none;">
+            Model No
+          </th>
+          <th
+            style="background-color: #d3d4d5;font-family: Georgia, 'Times New Roman', Times, serif; padding: 15px !important; border: 1px solid #d3d4d5; border-left: none;">
+            Currency Used
+          </th>
+          <th
+            style="background-color: #d3d4d5;font-family: Georgia, 'Times New Roman', Times, serif; padding: 15px !important; border: 1px solid #d3d4d5; border-left: none;">
+            Price
+          </th>
+          <th
+            style="background-color: #d3d4d5;font-family: Georgia, 'Times New Roman', Times, serif; padding: 15px !important; border: 1px solid #d3d4d5; border-left: none;">
+            Shipped Quantity
+          </th>
+          <th
+            style="background-color: #d3d4d5;font-family: Georgia, 'Times New Roman', Times, serif; padding: 15px !important; border: 1px solid #d3d4d5; border-left:none;">
+            Received Quantity
+          </th>
+
+        </tr>
+
+      </thead>
+      <tr *ngFor="let shipping of selectedshipping.ShipmentDetails">
+
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: left; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; ">
+          {{shipping.Product}}
+        </td>
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: left; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none;">
+          {{shipping.BLabel}}
+        </td>
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: center; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none;">
+          {{shipping.CurrencyID}}
+        </td>
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: center; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none;">
+          <span>€ </span>  {{shipping.Price | number:'1.2-2' }}
+        </td>
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: center; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none;">
+          {{shipping.Quantity}}
+        </td>
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: center; padding: 5px !important; border-left:none;border: 1px solid #d3d4d5;border-top: none; border-left: none; ">
+          {{shipping.ReceivedQuantity}}
+        </td>
+
+      <tr>
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: right; padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px;  border-top: none;"
+          colspan="5"> <b>Total</b></td>
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: center;border-left:none;border: 1px solid #d3d4d5; padding: 5px;   border-left: none; border-top: none;"
+          colspan="1">
+          {{totalData.totalQuantity}}
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: right;padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px;  border-top: none;"
+          colspan="5"> <b>Total Price (RMB)</b></td>
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: center;border-left:none;border: 1px solid #d3d4d5; padding: 5px;   border-left: none;border-top: none;"
+          colspan="1">
+          {{totalData.totalRMB | number:'1.2-2' }}
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: right;padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px; border-top: none;"
+          colspan="5"><b>Total Price (Dollar)</b></td>
+        <td
+          style="font-size: 13px;font-family: Georgia, 'Times New Roman', Times, serif; text-align: center;border-left:none;border: 1px solid #d3d4d5; padding: 5px; border-top: none;border-left:none;"
+          colspan="1">
+          {{totalData.totalDollar | number:'1.2-2' }}
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-family: Georgia, 'Times New Roman', Times, serif; text-align: right; padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px; border-top: none;"
+          colspan="5"><b>Total Price (Euro)</b></td>
+        <td
+          style="font-family: Georgia, 'Times New Roman', Times, serif; text-align: center;border-left:none;border: 1px solid #d3d4d5; padding: 5px; border-top: none;border-left:none;"
+          colspan="1">
+          {{totalData.totalEuro | number:'1.2-2' }}
+        </td>
+      </tr>
+    </table>
+
+  </div>
+</div>

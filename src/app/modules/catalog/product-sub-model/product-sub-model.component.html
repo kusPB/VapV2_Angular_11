@@ -1,0 +1,66 @@
+
+ <div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+                <button pButton pRipple label="{{'MANAGEDPRODUCT.TYPE'| translate}}" (click)="AddProductModel();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+                <!-- <button pButton pRipple label="{{'MANAGEDPRODUCT.ADDMULTIPLE'| translate}}"  icon="fas fa-plus" class="p-button-raised p-mr-2" ></button> -->                   
+            </ng-template>
+
+        </p-toolbar>
+        <p-toolbar styleclass="p-mb-4" *ngIf="IsAdd">
+          
+
+            <div >
+                <h5>{{'MANAGEDPRODUCT.TYPE'| translate}}</h5>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-3">
+                        <label>{{'REPORTS.PRODUCTMODELS'| translate}}</label>
+                        <ng-select [items]="filteredModels" [virtualScroll]="true" bindLabel="DisplayName"
+                            [(ngModel)]="selectedModel" [searchFn]="dataFunc">
+                            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                <span>{{item.Name}}</span>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                        <div class="p-field p-col-3">
+                            <label for="firstname1">{{'MANAGEDPRODUCT.NAME'| translate}}</label>
+                            <input id="firstname5" type="text" pInputText [(ngModel)]="productModel.Name">
+                        </div>
+                        <div class="p-field p-col-2">
+                            <label for="lastname1">{{'MANAGEDPRODUCT.DESCRIPTION'| translate}}</label>
+                            <input id="lastname5" type="text" pInputText [(ngModel)]="productModel.Description">
+                        </div>
+                        <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                            <button pButton pRipple type="button" icon="fas fa-plus" label="{{'MANAGEDPRODUCT.SAVE'| translate}}" (click)="SaveUpdateProductModelDetails();"icon="fas fa-plus" class="p-button-raised p-mr-2"></button>
+                    
+                        </div>
+                        <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                            <button pButton pRipple label="{{'MANAGEDPRODUCT.CLOSE'| translate}}" icon="fas fa-times" class="p-button-raised p-mr-2" (click)="CloseAddSection();"></button>
+                        </div>
+                    </div>
+                
+            </div>
+
+        </p-toolbar>
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        (emitSwitch)="UpdateProductModelStatus($event)"
+        [data]="AllProductModelList" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+       
+    </div>
+</div>

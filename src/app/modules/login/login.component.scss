@@ -1,0 +1,20 @@
+.login-image {
+    background-size: cover;
+    background-repeat: no-repeat;
+    // for vaplong
+    background-image: url('../../../assets/layout/images/loginBackground.jpg') !important;
+    // for mcservice
+    // background-image: url('../../../assets/layout/images/macbookservice.jpg') !important; 
+}
+.logo {
+    height: 60px !important;
+    padding: 3px !important;
+}
+.image-footer {
+
+display: block !important;
+
+}
+.login-footer-text{
+    color: #2196F3;
+}

@@ -1,0 +1,104 @@
+<button style="margin-left: 2px" pButton pRipple type="button" (click)="Print()" class="p-button p-button-success"
+  icon="pi pi-print" title="Print" label="Print"></button>
+<button style="margin-left: 2px" pButton pRipple type="button" (click)="Close()"
+  class="p-button p-button-secondary" icon="pi pi-times" title="Close" label="Close"></button>
+
+<app-sale-refund-report *ngIf="SaleDetails" [SaleDetails]="SaleDetails"></app-sale-refund-report>
+<div id="printArea" #screen *ngIf="SaleDetails">
+  <p-panel header="Sale Information">
+    <div class="p-grid">
+      <div class="p-col">
+        <label>Order by:</label>
+        {{ SaleDetails.Customer }} <br />
+        {{ customerDetails.Number }} <br />
+        {{ customerDetails.Address }} <br />
+        <label *ngxPermissionsOnly="SalePermission.CurrentBalanceinRefundSaleDetails">Customer Balance:
+        <span>€ </span> {{ customerDetails.CurrentBalance | number:'1.2-2' }}</label> <br />
+      </div>
+      <!-- <div class="p-col">
+      <label>Deliver To:</label>
+      {{SaleDetails.DeliveredTo}} <br>
+      {{DeliverToDetails.Number}} <br>
+      {{DeliverToDetails.Address}} <br>
+
+    </div> -->
+      <div class="p-col">
+        <label>ORDER NO:</label>
+        {{ SaleDetails.OriginalSaleID }} <br />
+
+        <label>REFUND NO:</label>
+        {{ SaleDetails.ID }} <br />
+        <label>REFUND DATE: :</label>
+        {{ SaleDetails.CreatedAt | date: "dd/MM/yyyy" }} <br />
+        <!-- <label>Remarks :</label>
+      {{SaleDetails.sRemarks}} <br>
+       -->
+      </div>
+      <div class="p-col">
+        <label>PAYMENT METHOD:</label>
+        {{ SaleDetails.PaymentMode }} <br />
+      </div>
+    </div>
+  </p-panel>
+  <br /><br />
+  <p-panel header="Refund Sale Detail Information">
+    <p-table [value]="SaleDetails.ReturnSaleDetails">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Product</th>
+          <th>Model No</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+          <th>Discount</th>
+          <th>Sub Total</th>
+          <th>Net Price</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>
+            {{
+            product.ProductVariant == null ||
+            product.ProductVariant == "" ||
+            product.ProductVariant == "Color N.A, Size N.A"
+            ? product.Product
+            : product.Product + " (" + product.ProductVariant + ")"
+            }}
+          </td>
+          <td>{{ product.BLabel }}</td>
+          <td>{{ product.Quantity }}</td>
+          <td><span>€ </span> {{ product.dTotalUnitValue | number:'1.2-2' }}</td>
+          <td>{{ product.dTotalDiscount | number:'1.2-2' }}</td>
+          <td><span>€ </span> {{ product.dTotalValue | number:'1.2-2' }}</td>
+          <td>
+            <span>€ </span> {{ (product.dTotalValue - product.dTotalDiscount) | number:'1.2-2'  }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+  <br />
+  <div class="p-grid">
+    <div class="p-col-8"></div>
+
+    <div class="p-col-4">
+      <p-card>
+        <div class="p-grid">
+          <div class="p-col">SubTotal</div>
+          <div class="p-col"><span>€ </span> {{ SaleDetails.txtSubTotal | number:'1.2-2' }}</div>
+        </div>
+        <div class="p-grid">
+          <div class="p-col">Total Discount</div>
+          <div class="p-col">
+            <span>€ </span> {{ SaleDetails.txtTotalDiscount | number:'1.2-2' }}
+          </div>
+        </div>
+
+        <div class="p-grid">
+          <div class="p-col">Total</div>
+          <div class="p-col"><span>€ </span> {{ SaleDetails.txtTotal | number:'1.2-2' }}</div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+
+<p-dialog header="Product Image" [(visible)]="displayImage" modal="modal" showEffect="fade">
+    <img src="{{imgSrc}}" height="500" width="500">
+</p-dialog>
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+<p-toast></p-toast>
+
+<!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card"> 
+        <app-genric-table
+        [data]="AllProductList"
+        [columnsData]="columns"
+        [globalFilterFields]="globalFilterFields"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [row]="25"
+        (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+      ></app-genric-table>
+    </div>
+</div>

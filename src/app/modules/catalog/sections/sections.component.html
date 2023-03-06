@@ -1,0 +1,84 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button *ngxPermissionsOnly="CatalogPermission.AddSection" pButton pRipple label="{{'MANAGEDPRODUCT.ADDSECTION'| translate}}"
+                    (click)="AddSection();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+
+            </ng-template>
+
+        </p-toolbar>
+        <p-toolbar styleclass="p-mb-4" *ngIf="IsAdd">
+            <div>
+                <h5>{{'MANAGEDPRODUCT.SECTION'| translate}}</h5>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col">
+                        <label for="firstname1">{{'MANAGEDPRODUCT.NAME'| translate}}</label>
+                        <input id="firstname5" type="text" pInputText [(ngModel)]="section.Name">
+                    </div>
+                    <div class="p-field p-col">
+                        <label for="firstname1">{{'MANAGEDPRODUCT.WAREHOUSE'| translate}}</label>
+                        <p-dropdown id="Warehouse" name="Warehouse" placeholder="Select Warehouse"
+                            [options]="WarehouseDropdown" [(ngModel)]="selectedWarehouseID"
+                            (onChange)="BindZones($event)" autoWidth="false" [style]="{'width':'200px'}" required
+                            filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col">
+                        <label for="firstname1">{{'MANAGEDPRODUCT.ZONE'| translate}}</label>
+                        <p-dropdown id="Zone" name="Zone" placeholder="Select Zone" [options]="ZoneDropdown"
+                            [(ngModel)]="selectedZoneID" autoWidth="false" [style]="{'width':'200px'}" required
+                            filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col">
+                        <label for="lastname1">{{'MANAGEDPRODUCT.DESCRIPTION'| translate}}</label>
+                        <input id="lastname5" type="text" pInputText [(ngModel)]="section.Description">
+                    </div>
+                    <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                        <button pButton pRipple type="button" icon="fas fa-plus" label="{{'MANAGEDPRODUCT.SAVE'| translate}}"
+                            (click)="SaveUpdateSectionDetails();" icon="fas fa-plus"
+                            class="p-button-raised p-mr-2"></button>
+
+                    </div>
+                    <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                        <button pButton pRipple label="{{'MANAGEDPRODUCT.CLOSE'| translate}}" icon="fas fa-times" class="p-button-raised p-mr-2"
+                            (click)="CloseAddSection();"></button>
+                    </div>
+                </div>
+
+            </div>
+
+        </p-toolbar>
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            (emitSwitch)="UpdateSectionStatus($event)" [data]="AllSectionList" [columnsData]="columns"
+            [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+
+
+    </div>
+</div>

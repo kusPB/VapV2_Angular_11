@@ -1,0 +1,100 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+<!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+
+<div class="p-col-12 p-m-0 p-p-0 p-shadow-2">
+  <div class="card">
+    <!-- <h4>Row Expand</h4> -->
+    <p-toolbar styleClass="p-mb-4">
+      <div class="p-col-12 p-md-4">
+        <div class="p-col-12">
+          <div>{{'REPORTBYADDRESS.CUSTOMER'| translate}}</div>
+          <p-dropdown placeholder="Select Customer" [options]="CustomerDropdown" (onChange)="onChangeCustomer($event)"
+            [(ngModel)]="selectedCustomerID" autoWidth="false" [style]="{ width: '100%' }" required filter="true">
+            <ng-template let-item pTemplate="selectedItem">
+              <span style="vertical-align: middle; margin-left: 0.5em">{{
+                item.label
+                }}</span>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+
+      <div class="p-col-12 p-md-4">
+        <div class="p-col-12">
+          <div>{{'GENRIC.SEARCHBYDATE'| translate}}</div>
+          <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+            [(ngModel)]="selectedSearchByDateID" (onChange)="SearchByDate($event)" autoWidth="false"
+            [style]="{ width: '100%' }" required filter="true">
+            <ng-template let-item pTemplate="selectedItem">
+              <span style="vertical-align: middle; margin-left: 0.5em">{{
+                item.label
+                }}</span>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+      <div class="p-col-12 p-md-4">
+        <div class="p-col-12">
+          <div>{{'REPORTBYADDRESS.ADDRESS'| translate}}</div>
+          <p-dropdown placeholder="Select Address" [options]="AddressDropdown" [(ngModel)]="selectedAddressID"
+            (onChange)="onChangeAddress($event)" autoWidth="false" [style]="{ width: '100%' }" required filter="true">
+            <ng-template let-item pTemplate="selectedItem">
+              <span style="vertical-align: middle; margin-left: 0.5em">{{
+                item.label
+                }}</span>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </div>
+    </p-toolbar>
+
+    <p-toolbar styleClass="p-mb-4">
+      <!-- <ng-template pTemplate="left"> -->
+      <div class="p-col-12 p-md-4">
+        <div class="p-col-12">
+          <div>{{'REPORTBYADDRESS.PREVIOUSBALANCE'| translate}}</div>
+          <div><span >€ </span> {{ txtPreviousBalance | number:'1.2-2' }}</div>
+        </div>
+      </div>
+      <!-- <div class="p-field p-col">
+          <label>Previous Balance</label>
+          <label>
+            <span >€ </span>  {{ txtPreviousBalance }}</label
+          >
+        </div> -->
+      <div class="p-col-12 p-md-4">
+        <div class="p-col-12">
+          <div>{{'REPORTBYADDRESS.CURRENTBALANCE'| translate}}</div>
+          <div><span >€ </span> {{ txtCurrentBalance | number:'1.2-2' }}</div>
+        </div>
+      </div>
+      <!-- <div class="p-field p-col">
+          <label>Current Balance</label>
+          <label
+            ><span >€ </span>  {{ txtCurrentBalance }}</label
+          >
+        </div> -->
+      <div class="p-col-12 p-md-4">
+        <div class="p-col-12">
+          <div>{{'REPORTBYADDRESS.ADDRESS'| translate}}</div>
+          <div>{{ txtAddress }}</div>
+        </div>
+      </div>
+      <!-- <div class="p-field p-col">
+          <label>Address</label>
+          <label>{{ txtAddress }}</label>
+        </div> -->
+      <!-- </ng-template> -->
+    </p-toolbar>
+    <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" [data]="AllCustomerList"
+      [columnsData]="columns" [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
+      [row]="25" [rowGroup]="rowGroup">
+    </app-genric-table>
+  </div>
+</div>
+<p-dialog header="Select Dates" [(visible)]="isCustomDate" modal="modal" showEffect="fade"
+[style]="{width: '50vw',height:'700px'}">
+<app-datepickerpopup (onSelectValue)="selectValue($event)"></app-datepickerpopup>
+</p-dialog>

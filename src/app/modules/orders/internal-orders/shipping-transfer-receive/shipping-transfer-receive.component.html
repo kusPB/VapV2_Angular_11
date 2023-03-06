@@ -1,0 +1,250 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<p-toast></p-toast>
+<button style="margin-left: 2px" pButton pRipple type="button" (click)="Receive()" class="p-button p-button-success"
+    title="Receive" label="Receive"></button>
+
+<button style="margin-left: 2px" pButton pRipple type="button" (click)="viewDocuments()"
+    class="p-button p-button-primary" icon="pi pi-times" title="Close" label="Documents"></button>
+
+<button style="margin-left: 2px" pButton pRipple type="button" (click)="cancelClick()"
+    class="p-button p-button-secondary" icon="pi pi-times" title="Close" label="Close"></button>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card ">
+
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-9">
+                <div class="top-c" style="padding-top: 3rem !important;">
+                    <div class="p-grid">
+                        <div class="p-field p-col-2">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12">
+                                    <div>
+                                        <h5>FROM</h5>
+                                    </div>
+                                    <div> {{FromOutLetData.Name}}</div>
+                                    <div>{{FromOutLetData.PhoneNo}}</div>
+                                    <div> {{FromOutLetData.City}}</div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col-2">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12">
+                                    <div>
+                                        <h5>TO</h5>
+                                    </div>
+                                    <div>{{ToOutLetData.Name}}</div>
+                                    <div>{{ToOutLetData.PhoneNo}}</div>
+                                    <div> {{ToOutLetData.City}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col-4">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12">
+                                    <div>
+                                        <b>Shipment Date: </b>
+                                        {{ selectedshipping?.dtDate | date: 'M/dd/yyyy hh:mm:ss a'}}
+                                    </div>
+
+                                    <div>
+                                        <b>Tracking Code: </b>
+                                        {{selectedshipping?.TrackingCode}} <br>
+                                    </div>
+                                    <div>
+                                        <b>Tracking Website: </b>
+                                        {{selectedshipping?.TrackingWebsite}}
+                                    </div>
+                                    <div>
+                                        <b>Receive Date: </b>
+                                        <p-calendar [(ngModel)]="ReceivingDate" [showIcon]="true" inputId="icon">
+                                        </p-calendar>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col-4" style="padding-top: 10px">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12">
+                                    <div class="p-grid">
+
+                                        <div class="p-col-12">
+                                            <div> <b>Delivery Method</b></div>
+                                            <div> {{ selectedshipping?.ShippingMethod}}</div>
+                                        </div>
+                                        <div class="p-col-10">
+                                            <b>Remarks</b>
+                                            <textarea id="remarks" type="text" pInputText rows="3" cols="30"
+                                                [(ngModel)]="selectedshipping.sRemarks"></textarea>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="p-field p-col-3">
+                <div class="top-c" style="padding: 5rem 2rem !important;">
+                    <div class="p-grid">
+                        <table style="width:100%">
+                            <tr>
+                                <th> <b> Total Shipped Quantity </b></th>
+                                <td> <b> {{totalQuantity}}</b> </td>
+                            </tr>
+                            <tr>
+                                <th><b> Total Received Quantity </b></th>
+                                <td><b> {{NewReceivedQuantity}} </b> </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p-table #dt [value]="ShipmentDetails | searchPipe:columns: mySearch" [rows]="rows"
+            [totalRecords]="ShipmentDetails.length" [(first)]="first"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [loading]="loading"
+            [showCurrentPageReport]="true" dataKey="id" [rowsPerPageOptions]="rowsPerPageOptions" [paginator]="true"
+            [rowHover]="true" styleClass="p-datatable-responsive-demo" [filterDelay]="0"
+            [globalFilterFields]="globalFilterFields">
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0">Products</h5>
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText [(ngModel)]="mySearch" type="text" placeholder="Global Search" />
+                    </span>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="Product"> Product <p-sortIcon field="Product"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Quantity"> Quantity <p-sortIcon field="Quantity"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="ReceivedQuantity"> Old Received Quantity <p-sortIcon field="ReceivedQuantity">
+                    </p-sortIcon>
+                </th>
+                    <th pSortableColumn="ReceivedQuantity"> Received Quantity <p-sortIcon field="ReceivedQuantity">
+                        </p-sortIcon>
+                    </th>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr [pContextMenuRow]="item">
+                    <td>{{item.Product}}</td>
+                    <td>{{item.Quantity}}</td>
+                    <td>{{item.OldReceivedQuantity}}</td>
+
+                    <td pEditableColumn>
+                        <input pInputText type="number" [(ngModel)]="item.ReceivedQuantity" style="width: 100px"
+                            (keyup)="OnChangeText($event.target.value, item)">
+                    </td>
+                    <td>
+                        <button pButton pRipple label="Add Trackables" *ngIf="item.IsTrackable" icon="fas fa-plus" class="p-button-secondary  p-mr-2"
+                        (click)="openTrackableDialog(item)"></button>
+                        <button pButton pRipple label="View Added trackables" *ngIf="item.IsTrackable" icon="fas fa-plus" class="p-button-secondary  p-mr-2"
+                        (click)="openProductTrackableDetailsDialog(item)"></button>
+                    </td>
+                    
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<p-dialog header="Trackable Details" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[(visible)]="displayAllTrackable">
+<p-table #dt10 [value]="AllTrackableListForDisplay" [paginator]="true" [rows]="25"
+[showCurrentPageReport]="true"
+ [rowsPerPageOptions]="[25, 50, 100]" [rowHover]="true" styleClass="p-datatable-responsive-demo"
+[filterDelay]="0" [globalFilterFields]="['TrackableCode']" >
+
+<ng-template pTemplate="caption" style="margin-top: 20px">
+
+<div class="p-d-flex p-ai-center p-jc-between">
+<h5 class="p-m-0">
+</h5>
+<span class="p-input-icon-left">
+<i class="pi pi-search"></i>
+<input pInputText (input)="dt10.filterGlobal($event.target.value, 'contains')" type="text"
+ placeholder="Global Search" />
+</span>
+</div>
+</ng-template>
+<ng-template pTemplate="header">
+<tr>
+    <th>Product</th>
+    <th pSortableColumn="TrackableCode">Trackable Code <p-sortIcon field="TrackableCode"></p-sortIcon></th>
+    <th>Trackable Shopping ID</th>
+    <th>Stock History ID</th>
+    <th>Outlet Stock HistoryID</th>
+</tr>
+</ng-template>
+<ng-template pTemplate="body" let-item let-ri="rowIndex">
+<tr (click)="onTrackableRowClick(item)">
+
+<td> {{item.Product}}</td>
+<td> {{item.TrackableCode}} </td>
+<td> {{item.TrackableForShoppingID}} </td>
+<td> {{item.StockHistoryID}} </td>
+<td> {{item.OutletStockHistoryID}} </td>
+</tr>
+</ng-template>
+</p-table>
+</p-dialog>
+<p-dialog header="Trackable Details" [style]="{width: '50vw'}" [baseZIndex]="10000"
+[(visible)]="displayTrackable">
+<p-table #dt12 [value]="TrackableListForDisplay" [paginator]="true" [rows]="25"
+[showCurrentPageReport]="true"
+ [rowsPerPageOptions]="[25, 50, 100]" [rowHover]="true" styleClass="p-datatable-responsive-demo"
+[filterDelay]="0" [globalFilterFields]="['TrackableCode']" >
+
+<ng-template pTemplate="caption" style="margin-top: 20px">
+
+<div class="p-d-flex p-ai-center p-jc-between">
+<h5 class="p-m-0">
+</h5>
+<span class="p-input-icon-left">
+<i class="pi pi-search"></i>
+<input pInputText (input)="dt12.filterGlobal($event.target.value, 'contains')" type="text"
+ placeholder="Global Search" />
+</span>
+</div>
+</ng-template>
+<ng-template pTemplate="header">
+<tr>
+<th pSortableColumn="TrackableCode">Trackable Code <p-sortIcon field="TrackableCode"></p-sortIcon></th>
+    <th>Action</th>
+
+</tr>
+</ng-template>
+<ng-template pTemplate="body" let-item let-ri="rowIndex">
+<tr>
+
+<td>{{item.TrackableCode}}</td>
+<td> <button pButton label="Remove" class="p-button-raised  p-mr-2"
+    (click)="RemoveTrackableFromProduct(item)"></button> </td>
+</tr>
+</ng-template>
+</p-table>
+</p-dialog>
+
+<p-dialog header="Documents" *ngIf="IsDocumentDialog" [(visible)]="IsDocumentDialog" modal="modal" showEffect="fade"
+    [style]="{ width: '50vw' }">
+    <app-genric-table [data]="selectedshipping.ShipmentDocuments" [columnsData]="documentsColumns"
+        (emitRowClick)="selectValue($event)" [globalFilterFields]="documentGlobalFilterFields"
+        [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+    </app-genric-table>
+</p-dialog>

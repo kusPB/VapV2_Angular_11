@@ -1,0 +1,185 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<div class="">
+    <div class="p-col-12 p-p-0 p-m-0 p-shadow-2">
+        <div class="card ">
+            <div class="card ">
+                <div class="p-grid">
+                    <div class="p-col-6">
+                        <h5>{{'EXTRAS.PROFILEIMAGE'| translate}}</h5>
+                        <p-fileUpload name="demo[]" (onSelect)="onUpload($event)" #form (onClear)="onClear(form)"
+                            accept="image/*" maxFileSize="1000000" customUpload="true">
+                            <ng-template pTemplate="content">
+                                <ul *ngIf="uploadedFiles.length">
+                                    <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                                </ul>
+                            </ng-template>
+                        </p-fileUpload>
+                    </div>
+                    <div class="p-col-6">
+                        <h5></h5>
+                        <p *ngIf="user.Image!=null && user.Image!=''">
+                            <img [src]="imageBasePath + user.Image" alt="Image Not Found" Height="140" width="140"
+                                class="p-shadow-2" />
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-fluid p-formgrid p-grid p-pl-2 p-pr-2 p-pt-3 p-pb-3">
+
+                <!-- <div class="p-field p-col-12 p-md-3">
+                            <label for="firstname"> First Name  <span class="RequiredEror">*</span> </label>
+                            <span class="p-input-icon-left">
+                                <i class="fas fa-user"></i>
+                                <input type="text" name= "firstname" id=firstname [(ngModel)]="user.FirstName" required pInputText placeholder="Enter First Name"/>
+                            </span>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="lastname"> Last Name  <span class="RequiredEror">*</span> </label>
+                            <span class="p-input-icon-left">
+                                <i class="fas fa-user"></i>
+                                <input type="text" name= "lastname" id=lastname [(ngModel)]="user.LastName" required pInputText placeholder="Enter Last Name"/>
+                            </span>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="address"> Address  <span class="RequiredEror">*</span> </label>
+                            <span class="p-input-icon-left">
+                                <i class="fas fa-address-book"></i>
+                                <input type="text" name= "address" id=address [(ngModel)]="user.Address" required pInputText placeholder="Enter Address"/>
+                            </span>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="phoneno"> Phone No.  <span class="RequiredEror">*</span> </label>
+                            <span class="p-input-icon-left">
+                                <i class="fas fa-phone"></i>
+                                <input type="text" name= "phoneno" id=phoneno [(ngModel)]="user.PhoneNo" required pInputText placeholder="Enter PhoneNo."/>
+                            </span>
+                        </div> -->
+                <div class="p-field p-col-12 p-md-6">
+                    <p-fieldset legend="{{'EXTRAS.USERBASICS'| translate}}" [transitionOptions]="'0ms'"
+                        toggleable="true">
+                        <div class="p-grid">
+                            <div class="p-field p-col-12 p-md-6">
+                                <label for="firstname"> {{'EXTRAS.FIRSTNAME'| translate}} <span
+                                        class="RequiredEror">*</span> </label>
+                                <span class="p-input-icon-left">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" name="firstname" id=firstname [(ngModel)]="user.FirstName"
+                                        required pInputText placeholder="Enter First Name" />
+                                </span>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6">
+                                <label for="lastname"> {{'EXTRAS.LASTNAME'| translate}} <span
+                                        class="RequiredEror">*</span> </label>
+                                <span class="p-input-icon-left">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" name="lastname" id=lastname [(ngModel)]="user.LastName" required
+                                        pInputText placeholder="Enter Last Name" />
+                                </span>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6">
+                                <label for="address"> {{'EXTRAS.ADDRESS'| translate}} <span
+                                        class="RequiredEror">*</span> </label>
+                                <span class="p-input-icon-left">
+                                    <i class="fas fa-address-book"></i>
+                                    <input type="text" name="address" id=address [(ngModel)]="user.Address" required
+                                        pInputText placeholder="Enter Address" />
+                                </span>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6">
+                                <label for="phoneno"> {{'EXTRAS.PHONENO'| translate}}. <span
+                                        class="RequiredEror">*</span> </label>
+                                <span class="p-input-icon-left">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="text" name="phoneno" id=phoneno [(ngModel)]="user.PhoneNo" required
+                                        pInputText placeholder="Enter PhoneNo." />
+                                </span>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6">
+                                <label for="username"> {{'EXTRAS.USERNAME'| translate}} <span class="RequiredEror">*</span> </label>
+                                <span class="p-input-icon-left">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" name="username" id=username [(ngModel)]="user.UserName" required
+                                        pInputText placeholder="Enter UserName" />
+                                </span>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6">
+                                <label for="password"> {{'EXTRAS.PASSWORD'| translate}} <span
+                                        class="RequiredEror">*</span> </label>
+                                <span class="p-input-icon-left">
+                                    <i class="fas fa-key"></i>
+                                    <input type="password" name="password" id=password [(ngModel)]="user.Password"
+                                        required pInputText placeholder="Enter Password" />
+                                </span>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6">
+                                <label for="selectedOutletID"> {{'EXTRAS.OUTLET'| translate}} <span
+                                        class="RequiredEror">*</span></label>
+                                <p-dropdown name="selectedOutletID" id=selectedOutletID [options]="OutletDropdown"
+                                    [(ngModel)]="selectedOutletID" autoWidth="false" [style]="{'width':'100%'}" required
+                                    filter="true" placeholder="Select Outlet">
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                    </ng-template>
+
+                                </p-dropdown>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6 p-mt-2">
+                                <div class="p-field-checkbox p-mt-5">
+                                    <p-checkbox name="IsDeliveryPerson" id="IsDeliveryPerson" binary="true"
+                                        inputId="binary" [(ngModel)]="IsDeliveryPerson"></p-checkbox>
+                                    <label for="ny">{{'EXTRAS.ISDELIVERYPERSON'| translate}}</label>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6 p-mt-2">
+                                <div class="p-field-checkbox p-mt-5">
+                                    <p-checkbox name="IsReseller" id="IsReseller" binary="true"
+                                        inputId="binary" [(ngModel)]="IsReseller"></p-checkbox>
+                                    <label for="ny">{{'EXTRAS.ISRESELLER'| translate}}</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </p-fieldset>
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <p-fieldset legend="{{'EXTRAS.ROLEASSIGNMENT'| translate}}" [transitionOptions]="'0ms'"
+                        toggleable="true">
+                        <div class="p-grid">
+                            <div class="p-field p-col-12 p-md-6">
+                                <label> {{'EXTRAS.ROLES'| translate}}<span class="RequiredEror">*</span></label>
+                                <p-listbox [options]="RoleList" [(ngModel)]="selectedRole" optionLabel="Name"
+                                    [style]="{'width':'15rem'}"></p-listbox>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+
+            </div>
+            <p-toolbar>
+                <div class="p-toolbar-group-left">
+
+                </div>
+
+                <div class="p-toolbar-group-right">
+                    <span class="p-buttonset">
+                        <button pButton pRipple label="{{'EXTRAS.CANCLE'| translate}}" icon="pi pi-times"
+                            [routerLink]="['/extras/manage-user']"
+                            class="p-button-raised  p-button-secondary p-mr-2"></button>
+                    </span>
+                    <span class="p-buttonset">
+                        <button
+                            *ngxPermissionsOnly="this.routeID !== '0' && this.routeID !== undefined ? ExtrasPermission.UpdateUserProfile : ExtrasPermission.AddUser"
+                            pButton pRipple label="{{UserButtonLabel}}" icon="{{buttonIcon}}"
+                            (click)="SaveUpdateUserDetails();" class="p-button-raised p p-mr-2"></button>
+                    </span>
+                </div>
+            </p-toolbar>
+
+        </div>
+
+
+    </div>
+</div>

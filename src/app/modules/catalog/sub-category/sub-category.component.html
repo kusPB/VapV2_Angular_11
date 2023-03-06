@@ -1,0 +1,93 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4" *ngxPermissionsOnly="CatalogPermission.AddSubcategory">
+            <ng-template pTemplate="left">
+
+                <button pButton pRipple label="{{'MANAGEDPRODUCT.ADDSUBCATEGORY'| translate}}" (click)="AddSubCategory();" icon="fas fa-plus"
+                    class="p-button-raised  p-mr-2"></button>
+                <button pButton pRipple label="{{'MANAGEDPRODUCT.ADDMULTIPLE'| translate}}" icon="fas fa-plus" class="p-button-raised p-mr-2"></button>
+
+
+            </ng-template>
+
+        </p-toolbar>
+        <!-- <p-toolbar styleclass="p-mb-4"> -->
+            <div class="card c-card" *ngIf="IsAdd">
+                <h5>{{'MANAGEDPRODUCT.SUBCATEGORY'| translate}}</h5>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-2">
+                        <label for="firstname1">{{'MANAGEDPRODUCT.CLASSIFICATION'| translate}}</label>
+                        <p-dropdown id="Classification" name="Classification" dataKey="value"
+                            placeholder="Select Classification" [options]="ClassificationDropdown"
+                            [(ngModel)]="selectedClassificationID" (onChange)="BindDepartment($event)" autoWidth="false"
+                            required filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col-2">
+                        <label for="firstname1">{{'MANAGEDPRODUCT.DEPARTMENT'| translate}}</label>
+                        <p-dropdown id="Department" name="Department" placeholder="Select Department" dataKey="value"
+                            [options]="DepartmentDropdown" [(ngModel)]="selectedDepartmentID"
+                            (onChange)="BindCategory($event)" autoWidth="false" required filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col-2">
+                        <label for="firstname1">{{'MANAGEDPRODUCT.CATEGORY'| translate}}</label>
+                        <p-dropdown id="Category" name="Category" placeholder="Select Category"
+                            [options]="CategoryDropdown" [(ngModel)]="selectedCategoryID" autoWidth="false" required
+                            filter="true">
+                            <!-- [style]="{'width':'200px'}"  -->
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col-3">
+                        <label for="firstname1">{{'MANAGEDPRODUCT.NAME'| translate}}</label>
+                        <input id="firstname5" type="text" pInputText [(ngModel)]="subCategory.Name">
+                    </div>
+                    <div class="p-field p-col-3">
+                        <label for="lastname1">{{'MANAGEDPRODUCT.DESCRIPTION'| translate}}</label>
+                        <input id="lastname5" type="text" pInputText [(ngModel)]="subCategory.Description">
+                    </div>
+                    <div class="p-col-12" style="">
+                        <div class="p-field" style="float: right;margin-right: 1rem;margin-top: 1.7rem">
+                            <button pButton pRipple type="button" icon="fas fa-plus" label="Save"
+                                (click)="SaveUpdateSubCategoryDetails();" icon="fas fa-plus"
+                                class="p-button-raised p-mr-2"></button>
+    
+                        </div>
+                        <div class="p-field" style="float: right;margin-right: 1rem;margin-top: 1.7rem">
+                            <button pButton pRipple label="Close" icon="fas fa-times" class="p-button-raised p-mr-2"
+                                (click)="CloseAddSection();"></button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        <!-- </p-toolbar> -->
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            (emitSwitch)="UpdateSubCategoryStatus($event)" [data]="AllSubCategoryList" [columnsData]="columns"
+            [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+    </div>
+</div>

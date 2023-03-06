@@ -1,0 +1,268 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<p-dialog header="Update Product Discount" [(visible)]="displayUpdateModel" modal="modal" showEffect="fade"
+    [style]="{width: '40vw'}">
+    <div class="p-grid">
+        <div class="p-field p-col-5">
+            <label>Minimum Discount (%)</label>
+
+            <span class="p-input-icon-left">
+                <i class="fas fa-percent"></i>
+                <input type="number" name="MinimumDiscount" id="MinimumDiscount" [(ngModel)]="updateMinDiscPer"
+                    pInputText placeholder="Enter Minimum Discount" />
+            </span>
+        </div>
+        <div class="p-field p-col-5">
+            <label>Maximum Discount (%)</label>
+
+            <span class="p-input-icon-left">
+                <i class="fas fa-percent"></i>
+                <input type="number" name="MaximumDiscount" id="MaximumDiscount" [(ngModel)]="updateMaxDiscPer"
+                    pInputText placeholder="Enter Maximum Stock" />
+            </span>
+        </div>
+
+        <div class="p-field p-col-2" style="margin-top: 1.7rem">
+            <button pButton pRipple type="button" icon="fas fa-plus" label="Save"
+                (click)="UpdateSelectedDiscountDetails();" icon="fas fa-plus" class="p-button-raised p-mr-2"></button>
+        </div>
+    </div>
+
+</p-dialog>
+<div class="card c-card" styleClass="p-mb-4">
+    <!-- <ng-template pTemplate="left"> -->
+    <div class="p-col-12 p-md-1 pad-0">
+        <div class="p-col-12">
+            <!-- <button pButton pRipple label="cancel" (click)="CloseThis()" icon="fas fa-sync"
+                class="p-button-raised p-mr-2"></button> -->
+                <button pButton pRipple label="Cancel" icon="pi pi-times" [routerLink]="['/customer/customer-index']"
+                class="p-button-raised p-button-secondary p-mr-2"></button>
+        </div>
+    </div>
+</div>
+
+<div class="">
+    <div class="p-col-12 p-p-0 p-m-0 p-shadow-2">
+        <div class="card ">
+            
+            <div class="p-fluid p-formgrid p-grid p-pl-2 p-pr-2 p-pt-3 p-pb-3">
+
+                <div class="p-field p-col-12">
+                    <p-fieldset legend="Customer Discount Assignment">
+                        <!-- <div class="widget-timeline p-grid">
+                            <div class="p-col-3 timeline-event  cust-det-sec"> <span class="timeline-event-icon"
+                                    style="background-color:#64B5F6">
+                                    <i class="pi pi-user"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtName}}</div>
+                            </div>
+                            <div class="p-col-3 timeline-event  cust-det-sec"> <span class="timeline-event-icon"
+                                    style="background-color:#4DB6AC">
+                                    <i class="timeline-icon pi pi-question"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtDiscountGroup}}</div>
+                            </div>
+                            <div class="p-col-3 timeline-event  cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#4DD0E1">
+                                    <i class="timeline-icon pi pi-comment"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtDiscountGroupType}}</div>
+                            </div>
+                            <div class="p-col-3 timeline-event  cust-det-sec"><span class="timeline-event-icon"
+                                    style="background-color:#72abda">
+                                    <i class="pi pi-money-bill"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtCurrentBalance}}</div>
+                            </div>
+                            <div class="p-col-3 timeline-event  cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#76b663">
+                                    <i class="timeline-icon pi pi-tag"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtEmail}}</div>
+                            </div>
+                            <div class="p-col-3 timeline-event  cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#e4e699">
+                                    <i class="timeline-icon pi pi-id-card"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtCompany}}</div>
+                            </div>
+                            <div class="p-col-3 timeline-event  cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#f1cd54">
+                                    <i class="timeline-icon pi pi-mobile"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtPhoneNo}}</div>
+                            </div>
+                            <div class="p-col-3 timeline-event  cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#e19c4d">
+                                    <i class="timeline-icon pi pi-mobile"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtMobileNo}}</div>
+                            </div>
+                        </div> -->
+                        <!-- <div class="card"> -->
+                        <div class="widget-timeline p-grid" style="padding: 15px">
+                            <div class="timeline-event p-col-3 cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#64B5F6">
+                                    <i class="pi pi-user"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtName}}</div>
+                            </div>
+                            <div class="timeline-event p-col-3 cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#4DB6AC">
+                                    <i class="timeline-icon pi pi-question"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtDiscountGroup}}</div>
+                            </div>
+                            <div class="timeline-event p-col-3 cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#4DD0E1">
+                                    <i class="timeline-icon pi pi-comment"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtDiscountGroupType}}</div>
+                            </div>
+                            <div class="timeline-event p-col-3 cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#72abda">
+                                    <i class="pi pi-money-bill"></i>
+                                </span>
+                                <div class="timeline-event-title">Current Bal: {{txtCurrentBalance}}</div>
+                            </div>
+                            <div class="timeline-event p-col-3 cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#76b663">
+                                    <i class="timeline-icon pi pi-tag"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtEmail !== 'Email: null' ? txtEmail : 'Email: ---'}}</div>
+                            </div>
+                            <div class="timeline-event p-col-3 cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#e4e699">
+                                    <i class="timeline-icon pi pi-id-card"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtCompany !== 'Company: null' ? txtCompany : 'Company: ---'}}</div>
+                            </div>
+                            <div class="timeline-event p-col-3 cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#f1cd54">
+                                    <i class="timeline-icon pi pi-mobile"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtPhoneNo !== 'Tel: null' ? txtPhoneNo : 'Tel: ---'}}</div>
+                            </div>
+                            <div class="timeline-event p-col-3 cust-det-sec">
+                                <span class="timeline-event-icon" style="background-color:#e19c4d">
+                                    <i class="timeline-icon pi pi-mobile"></i>
+                                </span>
+                                <div class="timeline-event-title">{{txtMobileNo !== 'Mobile: null' ? txtMobileNo : 'Mobile: ---'}}</div>
+                            </div>
+                            <div class="p-field p-col-12" style="padding: 0;">
+                                <hr>
+                            </div>
+                            <div class="p-field p-col-4" style="padding: 0;">
+                                <div class="p-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col-10">
+                                        <label>Product </label>
+
+                                        <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"
+                                            [(ngModel)]="selectedProduct" [searchFn]="dataFunc">
+                                            <ng-template ng-option-tmp let-item="item" let-index="index"
+                                                let-search="searchTerm">
+                                                <span>{{item.label}}</span>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                    <div class="p-col-2">
+                                        <i class="pi pi-search search-pi" (click)="OpenProductDialog();"></i>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="p-field p-col-3">
+                                <label>Minimum Discount (%)</label>
+
+                                <span class="p-input-icon-left">
+                                    <i class="fas fa-percent"></i>
+                                    <input type="number" name="MinimumDiscount" id="MinimumDiscount"
+                                        [(ngModel)]="MinDiscPer" pInputText placeholder="Enter Minimum Discount" />
+                                </span>
+                            </div>
+                            <div class="p-field p-col-3">
+                                <label>Maximum Discount (%)</label>
+
+                                <span class="p-input-icon-left">
+                                    <i class="fas fa-percent"></i>
+                                    <input type="number" name="MaximumDiscount" id="MaximumDiscount"
+                                        [(ngModel)]="MaxDiscPer" pInputText placeholder="Enter Maximum Stock" />
+                                </span>
+                            </div>
+                            <div class="p-field p-col-2" style="margin-top: 1.7rem">
+                                <button pButton pRipple type="button" icon="fas fa-plus" label="Save"
+                                    (click)="SaveCustomerProductsDiscount();" icon="fas fa-plus"
+                                    class="p-button-raised p-mr-2"></button>
+                            </div>
+                        </div>
+                        <!-- </div> -->
+                    </p-fieldset>
+                </div>
+                <!-- <div class="p-field p-col-4">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label>Product </label>
+                            <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectedProduct" [searchFn]="dataFunc">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <span>
+                            <i class="pi pi-search search-pi" (click)="OpenProductDialog();"></i>
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="p-field p-col-3">
+                    <label>Minimum Discount (%)</label>
+
+                    <span class="p-input-icon-left">
+                        <i class="fas fa-percent"></i>
+                        <input type="number" name="MinimumDiscount" id="MinimumDiscount" [(ngModel)]="MinDiscPer"
+                            pInputText placeholder="Enter Minimum Discount" />
+                    </span>
+                </div>
+                <div class="p-field p-col-3">
+                    <label>Maximum Discount (%)</label>
+
+                    <span class="p-input-icon-left">
+                        <i class="fas fa-percent"></i>
+                        <input type="number" name="MaximumDiscount" id="MaximumDiscount" [(ngModel)]="MaxDiscPer"
+                            pInputText placeholder="Enter Maximum Stock" />
+                    </span>
+                </div> -->
+            </div>
+            <!-- <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                <button pButton pRipple type="button" icon="fas fa-plus" label="Save"
+                    (click)="SaveCustomerProductsDiscount();" icon="fas fa-plus"
+                    class="p-button-raised p-mr-2"></button>
+            </div> -->
+
+        </div>
+    </div>
+    <div class="p-col-12 p-p-0 p-m-0 p-shadow-2">
+        <div class="card ">
+            <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+                (emitSwitch)="UpdateCustomerProductsDiscountStatus($event)" [data]="AllCustomerProductsDiscountList"
+                [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+                [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+            </app-genric-table>
+
+
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Products" *ngIf="IsOpenProductDialog" [(visible)]="IsOpenProductDialog" modal="modal"
+    showEffect="fade" [style]="{ width: '70vw' }">
+    <app-genric-table (emitRowClick)="selectValue($event)" [menuItems]="[]" [data]="ProductData"
+        [columnsData]="productsColumn">
+    </app-genric-table>
+    <!-- <app-productvariant-stock-DD-data (onSelectValue)="selectValue($event)"></app-productvariant-stock-DD-data> -->
+</p-dialog>

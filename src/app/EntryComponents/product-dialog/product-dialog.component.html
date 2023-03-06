@@ -1,0 +1,51 @@
+
+ <div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+    
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+  
+        <p-table #dt [value]="AllProductList"  [rows]="rows"  [totalRecords]="totalRecords" [(first)]="first"   
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+           [loading]="loading"  [showCurrentPageReport]="true"  dataKey="id" 
+           [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]" 
+           [lazy]="true" (onLazyLoad)="GetAllProductWithLazyLoading($event)" 
+           [paginator]="true"  [rowHover]="true" styleClass="p-datatable-responsive-demo"
+           [filterDelay]="0"  [globalFilterFields]="['Name']">
+   
+        
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">Products</h5>
+                <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" placeholder="Global Search"/>
+            </span>
+            </div>
+        </ng-template>
+         
+         <ng-template pTemplate="header">
+                <tr>
+                 
+                    <th style="width: 100px" pSortableColumn="ID"> ID <p-sortIcon field="ID"></p-sortIcon></th>
+                    <th pSortableColumn="Name"> Name<p-sortIcon field="Name"></p-sortIcon></th> 
+                    
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body" let-Product >
+                <tr [pContextMenuRow]="Product" (click)="SelectRow(Product)">
+                    
+                    <td >{{Product.ID}}</td>
+                    <td>{{Product.Name}}</td>
+                    
+                   
+                </tr>
+            </ng-template>
+
+        </p-table>
+
+    
+    </div>
+</div>

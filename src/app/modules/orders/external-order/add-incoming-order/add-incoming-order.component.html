@@ -1,0 +1,257 @@
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+  <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+<app-sale-invoice-report *ngIf="printingData" [SaleDetails]="printingData"></app-sale-invoice-report>
+<app-sale-preview-report *ngIf="printingDataPreview" [SaleDetails]="printingDataPreview"></app-sale-preview-report>
+
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<div class="p-col-12 p-m-0 p-p-0 p-shadow-2">
+  <div class="card">
+    <p-toolbar styleClass="p-mb-4">
+      <ng-template pTemplate="left">
+        <button pButton pRipple label="{{'ORDERS.SAVE'| translate}}" *ngxPermissionsOnly="'IncomingOrder'" icon="fas fa-plus" class="p-button-raised p-mr-2"
+          (click)="AddSale(false,false)"></button>
+     
+          <!-- <button pButton pRipple label="Save And Print" icon="fas fa-print" class="p-button-raised p-mr-2"
+          (click)="AddSale(false,true)"></button> -->
+        
+        <button pButton pRipple label="{{'ORDERS.CLOSE'| translate}}" icon="fas fa-times" class="p-button-raised p-mr-2"
+          (click)="Close()"></button>
+        
+      </ng-template>
+    </p-toolbar>
+
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-md-2 p-lg-2 p-mt-3 pad-0">
+        <div class="p-grid">
+          <div class="p-col-12">
+            <p-fieldset legend="Dates Section" [transitionOptions]="'0ms'" toggleable="true">
+              <div class="p-field p-col-12">
+                <label for="firstname1">{{'ORDERS.DELIVERDATE'| translate}}</label>
+                <p-calendar [(ngModel)]="deliverDate" [showIcon]="true" inputId="icon"></p-calendar>
+              </div>
+              <div class="p-field p-col-12">
+                <label for="firstname1">{{'ORDERS.ORDERDATE'| translate}}</label>
+                <p-calendar [(ngModel)]="orderDate" [showIcon]="true" inputId="icon"></p-calendar>
+              </div>
+            </p-fieldset>
+          </div>
+        </div>
+      </div>
+      <div class="p-md-2 p-lg-2 p-mt-3 pad-0">
+        <div class="p-grid">
+          <div class="p-col-12">
+            <p-fieldset legend="{{'ORDERS.REMARKS'| translate}}" [transitionOptions]="'0ms'" toggleable="true">
+              <div class="p-col-12">
+                <textarea id="lastname5" type="text" pInputText [(ngModel)]="remarks" cols="30" rows="4"></textarea>
+              </div>
+            </p-fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p-table [value]="cartProducts" dataKey="id" editMode="row" [(contextMenuSelection)]="selectedCartRow"
+      [contextMenu]="cm">
+      <ng-template pTemplate="caption" style="margin-top: 20px">
+
+        <div class="p-d-flex p-ai-center p-jc-between">
+          <h5 class="p-m-0">
+            <button pButton label="{{'ORDERS.ADDMULTIPLEPRODUCT'| translate}}" class="p-button-raised  p-mr-4"
+              (click)="IsOpenMultiProductDialog = true"></button>
+          </h5>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 70px">{{'ORDERS.ACTION'| translate}}</th>
+          <th style="width: 200px">{{'ORDERS.PRODUCT'| translate}}</th>
+          <th style="width: 150px">{{'ORDERS.QUANTITY'| translate}}</th>    
+        </tr>
+        <tr [pContextMenuRow]="item" *ngFor="let item of productInfo" [pEditableRow]="item">
+          <td>
+            <button pButton pRipple type="button" (click)="AddProductToList();" icon="pi pi-plus"
+              class="p-button-rounded p-button-success btn-round"></button>
+          </td>
+          <td pEditableColumn>
+            <div class="p-grid">
+              <div class="p-col-10">
+                <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label" [searchFn]="dataFunc"
+                  [(ngModel)]="item.selectedProductCart" (ngModelChange)="BindProductDetails($event, item)">
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span>{{item.label}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="p-col-2">
+                <span>
+                  <i class="pi pi-search search-pi" style="margin-top: 10px;" (click)="OpenProductDialog(item)"></i>
+                </span>
+              </div>
+            </div>
+          </td>
+          <td pEditableColumn>
+            <span *ngIf="RemainingStock > 0"><b> {{RemainingStock}}</b> </span>
+            <input pInputText type="number" [(ngModel)]="item.Quantity" style="width: 100px"
+              (keyup)="OnChangeText(item)" (change)="onChangeProductQuantity(item)" [disabled]="item.IsQtyDisable" />           
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-cartRow let-editing="editing" let-ri="rowIndex">
+        <tr [pContextMenuRow]="cartRow" [pEditableRow]="cartRow">
+          <td>
+            <button pButton pRipple style="margin-right: 5px" type="button" icon="pi pi-list"
+              *ngIf="cartRow.IsTrackable" class="p-button-rounded p-button-outlined" title="Open Trackables"
+              (click)="OpenProductTrackables(cartRow)"></button>
+            <button pButton pRipple type="button" (click)="RemoveCartProduct(ri)" icon="pi pi-times"
+              class="p-button-rounded p-button-danger btn-round"></button>
+          </td>
+          <td pEditableColumn>
+            <div class="p-grid">
+              <div class="p-col-10">
+                <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label" [searchFn]="dataFunc"
+                  [(ngModel)]="cartRow.selectedProductCart" (ngModelChange)="BindProductDetails($event, cartRow)">
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span>{{item.label}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+              <div class="p-col-2">
+                <span>
+                  <i class="pi pi-search search-pi" style="margin-top: 10px;" (click)="OpenProductDialog(cartRow)"></i>
+                </span>
+                <button style="margin-left: 2px" pButton pRipple type="button" icon="pi pi-list"
+                  *ngIf="cartRow.IsSelectedTrackables" class="p-button-rounded p-button-outlined"
+                  title="Show selected Trackables" (click)="OpenSelectedProductTrackables(cartRow)"></button>
+              </div>
+            </div>
+          </td>
+          <td pEditableColumn>
+            <input pInputText type="number" [(ngModel)]="cartRow.Quantity" style="width: 100px"
+              (keyup)="OnChangeText(cartRow)" (change)="onChangeProductQuantity(cartRow)"
+              [disabled]="cartRow.IsQtyDisable" />
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <div></div>
+  </div>
+</div>
+
+
+
+
+
+<p-dialog header="DeliveryMethods" *ngIf="displayDeliveryMethod" [(visible)]="displayDeliveryMethod" modal="modal"
+  showEffect="fade" [style]="{ width: '60vw' }">
+  <app-delivery-method (onDeliveryMethodSelectValue)="onDeliveryMethodSelectValue($event)"></app-delivery-method>
+</p-dialog>
+
+<p-dialog header="PaymentCondition" *ngIf="displayPaymentCondition" [(visible)]="displayPaymentCondition" modal="modal"
+  showEffect="fade" [style]="{ width: '60vw' }">
+  <app-payment-condition (onPaymentConditionSelectValue)="onPaymentConditionSelectValue($event)">
+  </app-payment-condition>
+</p-dialog>
+
+
+
+
+<p-dialog header="Products" [(visible)]="IsOpenProductDialog" modal="modal" showEffect="fade"
+  [style]="{ width: '70vw' }">
+  <!-- [style]="{width: '50vw',height:'460px'}" -->
+  <!-- <app-product-dialog (onSelectValue)='selectValue($event)'></app-product-dialog> -->
+  <app-genric-table (emitRowClick)="onSelectProductValue($event)" [menuItems]="[]"
+    [data]="AllProductListwithDiscountForSelection" [columnsData]="productsColumn">
+  </app-genric-table>
+
+</p-dialog>
+
+<p-dialog header="TrackableCodesfor {{ trackablePopupHeading }}" *ngIf="displayProductTrackables"
+  [(visible)]="displayProductTrackables" modal="modal" showEffect="fade" [style]="{ width: '40vw' }">
+  <!-- <app-product-trackables [selectedProduct]="selectedCartRow.selectedProductCart" [productTrackableList]="productTracablesList"
+    (onTrackableSelectValue)="onTrackableSelectValue($event)"></app-product-trackables> -->
+
+  <p-table #dt [value]="productTracablesList" [rows]="25"
+    [totalRecords]="productTracablesList.length>0?productTracablesList.length:0" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" dataKey="id"
+    [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+    styleClass="p-datatable-responsive-demo" [filterDelay]="0" [globalFilterFields]="['TrackableCode']">
+
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search TrackableCode" />
+        </span>
+
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="TrackableCode">TrackableCode <p-sortIcon field="TrackableCode"></p-sortIcon>
+        </th>
+      </tr>
+
+    </ng-template>
+    <ng-template pTemplate="body" let-trackable>
+      <tr (click)="onTrackableSelectValue(trackable)">
+        <td> {{trackable.TrackableCode }} </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+<p-dialog header="TrackableCodesfor {{ trackablePopupHeading }}" *ngIf="displaySelectedProductTrackables"
+  [(visible)]="displaySelectedProductTrackables" modal="modal" showEffect="fade" [style]="{ width: '40vw' }">
+
+  <p-table #dt [value]="selectedProductTrackables" [rows]="25"
+    [totalRecords]="selectedProductTrackables.length>0?selectedProductTrackables.length:0"
+    [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true" dataKey="id" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"
+    [paginator]="true" [rowHover]="true" styleClass="p-datatable-responsive-demo" [filterDelay]="0"
+    [globalFilterFields]="['TrackableCode']">
+
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search TrackableCode" />
+        </span>
+
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+
+      <tr>
+        <th pSortableColumn="TrackableCode">TrackableCode<p-sortIcon field="TrackableCode"></p-sortIcon>
+        </th>
+        <th>Action </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-trackable>
+      <tr>
+        <td> {{trackable.TrackableCode }} </td>
+        <td> <button pButton label="Remove" class="p-button-raised  p-mr-2"
+            (click)="onRemoveSelectedTrackable(trackable.TrackableCode)"></button> </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+<p-dialog header="Products" *ngIf="IsOpenMultiProductDialog" [(visible)]="IsOpenMultiProductDialog" modal="modal"
+  showEffect="fade" [style]="{width: '70vw'}">
+  <app-multi-product-selection [menuItems]="[]" (emitSelectedProduct)="addMultipleProduct($event)"
+    [data]="AllProductListwithDiscountForSelection" [columnsData]="productsColumn">
+  </app-multi-product-selection>
+</p-dialog>
+

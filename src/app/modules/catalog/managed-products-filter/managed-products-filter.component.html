@@ -1,0 +1,316 @@
+<!-- <div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div> -->
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<!-- prices table-->
+
+<!-- Prices-->
+<p-dialog header="Prices" [(visible)]="displayPricesPopup" modal="modal" showEffect="fade" [style]="{width: '60vw'}">
+    <div class="primeng-datatable-container">
+
+       
+        <app-ss-generic-table [data]="ProdutPriceTableModel" [columnsData]="pricecolumns" [totalRecords]="ProdutPriceTableModel.length"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25' [filterGlobal]= "false"
+            [multiSelect]="false">
+        </app-ss-generic-table>
+    </div>
+</p-dialog>
+
+
+<p-dialog header="Product Image" [(visible)]="displayImage" modal="modal" showEffect="fade">
+    <img src="{{imgSrc}}" height="500" width="500">
+</p-dialog>
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+<p-dialog header="Product Variants" [(visible)]="displayVariantPopup" modal="modal" showEffect="fade"
+    [style]="{width: '60vw'}">
+    <div class="p-grid">
+
+        <div class="p-field p-col">
+            <label for="Color"> Color </label>
+            <p-dropdown inputId="color" name="color" [options]="ColorDropdown" [(ngModel)]="selectedColorDropdownID"
+                [style]="{'width':'100%'}" placeholder="Select Color" required filter="true">
+                <ng-template let-item pTemplate="selectedItem">
+                    <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                </ng-template>
+
+            </p-dropdown>
+        </div>
+        <div class="p-field p-mt-5">
+            <div class="p-field-checkbox p-mt-5">
+                <p-checkbox [(ngModel)]="bChangeBarcode" binary="true" (onChange)="checkboxChange($event)"></p-checkbox>
+                <label for="ny">Change Barcode</label>
+            </div>
+        </div>
+        <div class="p-field p-col ">
+            <label for="EAN">BarCode</label>
+            <span class="p-input-icon-left" style="width: 100% !important;">
+                <i class="fas fa-barcode"></i>
+                <input type="number" [(disabled)]="barcodechange" [(ngModel)]="barcode" name="barcode" id="barcode"
+                    style="width: 100% !important;" required pInputText placeholder="Enter barcode" />
+            </span>
+        </div>
+    </div>
+    <div class="p-grid p-dir-col">
+        <div class="p-col">
+            <p-toolbar>
+                <div class="p-toolbar-group-left">
+
+                </div>
+                <div class="p-toolbar-group-right">
+                    <span class="p-buttonset">
+                        <button pButton pRipple label="Cancel" (click)="ProductVariantClosedPopUp()" icon="pi pi-times"
+                            class="p-button-raised  p-button-secondary p-mr-2"></button>
+                    </span>
+                    <span class="p-buttonset">
+                        <button pButton pRipple (click)="AddProductVarient()" label="Add Product Variant"
+                            icon="fas fa-plus" class="p-button-raised p p-mr-2"></button>
+                    </span>
+                </div>
+            </p-toolbar>
+
+        </div>
+
+    </div>
+
+
+    <!-- <p-table [value]="PorductVarientList" [rows]="5" [paginator]="true" [rowHover]="true" dataKey="ID"
+        styleClass="p-datatable-responsive-demo"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+
+        <ng-template pTemplate="header">
+            <tr>
+
+                <th style="width: 4.5rem;">Status</th>
+                <th pSortableColumn="ID" style="text-align: center;"> SKU <p-sortIcon field="ID"></p-sortIcon>
+                </th>
+                <th pSortableColumn="Product"> Product <p-sortIcon field="Product"></p-sortIcon>
+                </th>
+                <th pSortableColumn="Color" style="text-align: center;"> Color <p-sortIcon field="Color"></p-sortIcon>
+                </th>
+                <th pSortableColumn="Barcode" style="text-align: center;"> BarCode <p-sortIcon field="Barcode">
+                    </p-sortIcon>
+                </th>
+                <th> Action </th>
+
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-ProductVariant>
+            <tr>
+                <td>
+                    <p-inputSwitch [(ngModel)]="ProductVariant.IsActive"
+                        (click)="UpdateProductVariantStatusFunction(ProductVariant)"></p-inputSwitch>
+                </td>
+                <td style="text-align: center;">{{ProductVariant.ID}}</td>
+                <td>{{ProductVariant.Product}}</td>
+
+                <td style="text-align: center;">{{ProductVariant.Color}}</td>
+                <td style="text-align: center;">{{ProductVariant.Barcode}}</td>
+                <td style="text-align: center;">
+                    <button *ngIf="ProductVariant.IsAddedToShop === false" pButton pRipple type="button"
+                        icon="fas fa-paper-plane" (click)="PostTOShopOrAddProductToOpenCartFunction(ProductVariant.ID)"
+                        title="Post To Shop" class="p-button-raised"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table> -->
+    <app-genric-table [data]="PorductVarientList" [columnsData]="productvariantcolumns"
+    (emitMenuAction)="emitVarientAction($event)" [menuItems]="genericMenuVarientItems"
+    [rowsPerPageOptions]="rowsPerPageOptions" [row]='25' (emitSwitch)="UpdateProductVariantStatusFunction($event)">
+</app-genric-table>
+</p-dialog>
+
+<!-- Locations-->
+<p-dialog header=" Product Location" [(visible)]="displayLocationPopup" modal="modal" showEffect="fade"
+    [style]="{width: '60vw'}">
+    <div class="primeng-datatable-container">
+
+       
+        <app-genric-table [data]="allNonTrackableProductsLocationModelList" [columnsData]="locationColumn"
+        [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+    </app-genric-table>
+    </div>
+</p-dialog>
+
+<p-toast></p-toast>
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <div>
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col" >
+                    <label for="firstname1">Product Name</label>
+                    <ng-select title="{{selectedProduct?.label}}" [items]="filteredProduct" [virtualScroll]="true"
+                        bindLabel="label" [(ngModel)]="selectedProduct" [searchFn]="dataFunc" class="prod-d-d"
+                        autoWidth="false" [style]="{'width':'100px'}" >
+                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                            <span title="{{item.label}}">{{item.label}}</span>
+                        </ng-template>
+                    </ng-select>
+                </div>
+
+                <div class="p-field p-col" >
+                    <label for="firstname12">Article number</label>
+                    <ng-select title="{{selectedProductModel?.label}}" [items]="filteredProductModel" [virtualScroll]="true"
+                        bindLabel="label" [(ngModel)]="selectedProductModel" [searchFn]="dataFunc" class="prod-d-d"
+                         >
+                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                            <span title="{{item.label}}">{{item.label}}</span>
+                        </ng-template>
+                    </ng-select>
+                </div>
+                <div class="p-field p-col-2">
+                    <label for="MinPrice"> Min Price</label>
+                    <p-inputNumber [(ngModel)]="MinPrice" prefix="€"
+                        placeholder="Min Price" name="MinPrice" mode="decimal" 
+                        [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber>
+                </div>
+                <div class="p-field p-col-2">
+                    <label for="MaxPrice"> Max Price</label>
+                    <p-inputNumber [(ngModel)]="MaxPrice" prefix="€"
+                        placeholder="Max Price" name="MaxPrice" mode="decimal" 
+                        [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber>
+                </div>
+                <div  class="p-field p-col-2">
+                    <label for="MinQuantity">Min Quantity</label>
+                    <span class="p-input-icon-left">
+                        <i class="fas fa-sort-amount-down-alt"></i>
+                        <input type="number" value="0" [(ngModel)]="MinQuantity" id="MinQuantity"
+                            pInputText placeholder="Min Quantity"
+                            [ngModelOptions]="{standalone: true}" />
+                    </span>
+                </div>
+                <div  class="p-field p-col-2">
+                    <label for="MinQuantity">Max Quantity</label>
+                    <span class="p-input-icon-left">
+                        <i class="fas fa-sort-amount-down-alt"></i>
+                        <input type="number" value="0" [(ngModel)]="MaxQuantity" id="MaxQuantity"
+                            pInputText placeholder="Max Quantity"
+                            [ngModelOptions]="{standalone: true}" />
+                    </span>
+                </div>           
+                <div class="p-field p-col-2">
+                    <label for="Status">Status</label>
+                    <p-dropdown placeholder="Status" [options]="SearchByStatusDropdown"
+                        [(ngModel)]="selectedSearchByStatusID" autoWidth="false" [style]="{'width':'150px'}"
+                    filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-2">
+                    <label for="Image">Image</label>
+                    <p-dropdown placeholder="Image" [options]="SearchByImageDropdown"
+                        [(ngModel)]="selectedSearchByImageID" autoWidth="false" [style]="{'width':'150px'}"
+                    filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+
+                <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                    <button pButton pRipple type="button" label="Filter " style="width:80px" icon="pi pi-refresh"
+                        (click)="Filter();" class="p-button-raised p-mr-2"></button>
+                </div>
+                <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                    <button pButton pRipple type="button" label="Clear " style="width:80px" icon="pi pi-refresh"
+                        (click)="Reset();" class="p-button-raised p-mr-2"></button>
+                </div>
+
+            </div>  
+            </div>                 
+        </p-toolbar>
+       
+        <app-ss-generic-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            (emitSwitch)="UpdateProductQualityStatusFunction($event)" [data]="AllProductList" [columnsData]="columns" [filterGlobal]="false"
+            [totalRecords]="totalRecords" (getLazyData)="GetAllProductWithLazyLoadinFunction($event)"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-ss-generic-table>
+
+    </div>
+</div>
+<p-dialog header="Add to Wishlist" [(visible)]="isAddToWishlist" (onHide)="close()" modal="modal" showEffect="fade"
+    [style]="{width: '50vw'}">
+    <app-addwishlist-dialog #wishList [ProductVariantID]='selectedVariantIDforWishlist'
+        [ProductName]='selectedProductNameforWishlist' (ReturnCall)='CloseDialog($event)'></app-addwishlist-dialog>
+</p-dialog>
+<p-dialog header="Add to Incoming Order" [(visible)]="isAddToIncomingOrder" (onHide)="close1()" modal="modal" showEffect="fade"
+    [style]="{width: '50vw'}">
+    <app-addincomingquantity-dialog  #incomingList [ProductID]='selectedProductIDforincomingQuantitylist'
+        [ProductName]='selectedProductNameforincomingQuantitylist' (ReturnCall)='CloseDialog1($event)'></app-addincomingquantity-dialog>
+</p-dialog>
+<p-dialog
+  header="Add Multiple Products for shop"
+  [(visible)]="AttachDocumentPopDisplayForShop"
+  modal="modal"
+  showEffect="fade"
+  [style]="{ width: '30vw' }"
+>
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <h5>Document</h5>
+       
+        <p-fileUpload
+        name="myfile[]" 
+        mode="advanced"
+        customUpload="true"
+        (uploadHandler)="myUploaderForShop($event)"
+        accept="text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          maxFileSize="3000000"
+        >
+          <ng-template pTemplate="content">
+            <ul *ngIf="uploadedFilesShop.length">
+              <li *ngFor="let file of uploadedFilesShop">
+                {{ file.name }} - {{ file.size }} bytes
+              </li>
+            </ul>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+<p-dialog
+  header="Add Multiple Products"
+  [(visible)]="AttachDocumentPopDisplay"
+  modal="modal"
+  showEffect="fade"
+  [style]="{ width: '30vw' }"
+>
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <h5>Document</h5>
+       
+        <p-fileUpload
+        name="myfile[]" 
+        mode="advanced"
+        customUpload="true"
+        (uploadHandler)="myUploader($event)"
+        accept="text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          maxFileSize="1000000"
+        >
+          <ng-template pTemplate="content">
+            <ul *ngIf="uploadedFiles.length">
+              <li *ngFor="let file of uploadedFiles">
+                {{ file.name }} - {{ file.size }} bytes
+              </li>
+            </ul>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+    </div>
+  </div>
+</p-dialog>

@@ -1,0 +1,614 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<p-confirmDialog [style]="{width: '25vw'}" [baseZIndex]="10000"></p-confirmDialog>
+
+<p-dialog header="Category Assignment" [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '65vw'}">
+
+
+    <p-pickList [source]="Sourcelist" [target]="Targetlist" sourceHeader="All Categories"
+        targetHeader="Assigned Categories" dragdrop="true" [responsive]="true" [sourceStyle]="{'height':'19vw'}"
+        [targetStyle]="{'height':'19vw'}" filterBy="Name" sourceFilterPlaceholder="Search by Name"
+        targetFilterPlaceholder="Search by Name">
+        <ng-template let-Category pTemplate="item">
+            <div>{{Category.Name}}</div>
+        </ng-template>
+    </p-pickList>
+</p-dialog>
+
+
+<p-dialog header="Attach Images" [(visible)]="AttachImagesPopDisplay" modal="modal" showEffect="fade"
+    [style]="{width: '75vw'}">
+
+    <div class="p-grid">
+        <div class="p-col-6">
+           <p-table #dt [value]="folderHierarchys"  [rows]="rows"  [totalRecords]="totalRecords" [(first)]="first"   
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+           [showCurrentPageReport]="true"   
+           selectionMode="single" [(selection)]="selectedFolder" (onRowSelect)="onRowSelect($event)"  
+           [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"  
+           [paginator]="true"  [rowHover]="true"  dataKey="ID" styleClass="p-datatable-responsive-demo"
+           [filterDelay]="0" 
+           [lazy]="true" (onLazyLoad)="LazyLoadFolderFunction($event)"
+           [globalFilterFields]="['Name', 'Description']">
+
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        <h5 class="p-m-0">Attach Images</h5>
+                        <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" placeholder="Global Search"/>
+                    </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+
+                        <!-- <th>ID</th> -->
+                        <th> Folder Name</th>
+                        <th> Path</th>
+                        <th> Action</th>
+
+                    </tr>
+
+
+                </ng-template>
+                <ng-template pTemplate="body" let-folder>
+
+                    <tr [pSelectableRow]="folder">
+                        <!-- <td>{{folder.ID}}</td> -->
+                        <td class="discription">{{folder.Name}}</td>
+                        <td class="discription"> <span>
+                                {{folder.Description}}
+                            </span>
+                        </td>
+                        <td>
+                            <p-button icon="pi pi-upload" class="p-mr-2 p-mb-2" (click)="UpdateImages(folder);"
+                                pTooltip="Attach Images" tooltipPosition="top"></p-button>
+                        </td>
+                    </tr>
+
+                </ng-template>
+
+            </p-table>
+        </div>
+        <div class="p-col-6">
+            <div class="p-grid">
+                <!-- <div class="p-col-12 p-md-3 p-lg-3" *ngFor="let item of Images; let i = index">
+                    <div (click)="ImageSrcFunction($event,folderImagesList.Description+'/'+item)">
+                        <img [src]="imageBasePath+folderImagesList.Description+'/'+item" class="box attachment"
+                            alt="Not Show" [title]="item" width="100" height="100" />
+                    </div>
+                </div> -->
+               <app-genric-table 
+               (emitRowClick)="ImageSrcFunction($event)"
+               [data]="Images" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+               [rowsPerPageOptions]="rowsPerPageOptions" [row]='3'>
+               </app-genric-table> 
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+
+<div class="">
+    <div class="p-col-12 p-p-0 p-m-0 p-shadow-2">
+        <div class="card ">
+
+            <div class="p-fluid p-formgrid p-grid p-pl-2 p-pr-2 p-pt-3 p-pb-3">
+
+                <div class="p-field p-col-12 p-md-4 ">
+                    <label for="ProductName"> {{'MANAGEDPRODUCT.PRODUCTNAME'| translate}} <span
+                            class="RequiredEror">*</span> </label>
+                    <span class="p-input-icon-left">
+                        <i class="fas fa-shopping-basket"></i>
+                        <input type="text" name="ProductName" id=ProductName
+                            (blur)="onProductNameChange($event.target.value)" [(ngModel)]="addProduct.Name" required
+                            pInputText placeholder="Enter Product Name" />
+                    </span>
+                </div>
+                <div class="p-field p-col-12 p-md-2 ">
+                    <label for="state"> {{'MANAGEDPRODUCT.MODELNUMBER'| translate}} <span
+                            class="RequiredEror">*</span></label>
+                    <p-dropdown name="modelNumber" id=ProductName [options]="ProudctModelApiList"
+                        (onChange)="productModelChange($event)" [(ngModel)]="selectedProductModelID" autoWidth="false"
+                        [style]="{'width':'100%'}" required filter="true" placeholder="Select Model Number">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+                <!-- <span class="RequiredEror">*</span> -->
+                <div class="p-field p-col-12 p-md-2 ">
+                    <label for="state"> {{'MANAGEDPRODUCT.TYPE'| translate}} </label>
+                    <p-dropdown name="subModelNumber" id=subModelNumber [options]="ProudctSubModelDD"
+                         [(ngModel)]="selectedProductSubModelID" autoWidth="false"
+                        [style]="{'width':'100%'}" required filter="true" placeholder="Select Type">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <label> <br></label>
+                    <br>
+                    <input type="text" style="background-color: #cccc;" name="BLabel" id="Blabel"
+                        [(ngModel)]="addProduct.BLabel" pInputText />
+                        
+                        <!-- <input type="text" style="background-color: #cccc;" name="BLabel" id="Blabel"
+                        pInputText  value={{BrandLabel+ModelLabel+LabelNo}} /> -->
+
+                </div>
+                <div class="p-field p-col-12 p-md-2 ">
+                    <label for="QualityLabel"> {{'MANAGEDPRODUCT.QUALITYLABEL'| translate}} </label>
+                    <p-dropdown id="QualityLabel" name="QualityLabel" placeholder="Select Quality Label"
+                        [options]="QualityLabelDropdown" [(ngModel)]="selectedQualityLabelID" autoWidth="false"
+                        [style]="{'width':'100%'}" filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <label for="MeasuringUnit"> {{'MANAGEDPRODUCT.MEASURINGUNIT'| translate}} <span
+                            class="RequiredEror">*</span></label>
+                    <p-dropdown id="MeasuringUnit" name="MeasuringUnit" placeholder="Select Measuring Unit"
+                        [options]="MeasuringUnitDropdown" [(ngModel)]="selectedMeasuringUnitID" autoWidth="false"
+                        [style]="{'width':'100%'}" required filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-2 ">
+                    <label for="Color"> {{'MANAGEDPRODUCT.COLOR'| translate}} </label>
+                    <p-dropdown id="Color" name="Color" placeholder="Select Color"
+                        [options]="ColorDropdown" [(ngModel)]="selectedColorID" autoWidth="false"
+                        [style]="{'width':'100%'}" filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-2 ">
+                    <!-- (onChange)="productBrandChange($event)" -->
+                    <label for="Brand"> {{'MANAGEDPRODUCT.BRAND'| translate}} </label>
+                    <p-dropdown id="Brand" name="Brand" placeholder="Select Brand" 
+                        [options]="BrandDropdown" [(ngModel)]="selectedBrandID" autoWidth="false"
+                        (onChange)="productBrandChange($event)"
+                        [style]="{'width':'100%'}" filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-2 ">
+                    <label for="BrandType"> {{'MANAGEDPRODUCT.BRANDTYPE'| translate}} </label>
+                    <p-dropdown id="BrandType" name="BrandType" placeholder="Select Brand Type" 
+                        [options]="BrandTypeDropdown" [(ngModel)]="selectedBrandTypeID" autoWidth="false"
+                        [style]="{'width':'100%'}" filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+                <!-- <div class="p-field p-col-12 p-md-2 ">
+                    <label for="Type"> {{'MANAGEDPRODUCT.TYPE'| translate}} </label>
+                    <p-dropdown id="Type" name="Type" placeholder="Select Type" 
+                        [options]="TypeDropdown" [(ngModel)]="selectedTypeID" autoWidth="false"
+                        [style]="{'width':'100%'}" filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div> -->
+                <div class="p-field p-col-12 p-md-2 ">
+                    <!-- (onChange)="productBrandChange($event)" -->
+                    <label for="Series"> {{'SSGENERIC.PRODUCTSERIES'| translate}} </label>
+                    <p-dropdown id="Series" name="Series" placeholder="Select Series" 
+                        [options]="SeriesDropdown" [(ngModel)]="selectedSeriesID" autoWidth="false"
+                        [style]="{'width':'100%'}" filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+                
+                <div class="p-field p-col-12 p-md-3 ">
+                    <label for="EAN">{{'MANAGEDPRODUCT.EAN'| translate}}</label>
+                    <span class="p-input-icon-left">
+                        <i class="fas fa-glass-whiskey"></i>
+                        <input type="text" id="EAN" name="EAN" [(ngModel)]="addProduct.Barcode" pInputText
+                            placeholder="Enter EAN" />
+                    </span>
+                </div>
+
+                <div class="p-field p-col-12 p-md-3 ">
+                    <label for="Tags">{{'MANAGEDPRODUCT.TAGS'| translate}}</label>
+                    <span class="p-input-icon-left">
+                        <i class="fas fa-tags"></i>
+                        <input type="text" name="tags" id="Tags" [(ngModel)]="addProduct.Tags" pInputText
+                            placeholder="Enter tags" />
+                    </span>
+                </div>
+
+                <div class="p-field p-col-12 p-md-3 ">
+                    <label>{{'MANAGEDPRODUCT.DESCRIPTION'| translate}}</label>
+                    <span class="p-input-icon-left">
+                        <i class="fas fa-receipt"></i>
+                        <input type="text" name="Description" id="Description" [(ngModel)]="addProduct.Description"
+                            pInputText placeholder="Enter Description" />
+                    </span>
+                </div>
+
+                <div class="p-field p-col-12 p-md-2">
+                    <label for="ProductName">{{'MANAGEDPRODUCT.ATTACHIMAGE'| translate}}</label>
+                    <!-- <p-fileUpload mode="basic" [style]="{'width':'100%'}" ></p-fileUpload> -->
+                    <span class="p-buttonset">
+                        <button pButton pRipple (click)="AttachImagesFunction()" label=""
+                            icon="fas fa-plus" class="p-button-raised p p-mr-2"></button>
+                    </span>
+                </div>
+
+
+
+                <div class="p-field p-col-12 p-md-6">
+                    <p-fieldset legend="{{'MANAGEDPRODUCT.PRICINGINFORMATION'| translate}}" [transitionOptions]="'0ms'"
+                        toggleable="true">
+                        <div class="p-grid">
+                            <div class="p-field p-col-12 p-md-6" *ngxPermissionsOnly="this.routeID !== '0' ? CatalogPermission.ProductBuyingPrice : CatalogPermission.ProductBuyingPrice" >
+
+                                <label>{{'MANAGEDPRODUCT.BUYINGPRICE'| translate}}</label>
+
+                                <!-- <span class="p-input-icon-left"> -->
+                                <!-- <i class="fas fa-euro-sign"></i> -->
+                                <p-inputNumber [disabled]="PurchasePriceDisabled" [(ngModel)]="addProduct.PurchasePrice"
+                                    prefix="€" name="Pprice" mode="decimal" [minFractionDigits]="2"
+                                    placeholder="Enter Buying Price" [maxFractionDigits]="2"></p-inputNumber>
+                                <!-- <input type="number" value="0" [(ngModel)]="addProduct.PurchasePrice" 
+                                name="PurchasePrice" (ngModelChange)="setPriceDefaultValueForFeilds($event)" 
+                                id="PurchasePrice"  pInputText placeholder="Enter Buying Price"/> -->
+                                <!-- </span> -->
+                            </div>
+                            <div  class="p-field p-col-12 p-md-6">
+                                <label>{{'MANAGEDPRODUCT.SHOPSALEVAP'| translate}} <span
+                                        class="RequiredEror">*</span></label>
+
+                                <!-- <span class="p-input-icon-left">
+                                <i class="fas fa-euro-sign"></i>
+                                <input type="number"  id="SalePriceVAP" name="SalePriceVAP" 
+                                [(ngModel)]="addProduct.SalePrice"   pInputText placeholder="Enter Sale Price System"/>
+                            </span> -->
+                                <p-inputNumber [(ngModel)]="addProduct.SalePrice" prefix="€"
+                                    placeholder="Enter Sale Price System" name="SalePriceVAP" mode="decimal" required
+                                    [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber>
+                            </div>
+
+                            <div class="p-field p-col-12 p-md-6">
+                                <label>{{'MANAGEDPRODUCT.MINIMUMDISCOUNT'| translate}}</label>
+
+                                <!-- <span class="p-input-icon-left">
+                                <i class="fas fa-percent"></i>
+                                <input type="number" name="MinimumDiscount" id="MinimumDiscount"  
+                                [(ngModel)]="addProduct.MinDiscPer" pInputText placeholder="Enter Minimum Discount"/>
+                            </span> -->
+                                <p-inputNumber [(ngModel)]="addProduct.MinDiscPer" prefix="%"
+                                    placeholder="Enter Minimum Discount" name="MinimumDiscount" mode="decimal"
+                                    [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6">
+                                <label>{{'MANAGEDPRODUCT.MAXIMUMDISCOUNT'| translate}}</label>
+                                <!--                           
+                            <span class="p-input-icon-left">
+                                <i class="fas fa-percent"></i>
+                                <input type="number" name="MaximumDiscount" id="MaximumDiscount"   
+                                [(ngModel)]="addProduct.MaxDiscPer" pInputText placeholder="Enter Maximum Stock"/>
+                            </span> -->
+                                <p-inputNumber [(ngModel)]="addProduct.MaxDiscPer" prefix="%"
+                                    placeholder="Enter Maximum Stock" name="MaximumDiscount" mode="decimal"
+                                    [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber>
+                            </div>
+
+                        </div>
+                    </p-fieldset>
+                </div>
+
+                <div class="p-field p-col-12 p-md-6">
+                    <p-fieldset legend="{{'MANAGEDPRODUCT.SHOPDETAIL'| translate}}" [transitionOptions]="'0ms'"
+                        toggleable="true">
+                        <div class="p-grid">
+                            <div *ngIf="shopEnable" class="p-field p-col-12 p-md-6">
+                                <label>{{'MANAGEDPRODUCT.SHOPSALEPRICE'| translate}} <span
+                                        class="RequiredEror">*</span></label>
+
+                                <!-- <span class="p-input-icon-left">
+                                        <i class="fas fa-euro-sign"></i>
+                                        <input type="number" name="salePrice" [(ngModel)]="addProduct.ShopSalePrice"
+                                            pInputText id="SalePriceShop" placeholder="Enter Sale Price Shop" />
+                                    </span> -->
+                                <p-inputNumber [(ngModel)]="addProduct.ShopSalePrice" prefix="€"
+                                    placeholder="Enter Sale Price Shop" name="ShopSalePrice" mode="decimal" required
+                                    [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber>
+                            </div>
+                            <div *ngIf="shopEnable" class="p-field p-col-12 p-md-6">
+                                <label>{{'MANAGEDPRODUCT.ADVICEPRICE'| translate}} <span
+                                        class="RequiredEror"></span></label>
+
+                                <!-- <span class="p-input-icon-left">
+                                        <i class="fas fa-euro-sign"></i>
+                                        <input type="number" name="AdvicePrice" pInputText id="AdvicePrice"
+                                            [(ngModel)]="addProduct.ShopAdvicePrice" placeholder="Enter Advice Price" />
+                                    </span> -->
+                                <p-inputNumber [(ngModel)]="addProduct.ShopAdvicePrice" prefix="€"
+                                    placeholder="Enter Advice Price" name="AdvicePrice" mode="decimal"
+                                    [minFractionDigits]="2" [maxFractionDigits]="2"></p-inputNumber>
+                            </div>
+                            <div  *ngIf="shopEnable" class="p-field p-col-12 p-md-3 p-mt-2">
+                                <div class="p-field-checkbox p-mt-5">
+                                    <p-checkbox name="bShopAllowDiscount" id="bShopAllowDiscount" [binary]="true"
+                                        [(ngModel)]="addProduct.bShopAllowDiscount"></p-checkbox>
+                                    <label for="bShopAllowDiscount">{{'MANAGEDPRODUCT.ALLOWDISCOUNT'|
+                                        translate}}</label>
+                                </div>
+                            </div>
+                            <div *ngIf="shopEnable" class="p-field p-col-12 p-md-3 p-mt-2">
+                                <div class="p-field-checkbox p-mt-5">
+                                    <p-checkbox name="bShowInShop" id="bShowInShop" [binary]="true"
+                                        [(ngModel)]="bShowInShop"></p-checkbox>
+                                    <label for="bShowInShop">{{'MANAGEDPRODUCT.POSTTOSHOP'| translate}}</label>
+                                </div>
+                            </div>
+
+
+
+                            <div class="p-field p-col-12 p-md-6 p-mt-5">
+
+                                <span class="p-buttonset">
+                                    <button pButton pRipple (click)="CategoryAssignment()"
+                                        label="{{'MANAGEDPRODUCT.CATEGORYASSIGNMENT'| translate}}" icon="fas fa-plus"
+                                        class="p-button-raised p p-mr-2"></button>
+                                </span>
+                            </div>
+
+                        </div>
+                    </p-fieldset>
+                </div>
+
+
+                <div class="p-field p-col-12 p-md-4 ">
+                    <p-fieldset legend="Classification" [transitionOptions]="'0ms'" toggleable="true" collapsed="true">
+                        <div class="p-field ">
+                            <label for="Classification"> {{'MANAGEDPRODUCT.CLASSIFICATION'| translate}} </label>
+                            <p-dropdown id="Classification" name="{{'MANAGEDPRODUCT.CLASSIFICATION'| translate }}"
+                                placeholder="Select Classification" [options]="ClassificationDropdown"
+                                (onChange)="onChangeClassification($event)" [(ngModel)]="selectedClassificationID"
+                                autoWidth="false" [style]="{'width':'100%'}" required filter="true">
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                </ng-template>
+
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field ">
+                            <label for="Department"> {{'MANAGEDPRODUCT.DEPARTMENT'| translate}}</label>
+                            <p-dropdown id="Department" name="Department" placeholder="Select Department"
+                                [options]="DepartmentDropdown" (onChange)="onChangeDepartment($event)"
+                                [(ngModel)]="selectedDepartmentID" autoWidth="false" [style]="{'width':'100%'}" required
+                                filter="true">
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                </ng-template>
+
+                            </p-dropdown>
+                        </div>
+
+                        <div class="p-field  ">
+                            <label for="Category"> {{'MANAGEDPRODUCT.CATEGORY'| translate}}</label>
+                            <p-dropdown id="Category" name="category" placeholder="Select Category"
+                                [options]="CategoryDropdown" (onChange)="onChangeCategory($event)"
+                                [(ngModel)]="selectedCategoryID" autoWidth="false" [style]="{'width':'100%'}" required
+                                filter="true">
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div class="p-field  ">
+                            <label for="SubCategory"> {{'MANAGEDPRODUCT.SUBCATEGORY'| translate}}</label>
+                            <p-dropdown id="SubCategory" name="SubCategory" placeholder="Select SubCategory"
+                                [options]="SubCategoryDropdown" [(ngModel)]="selectedSubCategoryID" autoWidth="false"
+                                [style]="{'width':'100%'}" required filter="true">
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                    </p-fieldset>
+                </div>
+
+                <div class="p-field p-col-12 p-md-4 ">
+                    <p-fieldset legend="{{'MANAGEDPRODUCT.TRACKABLE'| translate}}" [transitionOptions]="'0ms'"
+                        toggleable="true" collapsed="true">
+                        <div class="p-field-radiobutton ">
+                            <p-radioButton name="Trackable" value="Trackable" [(ngModel)]="trackable">
+                            </p-radioButton>
+                            <label for="Trackable">{{'MANAGEDPRODUCT.TRACKABLE'| translate}}</label>
+                        </div>
+                        <div class="p-field-radiobutton ">
+                            <p-radioButton name="Non-Trackable" value="nonTrackable" [(ngModel)]="trackable">
+                            </p-radioButton>
+                            <label for="city1">{{'MANAGEDPRODUCT.NONTRACKABLE'| translate}}</label>
+                        </div>
+                    </p-fieldset>
+                </div>
+
+
+                <div class="p-field p-col-12 p-md-4">
+                    <p-fieldset legend="{{'MANAGEDPRODUCT.STOCKINFORMATION'| translate}}" [transitionOptions]="'0ms'"
+                        toggleable="true" collapsed="true">                       
+                        <div class="p-field">
+                            <label>{{'MANAGEDPRODUCT.MAXIMUMSTOCK'| translate}}</label>
+
+                            <span class="p-input-icon-left">
+                                <i class="fas fa-store"></i>
+                                <input id="MaximumStock" value="0" [(ngModel)]="addProduct.MaximumStock" type="number"
+                                    pInputText placeholder="Enter Maximum Stock"
+                                    [ngModelOptions]="{standalone: true}" />
+                            </span>
+                        </div>
+                        <div  class="p-field">
+                            <div class="p-field-checkbox p-mt-5">
+                                <p-checkbox name="bAddToWishList" id="bAddToWishList" [binary]="true"
+                                    [(ngModel)]="bAddToWishList"></p-checkbox>
+                                <label for="bAddToWishList">{{'MANAGEDPRODUCT.ISAUTOADDTOWISH'| translate}}</label>
+                            </div>
+                        </div>
+                        <div *ngIf="bAddToWishList" class="p-field">
+                            <label>{{'MANAGEDPRODUCT.REORDERPOINT'| translate}}<span class="RequiredEror">*</span></label>
+
+                            <span class="p-input-icon-left">
+                                <i class="fas fa-sort-amount-down-alt"></i>
+
+                                <input type="number" value="0" required [(ngModel)]="addProduct.ReorderPoint" id="ReorderPoint"
+                                    pInputText placeholder="Enter Reorder Point"
+                                    [ngModelOptions]="{standalone: true}" />
+                            </span>
+                        </div>
+                        <div *ngIf="bAddToWishList" class="p-field">
+                            <label>{{'MANAGEDPRODUCT.REORDERQUANTITY'| translate}}</label>
+
+                            <span class="p-input-icon-left">
+                                <i class="fas fa-sort-amount-down-alt"></i>
+
+                                <input type="number" value="0" [(ngModel)]="addProduct.ReorderQuantity" id="ReorderQuantity"
+                                    pInputText placeholder="Enter Reorder Quantity"
+                                    [ngModelOptions]="{standalone: true}" />
+                            </span>
+                        </div>
+                    </p-fieldset>
+                </div>
+
+
+
+                <div class="p-field p-col-12">
+                    <p-fieldset legend="{{'MANAGEDPRODUCT.ATTACHIMAGE'| translate}}" [transitionOptions]="'0ms'"
+                        toggleable="true">
+
+                        <div class="p-grid">
+                            <div class="p-col-1" *ngFor="let item of selectedImages">
+                                <img [src]="item.src" class="box attachment" alt="Image Not Found" Height="100"
+                                    width="100" class="p-shadow-2" />
+
+                                <div style="text-align: center;">
+                                    <button pButton pRipple type="button" icon="pi pi-times"
+                                        class="p-button-rounded p-button-danger p-mr-2 p-mb-2"
+                                        (click)="DeleteImage(item);"></button>
+                                </div>
+
+                                <!-- <button pButton pRipple label="remove" icon="fas fa-times"
+                                    class="p-button-raised p-mr-2" (click)="DeleteImage(item);"></button> -->
+                            </div>
+                        </div>
+
+                        <!-- <p-galleria [(value)]="selectedImages" [(visible)]="displayCustom" [(activeIndex)]="activeIndex" [responsiveOptions]="responsiveOptions" [containerStyle]="{'max-width': '850px'}" [numVisible]="7"
+                [circular]="true" [fullScreen]="true" [showItemNavigators]="true" [showThumbnails]="false" [baseZIndex]="100000"> 
+                <ng-template pTemplate="item" let-item>
+                <img [src]="item" style="width: 100%; display: block;"/>
+                </ng-template>
+                <ng-template pTemplate="thumbnail" let-item>
+                <div class="p-grid p-nogutter p-justify-center">
+                    <img [src]="item" style="display: block;"/>
+                </div>
+                </ng-template>
+                </p-galleria>
+                <div *ngIf="images" class="p-grid" style="max-width: 400px;">
+                    <div *ngFor="let image of images; let index = index;" class="p-col-3" key="index">
+                        <img [src]="image" [alt]="image.alt" style="cursor: pointer" (click)="imageClick(index)"/>
+                    </div>
+                </div> -->
+
+                    </p-fieldset>
+                </div>
+
+
+            </div>
+
+            <p-toolbar>
+                <div class="p-toolbar-group-left">
+
+                </div>
+
+                <div class="p-toolbar-group-right">
+                    <span class="p-buttonset">
+                        <button pButton pRipple label="{{'MANAGEDPRODUCT.CANCLE'| translate}}" icon="pi pi-times"
+                            [routerLink]="['/catalog/managed-products']"
+                            class="p-button-raised  p-button-secondary p-mr-2"></button>
+                    </span>
+                    <span class="p-buttonset">
+                        <button
+                            *ngxPermissionsOnly="this.routeID !== '0' ? CatalogPermission.UpdateProduct : CatalogPermission.AddProduct"
+                            pButton pRipple label="{{ProductButtonLabel}}" (click)="checkConfirmation();"
+                            icon="{{buttonIcon}}" class="p-button-raised p p-mr-2"></button>
+                        <!-- AddProduct -->
+                    </span>
+                </div>
+            </p-toolbar>
+        </div>
+        <!-- UpdateProductDiscounts -->
+
+    </div>
+</div>
+<p-dialog header="DocumentAttachment" [(visible)]="AttachDocumentPopDisplay" modal="modal" showEffect="fade"
+    [style]="{ width: '65vw' }">
+    <div class="progress-spinner" *ngIf="IsSpinner">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+    <div class="p-grid">
+        <div class="p-col-6">
+            <div class="card">
+                <h5>Document</h5>
+                <p-fileUpload name="uploadedFiles" #form [files]="uploadedFiles" customUpload="true" accept="image/*"
+                    (onSelect)="onUpload($event, form)" (uploadHandler)="UpdateImage(form)" multiple="true"
+                    maxFileSize="3000000">
+                    <!-- <ng-template let-file pTemplate='file'>
+                        <div>{{file.name}}</div>
+                        <div>{{file.size}}</div>
+                    </ng-template> -->
+                </p-fileUpload>
+            </div>
+        </div>
+        <div class="p-col-6">
+            <div class="card p-grid">
+                <div class="p-col-12">
+                    <h5>Images</h5>
+                </div>
+                <!-- <div *ngFor="let item of Images" class="p-col-4">
+                    <img [src]="imageBasePath + folderHierarchy.Description + '/' + item" alt="Image Not Found"
+                        Height="140" width="140" class="p-shadow-2" />
+                    <div style="text-align: center;">
+                        <button pButton pRipple type="button" icon="pi pi-times"
+                            class="p-button-rounded p-button-danger p-mr-2 p-mb-2"
+                            (click)="DeleteImage1(item);"></button>
+                    </div>
+                </div> -->
+
+                <app-genric-table (emitDeleteBtnClick)="DeleteImage1($event)" 
+                [data]="Images" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+                [rowsPerPageOptions]="rowsPerPageOptions" [row]='3'>
+                </app-genric-table> 
+
+            </div>
+        </div>
+
+        <!-- </div> -->
+    </div>
+</p-dialog>

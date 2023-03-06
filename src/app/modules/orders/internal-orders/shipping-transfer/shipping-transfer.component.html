@@ -1,0 +1,67 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<p-toast></p-toast>
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card ">
+        <div class="top-c" style="">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-2">
+                    <!-- *ngxPermissionsOnly="OrderPermission.ShippingTransferAdd" -->
+                    <button style="margin-left: 2px" pButton pRipple type="button" 
+                        routerLink="/orders/shipping-transfer/Add" class="p-button p-button-primary" icon="fas fa-plus"
+                        title="{{'ORDERS.CREATE'| translate}}" label="Create"></button>
+                </div>
+                <div class="p-field p-col-10">
+                    <!-- <div class="p-fluid p-formgrid p-grid"> -->
+                        <div style="float: right;"><!--   class="p-field p-col" -->
+                            <label > {{'GENRIC.SEARCHBYDATE'| translate}} </label><br>
+                            
+                            <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+                        (onChange)="onChangeDate($event)" [(ngModel)]="selectedSearchByDateID" autoWidth="false"
+                        [style]="{'width':'200px'}" required filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                        </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            [data]="ShippingTransferList" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+            [rowGroup]="rowGroup" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+    </div>
+</div>
+
+<p-dialog header="Update Incoming Shipment Data" *ngIf="IsUpdateDialog" [(visible)]="IsUpdateDialog" modal="modal"
+    showEffect="fade" [style]="{ width: '50vw' }">
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-6">
+            <label for="code">Tracking Code *</label>
+            <input id="code" type="text" pInputText [(ngModel)]="shippingTransfer.TrackingCode">
+        </div>
+        <div class="p-field p-col-6">
+            <label for="website">Tracking Website * </label>
+            <input id="website" type="text" pInputText [(ngModel)]="shippingTransfer.TrackingWebsite">
+        </div>
+        <div class="p-field p-col-12" style="text-align: right;margin-top: 1.7rem">
+            <button pButton pRipple type="button" icon="fas fa-edit" label="Update" (click)="updateShippingData();"
+                style="width: 20%;" class="p-button-raised p-mr-2"></button>
+
+        </div>
+    </div>
+
+</p-dialog>
+
+<app-shipping-transfer-details-report [isHidden]="printHidden" [selectedshipping]="selectedshiping" [FromOutLetData]="FromOutLetData"
+[ToOutLetData]="ToOutLetData" [totalData]="totalData"></app-shipping-transfer-details-report>
+<p-dialog header="Select Dates" [(visible)]="isCustomDate" modal="modal" showEffect="fade"
+[style]="{width: '50vw',height:'700px'}">
+<app-datepickerpopup (onSelectValue)='selectValue($event)'></app-datepickerpopup>
+</p-dialog>

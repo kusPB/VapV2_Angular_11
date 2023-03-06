@@ -1,0 +1,59 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<div class="login-body">
+    <div class="login-wrapper">
+       
+        <div class="login-panel">
+          <!-- for vaplong -->
+          <img src="assets/layout/images/VaPlong_Logo_Report.png" class="logo" alt="diamond-layout" style="margin-top: 80px" />
+          <!-- for MC Services -->
+          <!-- <img src="assets/layout/images/mcserviceloginimage.png" class="logo" alt="diamond-layout" style="margin-top: 80px" /> -->
+  
+          <div class="login-form">
+              <!-- <p>Already have an account? <a href="#">Login</a></p> -->
+              <div class="p-field">
+              <span class="p-input-icon-left">
+                  <i class="pi pi-user"></i>
+                  <input pInputText id="name" placeholder="User Name" [(ngModel)]="loginmodel.UserName" />
+              </span>
+              </div>
+              
+              <!-- <input pInputText id="email" placeholder="Email" /> -->
+              <div class="p-field">
+              <span class="p-input-icon-left">
+                  <i class="pi pi-lock"></i>
+                  <input type="password" pPassword id="password" placeholder="Password" [(ngModel)]="loginmodel.Password" />
+              </span>
+  
+          </div>
+              
+            
+              <button pButton label="Login"  (click)="loginuser();" type="submit" ></button>
+          </div>
+  
+          <!-- <p>A problem? <a href="#">Click here</a> and let us help you.</p> -->
+          <div class="image-footer">
+          <span class="login-footer-text">Copyright &copy; 2020</span>
+              <br/>
+               <!-- for vaplong -->
+               <img src="assets/layout/images/VaPlong_Logo_Report.png" width="10%" /><span class="login-footer-text"> Version 2.01 </span>
+               <!-- for MC Services -->
+               <!-- <img src="assets/layout/images/mcserviceloginimage.png" width="10%" /><span class="login-footer-text"> Version 2.01 </span> -->
+  
+      </div>
+      </div>
+      <div class="login-image">
+        <div class="login-image-content">
+        
+        </div>
+        <div class="image-footer">
+            
+            <div class="icons">
+                   
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
+  

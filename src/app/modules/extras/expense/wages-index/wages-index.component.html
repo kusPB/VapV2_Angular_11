@@ -1,0 +1,19 @@
+<p-toast></p-toast>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+                    <button *ngxPermissionsOnly="ExtrasPermission.AddWage" pButton pRipple label="{{'EXTRAS.ADDWAGE'| translate}}" (click)="AddWage();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+                </ng-template>
+        </p-toolbar>
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        (emitSwitch)="UpdateExpenseStatus($event)"
+        [data]="AllWageslist" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+ </div>
+</div>

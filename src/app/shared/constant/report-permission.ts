@@ -1,0 +1,27 @@
+export enum ReportPermissionEnum {
+  ViewAllInternalOrders = 'View All Internal Orders',
+  SubMenuOrderDeliveryStatusReport = 'Sub Menu_Order Delivery Status Report',
+  SubMenuAvailableStock = 'Sub Menu_Available Stock',
+  SubMenuStockPurchasePrice = 'Sub Menu_Stock Purchase Price',
+  SubMenuStockLocation = 'Sub Menu_Stock Location',
+  SubMenuSupplierInvoices = 'Sub Menu_Supplier Invoices',
+  SubMenuInvoicePayments = 'Sub Menu_Invoice Payments',
+  StockListing = 'Stock Listing',
+  InvoiceShipmentStatusReport = 'Invoice Shipment Status Report',
+  SubMenuInvoiceShipmentStatusReport = 'Sub Menu_Invoice Shipment Status Report',
+  OnlineOrdersReport = 'Online Orders Report',
+  SingleProductLifeLine = 'Single Product Life-Line Report',
+  CustomerLifeLlineReport = 'Customer Life-Line Report',
+  SupplierLifeLlineReport = 'Supplier Life-Line Report',
+
+  StockbyShopCategories = 'Stock By Shop-Categories',
+  VPOrders = 'VP Orders',
+  OpencartLogsReport = 'OpenCartLogs Report',
+  OpencartReposting = 'RepostingOpenCart',
+  SubMenuOpenCartLogs = 'Sub Menu OpenCart Logs',
+  StockReportByModels = 'Stock Report by Models',
+  StockAlertReport = "Stock Alert Report",
+  InventoryValueReport = "Inventory Value Report",
+  SubMenuCashInOut = 'Sub Menu_Cash_In_Out',
+
+}

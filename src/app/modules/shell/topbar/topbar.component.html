@@ -1,0 +1,183 @@
+<div class="layout-topbar">
+  <div class="topbar-left">
+      <!-- <a tabindex="0" class="menu-button" (click)="app.onMenuButtonClick($event)">
+          <i class="pi pi-chevron-left"></i>
+      </a> -->
+      <!-- <button style="margin-left: 2px"pButton pRipple type="button" (click)="app.onMenuButtonClick($event)"
+      class="p-button p-button-raised" title="Add Purchase" label="Add Purchase"></button> -->
+      <span class="topbar-separator"></span>
+      <app-breadcrumb></app-breadcrumb>
+      <!-- <ng-template ngFor let-item let-last="last" [ngForOf]="items">
+          <span class="viewname" style="text-transform: uppercase">{{item.label}}</span>
+      </ng-template>
+      <img id="logo-mobile" class="mobile-logo"  [routerLink]="['/']" src="assets/layout/images/logo.png" alt="diamond-layout" /> -->
+  </div>
+
+  <div class="topbar-right">
+      <ul class="topbar-menu">
+          <!-- <li class="search-item">
+              <a tabindex="0" (click)="app.onSearchClick($event)">
+                  <i class="pi pi-search"></i>
+              </a>
+          </li> -->
+          <!-- <li class='notifications-item' [ngClass]="{'active-menuitem ': app.topbarNotificationMenuActive}">
+              <a href="#" tabindex="0" (click)="app.onTopbarNotificationMenuButtonClick($event)">
+                  <i class="pi pi-bell"></i>
+                  <span class="topbar-badge">5</span>
+              </a>
+              <ul class="notifications-menu fade-in-up">
+                  <li role="menuitem">
+                      <a href="#" tabindex="0">
+                          <i class="pi pi-shopping-cart"></i>
+                          <div class="notification-item">
+                              <div class="notification-summary">New Order</div>
+                              <div class="notification-detail">You have <strong>3</strong> new orders.</div>
+                          </div>
+                      </a>
+                  </li>
+                  <li role="menuitem">
+                      <a href="#" tabindex="0">
+                          <i class="pi pi-check-square"></i>
+                          <div class="notification-item">
+                              <div class="notification-summary">Withdrawn Completed</div>
+                              <div class="notification-detail">Funds are on their way.</div>
+                          </div>
+                      </a>
+                  </li>
+                  <li role="menuitem">
+                      <a href="#" tabindex="0">
+                          <i class="pi pi-chart-line"></i>
+                          <div class="notification-item">
+                              <div class="notification-summary">Monthly Reports</div>
+                              <div class="notification-detail">New reports are ready.</div>
+                          </div>
+                      </a>
+                  </li>
+                  <li role="menuitem">
+                      <a href="#" tabindex="0">
+                          <i class="pi pi-comments"></i>
+                          <div class="notification-item">
+                              <div class="notification-summary">Comments</div>
+                              <div class="notification-detail"><strong>2</strong> new comments.</div>
+                          </div>
+                      </a>
+                  </li>
+                  <li role="menuitem">
+                      <a href="#" tabindex="0">
+                          <i class="pi pi-exclamation-circle"></i>
+                          <div class="notification-item">
+                              <div class="notification-summary">Chargeback Request</div>
+                              <div class="notification-detail"><strong>1</strong> to review.</div>
+                          </div>
+                      </a>
+                  </li>
+              </ul>
+          </li> -->
+
+          <li class="profile-item" [ngClass]="{'active-menuitem fadeInDown': app.topbarUserMenuActive}">
+              <a href="#" (click)="app.onTopbarUserMenuButtonClick($event)">
+                  <img src="{{usermodel.Image}}" alt="User" class="profile-image"/>
+                  <span class="profile-name">{{usermodel.FirstName + ' '+ usermodel.LastName}}</span>
+              </a>
+              <ul class="profile-menu fade-in-up">
+                  <!-- <li>
+                      <a href="#">
+                          <i class="pi pi-user"></i>
+                          <span>Profile</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="#">
+                          <i class="pi pi-cog"></i>
+                          <span>Settings</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="#">
+                          <i class="pi pi-calendar"></i>
+                          <span>Calendar</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="#">
+                          <i class="pi pi-inbox"></i>
+                          <span>Inbox</span>
+                      </a>
+                  </li> -->
+                  <li>
+                      <a (click)="logout()">
+                          <i class="pi pi-power-off"></i>
+                          <span>Logout</span>
+                      </a>
+                  </li>
+                  <!-- <li>
+                    <a (click)="ChangePassword()">
+                        <i class="pi pi-power-off"></i>
+                        <span>Change Password</span>
+                    </a>
+                </li> -->
+              </ul>
+          </li>
+
+          <!-- <li class="right-sidebar-item">
+              <a href="#" tabindex="0" (click)="app.onRightMenuClick($event)">
+                  <i class="pi pi-align-right"></i>
+              </a>
+          </li> -->
+      </ul>
+  </div>
+</div>
+<p-dialog header="Change Password" [(visible)]="displayPasswordPopup" modal="modal" showEffect="fade" [style]="{width: '25vw'}">
+    <div class="p-grid">
+          
+            <!-- <div class="p-field p-col-12 ">
+                <label for="currentpassword" >Current Password</label>
+                <span class="p-input-icon-left"  style="width: 100% !important;">
+                    <i class="fas fa-key"></i>
+                    <input type="password" [(ngModel)]="changepasswordrequest.OldPassword" name= "currentpassword" id="currentpassword"  style="width: 100% !important;" required pInputText placeholder="Enter current password"/>
+                </span>
+            </div> -->
+            <div class="p-field p-col-12 ">
+                <label for="newpassword" >New Password</label>
+                <span class="p-input-icon-left"  style="width: 100% !important;">
+                    <i class="fas fa-key"></i>
+                    <input type="password" [(ngModel)]="changepasswordrequest.NewPassword" name= "newpassword" id="newpassword"  style="width: 100% !important;" required pInputText placeholder="Enter new password"/>
+                </span>
+            </div>
+
+            <div class="p-field p-col-12 ">
+                <label for="confirmnewpassword" >Confirm New Password</label>
+                <span class="p-input-icon-left"  style="width: 100% !important;">
+                    <i class="fas fa-key"></i>
+                    <input type="password" [(ngModel)]="confirmnewpassword" name= "confirmnewpassword" id="confirmnewpassword"  style="width: 100% !important;" required pInputText placeholder="Enter confirm new password"/>
+                </span>
+            </div>
+    </div>
+    <div class="p-grid p-dir-col">
+            <div class="p-col">
+                <p-toolbar>
+                <div class="p-toolbar-group-left">
+                    
+                 </div>
+                 <!-- <div >
+                    <span class="p-buttonset">
+                        <button pButton pRipple label="Confirm" icon="pi pi-check"  class="p-button-raised  p-button-secondary p-mr-2"></button>
+                    </span>
+                 </div> -->
+
+             <div class="p-toolbar-group-right">
+                    <span class="p-buttonset">
+                        <button pButton pRipple label="Cancel" (click)="PasswordClosedPopUp()" icon="pi pi-times"  class="p-button-raised  p-button-secondary p-mr-2"></button>
+                    </span>
+                    <!--  -->
+                    <span class="p-buttonset">
+                        <button  pButton pRipple *ngxPermissionsOnly="ExtrasPermission.ChangePassword" (click)="ChangePassword()" label="Change Password" icon="fas fa-key" class="p-button-raised p p-mr-2"></button>
+                    </span>
+                </div>
+            </p-toolbar>
+
+        </div>
+      
+    </div>   
+
+</p-dialog>

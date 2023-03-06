@@ -1,0 +1,147 @@
+<p-toast></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+<p-dialog header="Product Image" [(visible)]="displayImage" modal="modal" showEffect="fade">
+    <img src="{{imgSrc}}" height="500" width="500">
+</p-dialog>
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label>{{'GENRIC.SEARCHBYDATE'| translate}}</label>
+                    <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+                        [(ngModel)]="selectedSearchByDateID" (onChange)="onChangeDate($event)"  autoWidth="false" [style]="{'width':'200px'}" required
+                        filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col">
+                    <label>{{'REPORTS.PRODUCT'| translate}}</label>
+ 
+                    <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"(ngModelChange)="onSelectProduct($event)"
+                    [(ngModel)]="selectedProduct" [searchFn]="dataFunc" class="prod-d-d">
+                    <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.label}}</span>
+                    </ng-template>
+                </ng-select>
+                </div>
+                
+                <!-- <div class="p-field" style="margin-left: 1rem;margin-top: 1.7rem">
+                    <button pButton pRipple label="Refresh" (click)="RefreshReport()" icon="fas fa-sync-alt"
+                        class="p-button-raised  p-mr-2"></button>
+                </div> -->
+            </div>
+        </p-toolbar>
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        [data]="AllSalelist" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+        <!-- <p-table #dt [value]="AllSalelist" [rows]="rows" [totalRecords]="totalRecords" [(first)]="first"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [loading]="loading"
+            [showCurrentPageReport]="true" dataKey="id" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"
+            [(contextMenuSelection)]="selectedSale" [contextMenu]="cm" [paginator]="true" [rowHover]="true"
+            styleClass="p-datatable-responsive-demo" [filterDelay]="0" [globalFilterFields]="['Product','ModelNumber','SaleQuantity','TotalSale','RefundQuantity','TotalRefund']">
+
+
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <div class="p-d-flex">
+                        <button type="button" pButton pRipple icon="pi pi-file-o" (click)="dt.exportCSV()"
+                            class="p-mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+                        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                            class="p-button-success p-mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+                        <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                            class="p-button-warning p-mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+
+                    </div>
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text"
+                            placeholder="Global Search" />
+                    </span>
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th> Image</th>
+                    <th pSortableColumn="Product"> Product <p-sortIcon field="Product"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="ModelNumber"> Model Number <p-sortIcon field="ModelNumber"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="SaleQuantity"> Sold Quantity <p-sortIcon field="SaleQuantity"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="TotalSale"> Sale Amount <p-sortIcon field="TotalSale"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="RefundQuantity"> Refunded Quantity <p-sortIcon field="RefundQuantity"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="TotalRefund"> Refunded Amount <p-sortIcon field="TotalRefund"></p-sortIcon>
+                    </th>
+                    
+                </tr>
+
+
+                <tr>
+
+                    <th style="width: 4.5rem"> </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Product', 'contains')"
+                            placeholder="Search by Product" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text"
+                            (input)="dt.filter($event.target.value, 'ModelNumber', 'contains')"
+                            placeholder="Search by Model Number" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text"
+                        (input)="dt.filter($event.target.value, 'SaleQuantity', 'contains')"
+                        placeholder="Search by Sold Quantity" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text"
+                        (input)="dt.filter($event.target.value, 'TotalSale', 'contains')"
+                        placeholder="Search by Sale Amount" class="p-column-filter">
+                    </th>
+                    <th>
+                         <input pInputText type="text"
+                        (input)="dt.filter($event.target.value, 'RefundQuantity', 'contains')"
+                        placeholder="Search by Refunded Quantity" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text"
+                        (input)="dt.filter($event.target.value, 'TotalRefund', 'contains')"
+                        placeholder="Search by Refunded Amount" class="p-column-filter">
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-SaleModel>
+                <tr [pContextMenuRow]="SaleModel">
+                    <td>
+                        <img (click)="popUpImageFuction(imageBasePath + SaleModel.ProductImage)"
+                            [src]="imageBasePath + SaleModel.ProductImage" alt="Image Not Found" width="100"
+                            height="100" class="p-shadow-2" />
+                    </td>
+                    <td>{{SaleModel.Product}}</td>
+                    <td>{{SaleModel.ModelNumber}}</td>
+                    <td>{{SaleModel.SaleQuantity}}</td>
+                    <td><span >€ </span> {{SaleModel.TotalSale}}</td>
+                    <td>{{SaleModel.RefundQuantity}}</td>
+                    <td><span >€ </span> {{SaleModel.TotalRefund}}</td>
+                </tr>
+            </ng-template>
+
+        </p-table> -->
+
+    </div>
+</div>
+<p-dialog header="Select Dates" [(visible)]="isCustomDate" modal="modal" showEffect="fade"
+[style]="{width: '50vw',height:'700px'}">
+    <app-datepickerpopup (onSelectValue)='selectValue($event)'></app-datepickerpopup>
+</p-dialog>

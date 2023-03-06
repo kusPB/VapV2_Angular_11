@@ -1,0 +1,25 @@
+<div class="layout-sidebar" (click)="onMenuClick($event)">
+  <a [routerLink]="['/']" class="logo">
+   <!-- for vaplong -->
+ <!-- <img id="app-logo" class="logo-image" src="assets/layout/images/logo.png" alt="diamond-ng"/>  -->
+   <!-- for MCServices -->
+ <!-- <img id="app-logo" class="logo-image" src="assets/layout/images/mc_logo.png" alt="diamond-ng"/>  -->
+
+  <img id="app-logo" class="logo-image" src={{environmentData.APP_LOGO}} alt="diamond-ng"/> 
+
+      <span class="app-name mt-5">{{environmentData.Menu_Name}}</span>
+  </a>
+
+  <div class="layout-menu-container ">
+      <ul class="layout-menu">
+          <ng-container *ngFor="let item of model; let i = index;">
+              <span *ngIf="item">
+                <span *ngxPermissionsOnly="item.id">
+                    <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
+                 </span> 
+                 <span *ngxPermissionsOnly="item.id">   <li *ngIf="item.separator" class="menu-separator"></li> </span> 
+              </span>
+          </ng-container>
+      </ul>
+  </div>
+</div>

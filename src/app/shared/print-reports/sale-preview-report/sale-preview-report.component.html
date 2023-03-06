@@ -1,0 +1,419 @@
+<div id="printA4-sale-preview-1" [hidden]="true" style="width: 95%;margin:0 auto;" *ngIf="SaleDetails">
+  <div style="width: 93%; margin: auto;">
+    <div style="width: 100%;display: table;">
+      <!-- <div style="width: 100%;">
+        <div style="float: left; margin: 10px 36px;">
+          <img src="https://emcparts.shop/image/cache/webp/catalog/logos/emc-logo-new-123x60-123x60.png" alt="*"
+            style="width: 120px;display: block;margin: auto;">
+        </div>
+        <div style="float: right;;">
+          
+        </div>
+      </div>
+      <br>
+      <hr style="border-top: solid #d3d4d5; border-width: 3px 0 0 0; margin: 1rem 0;margin: 65px 15px 0 15px"> -->
+      <!-- <h3 style="font-family: sans-serif !important; margin: 28px 30px 0px 0px; font-size: 30px;">INVOICE</h3> -->
+      <div style="width: 100%;display: table;">
+        <div style="width: 58%;float: left;">
+
+          <div style="padding:10px 5px;display: table;">
+            <h4 style="font-family: sans-serif !important;color: #8d9092; margin: 5px 30px 0px 0px; font-size: 30px;">
+              PACKING LIST</h4>
+            <!-- <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.companyName}}
+                </span>
+              </p>
+            </div>
+            <br>
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.companyAddress}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  VAT NO:
+                  {{environmentData.vatNo}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  TELEPHONE:
+                  {{environmentData.telephone}}
+                </span>
+
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.email}}
+                </span>
+
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.website}}
+                </span>
+
+              </p>
+            </div> -->
+          </div>
+
+        </div>
+
+        <div style="width: 40%;float: left;">
+          <div style="padding:10px 5px;display: table; width: 100%;">
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>INVOICE DATE:</b>
+                </span>
+                <!-- <p style="margin-left: 10px; float: right;">  -->
+                <span style="float: right;">
+                  {{SaleDetails.SaleDate| date: 'dd.MM.YYYY HH:MM'}}
+                </span>
+              </p>
+            </div>
+            <br>
+            <!-- <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>INVOICE NO:</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{--}}
+                </span>
+              </p>
+            </div>
+            <br> -->
+
+             <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>ORDER NO:</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{SaleDetails.ID}}
+                </span>
+              </p>
+            </div>  
+            <br>
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>CUSTOMER :</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{SaleDetails.OrderByName}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+            <!-- <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>COMPANY :</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{SaleDetails.CompanyName}}
+                </span>
+              </p>
+            </div>
+            <br> -->
+
+            <!-- <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>PAYMENT METHOD:</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{SaleDetails.PaymentType}}
+                </span>
+              </p>
+            </div>
+            <br> -->
+
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important; font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>SHIPPING METHOD:</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{SaleDetails.ShippingMethod}}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table style="width: 100%;margin-top: 10px; " cellspacing="0">
+      <tr style="border-top:none;page-break-inside:avoid;">
+        <th
+          style="background-color: #d3d4d5;font-family: sans-serif !important;text-align: left; padding: 15px !important; border: 1px solid #d3d4d5; ">
+          Billing Address</th>
+        <th
+          style="background-color: #d3d4d5;font-family: sans-serif !important;text-align: left; padding: 15px !important; border: 1px solid #d3d4d5; ">
+          Shipping Address</th>
+      </tr>
+      <tr>
+        <td
+          style="font-family: sans-serif !important;  text-align: left; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; font-size: 12px;">
+          {{SaleDetails.OrderByName}} <br>
+          {{SaleDetails.OrderByCompany}}<br>
+          {{SaleDetails.InvoiceAddress?.split(" ")[0] }} {{ SaleDetails.InvoiceAddress?.split(" ")[1] }}<br>
+          {{SaleDetails.InvoiceAddress?.split(" ")[2] }} {{ SaleDetails.InvoiceAddress?.split(",")[0].split(" ")[3]}}<br>
+          {{ SaleDetails.InvoiceAddress?.split(",")[0].split(" ")[4]}} {{ SaleDetails.InvoiceAddress?.split(",")[0].split(" ")[5]}}<br> 
+          {{SaleDetails.InvoiceAddress?.split(",")[1]}}<br>
+
+          <!-- 2548CS 's-gravenhage<br>
+          Zuid-Holland<br>
+          Netherlands<br>
+          vaplog@emcgsm.fr<br>
+          0000000000<br>
+          KvK nummer: 12345<br>
+          BTW nummer: NL002019536B12<br> -->
+
+        </td>
+        <td
+          style="font-family: sans-serif !important;  text-align: left; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none;font-size: 12px; ">
+          {{SaleDetails.DeliveredToName}}<br>
+          {{SaleDetails.DeliveredToCompanyName}} <br>
+          {{SaleDetails.DeliveryAddress?.split(" ")[0] }} {{ SaleDetails.DeliveryAddress?.split(" ")[1] }}<br>
+          {{SaleDetails.DeliveryAddress?.split(" ")[2] }} {{ SaleDetails.DeliveryAddress?.split(",")[0].split(" ")[3]}}<br> 
+          {{SaleDetails.DeliveryAddress?.split(",")[0].split(" ")[4]}} {{ SaleDetails.DeliveryAddress?.split(",")[0].split(" ")[5]}}<br> 
+          {{SaleDetails.DeliveryAddress?.split(",")[1]}}<br>
+          <!-- 2548CS 's-gravenhage<br>
+          Zuid-Holland<br>
+          Netherlands<br>
+          vaplog@emcgsm.fr<br>
+          0000000000<br>
+          KvK nummer: 12345<br>
+          BTW nummer: NL002019536B12<br> -->
+
+        </td>
+      </tr>
+    </table>
+
+    <table style="width: 100%;margin-top: 10px; " styleClass="p-datatable-striped"  cellspacing="0">
+      <thead>
+        <tr style="border-top:none;page-break-inside:avoid;">
+          <th
+            style="width: 1%; background-color: #d3d4d5;font-family: sans-serif !important;  padding: 5px !important; font-size: 13px; border: 1px solid #d3d4d5;text-align: left;">
+            Check
+          </th>
+          <th
+            style="width:10px; background-color: #d3d4d5;font-family: sans-serif !important;  padding: 15px !important; font-size: 13px; border: 1px solid #d3d4d5; text-align: left;">
+            QR
+          </th>
+          <th
+            style="width:10px; background-color: #d3d4d5;font-family: sans-serif !important;  padding: 15px !important; font-size: 13px; border: 1px solid #d3d4d5; text-align: left;">
+            Model No
+          </th>
+          <th
+            style="width:40px; background-color: #d3d4d5;font-family: sans-serif !important;  padding: 15px !important; font-size: 13px; border: 1px solid #d3d4d5; border-left: none; text-align: left;">
+            Product Name
+          </th>
+          <th
+            style="width:10px; background-color: #d3d4d5;font-family: sans-serif !important;  padding: 15px !important; font-size: 13px; border: 1px solid #d3d4d5; border-left: none; text-align: left;">
+            Quantity
+          </th>
+          <th
+            style="width:10px; background-color: #d3d4d5;font-family: sans-serif !important;  padding: 15px !important; font-size: 13px; border: 1px solid #d3d4d5; border-left: none; text-align: left;">
+            Location
+          </th>
+          <!-- <th style="background-color: #d3d4d5;font-family: sans-serif !important;  padding: 15px !important; font-size: 13px; border: 1px solid #d3d4d5; border-left: none; text-align: left;">
+                    SKU
+                </th> -->
+          <th
+            style="width:10px; background-color: #d3d4d5;font-family: sans-serif !important;  padding: 15px !important; font-size: 13px; border: 1px solid #d3d4d5; border-left: none; text-align: left;">
+            Price ex. VAT
+          </th>
+          <th
+            style="width:10px; background-color: #d3d4d5;font-family: sans-serif !important;  padding: 15px !important; font-size: 13px; border: 1px solid #d3d4d5; border-left:none; text-align: left;">
+            Total ex. VAT
+          </th>
+          <!-- <th
+            style="width:10px; background-color: #d3d4d5;font-family: sans-serif !important;  padding: 15px !important; font-size: 13px; border: 1px solid #d3d4d5; border-left:none; text-align: left;">
+            Total Discount
+          </th> -->
+        </tr>
+
+      </thead>
+      <!-- ngFor="let item of printdata.SaleDetails; let i = index" -->
+      <tr  *ngFor="let product of SaleDetails.newSaleDetails ; let i = index">
+        <td [ngStyle]="{'background-color':i%2!== 0 ? '#e5e7e9' : 'white' }"
+        style="font-size:12px;font-family: sans-serif !important; text-align: center; padding: 5px !important; border: 1px solid #cddddd;border-top: none; ">
+        <input type="checkbox">
+      </td>
+      <td [ngStyle]="{'background-color':i%2!== 0 ? '#e5e7e9' : 'white' }"
+      style="font-size:12px;font-family: sans-serif !important; text-align: center; padding: 5px !important; border: 1px solid #cddddd;border-top: none; ">
+        <div style="float: left;">
+          <img [src]="imageBasePath+product.ProductQRCode"  alt="-"
+            style="width: 80px;display: block;margin: auto;">
+        </div>
+      </td>
+      <td [ngStyle]="{'background-color':i%2!== 0 ? '#e5e7e9' : 'white' }"
+          style="font-size:13px;font-family: sans-serif !important;  text-align: left; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none;">
+          {{product.BLabel}}
+        </td>
+        <td [ngStyle]="{'background-color':i%2!== 0 ? '#e5e7e9' : 'white' }"
+          style="font-size:13px;font-family: sans-serif !important;  text-align: left; padding: 5px !important; border: 1px solid #d3d4d5; border-left: none; border-top: none; ">
+          {{product.Product}}
+        </td>
+        <td [ngStyle]="{'background-color':i%2!== 0 ? '#e5e7e9' : 'white' }"
+          style="font-size:13px;font-family: sans-serif !important;  text-align: center; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none;">
+          {{product.Quantity}}
+        </td>
+        <td [ngStyle]="{'background-color':i%2!== 0 ? '#e5e7e9' : 'white' }"
+          style="font-size:13px;font-family: sans-serif !important;  text-align: left; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none;">
+          {{product.Location}}
+        </td>
+        <!-- <td style="font-size:13px;font-family: sans-serif !important;  text-align: center; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none;">
+                {{product.ProductVariantID}}
+            </td> -->
+
+        <td [ngStyle]="{'background-color':i%2!== 0 ? '#e5e7e9' : 'white' }"
+          style="font-size:13px;font-family: sans-serif !important;  text-align: center; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none;">
+          <span>€ </span> {{product.dTotalUnitValue | number:'1.2-2' }}
+        </td>
+        <td [ngStyle]="{'background-color':i%2!== 0 ? '#e5e7e9' : 'white' }"
+          style="width:10%;font-size:13px;font-family: sans-serif !important;  text-align: center; padding: 5px !important; border-left:none;border: 1px solid #d3d4d5;border-top: none; border-left: none; ">
+          <span>€ </span> {{product.dTotalValue | number:'1.2-2' }}
+        </td>
+        <!-- <td
+          style="font-size:13px;font-family: sans-serif !important;  text-align: center; padding: 5px !important; border-left:none;border: 1px solid #d3d4d5;border-top: none; border-left: none; ">
+          <span>€ </span> {{product.dTotalDiscount | number:'1.2-2' }}
+        </td> -->
+
+        <tr>
+          <td
+          style="font-size:13px;font-family: sans-serif !important;  text-align: right; padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px;  border-top: none;"
+          colspan="3">
+          </td>
+
+          <td
+          style="font-size:13px;font-family: sans-serif !important;  text-align: right; padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px;  border-top: none;"
+          colspan="1"><b>Total Quantity</b>
+        </td>
+          <td
+            style="font-size:13px;font-family: sans-serif !important;  text-align: center; padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px;  border-top: none;"
+            colspan="1">
+            <b>{{TotalQuantity}}</b>
+          </td>
+          <td
+          style="font-size:13px;font-family: sans-serif !important;  text-align: right; padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px;  border-top: none;"
+          colspan="3">
+          </td>
+          
+        </tr>
+      <tr>
+        
+        <td
+          style="font-size:13px;font-family: sans-serif !important;  text-align: right; padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px;  border-top: none;"
+          colspan="6">
+          <b>Subtotal</b>
+        </td>
+        <td
+          style="font-size:13px;font-family: sans-serif !important;  text-align: center;border-left:none;border: 1px solid #d3d4d5; padding: 5px;   border-left: none; border-top: none; text-align: right;"
+          colspan="2">
+          <span>€ </span> {{SaleDetails.subTotal | number:'1.2-2'}}
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size:13px;font-family: sans-serif !important;  text-align: right;padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px; border-top: none;"
+          colspan="6">
+          <b>Discount</b>
+        </td>
+        <td
+          style="font-size:13px;font-family: sans-serif !important;  text-align: center;border-left:none;border: 1px solid #d3d4d5; padding: 5px; border-top: none;border-left:none;text-align: right;"
+          colspan="2">
+          <span>€ </span> {{SaleDetails.dDiscountValue | number:'1.2-2'}}
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size:13px;font-family: sans-serif !important;  text-align: right;padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px;  border-top: none;"
+          colspan="6">
+          <b>Shipping Cost</b>
+        </td>
+        <td
+          style="font-size:13px;font-family: sans-serif !important;  text-align: center;border-left:none;border: 1px solid #d3d4d5; padding: 5px;   border-left: none;border-top: none;text-align: right;"
+          colspan="2">
+          <span>€ </span> {{SaleDetails.ShippingCost | number:'1.2-2' }}
+        </td>
+      </tr>
+      <!-- <tr>
+       <td
+        style="font-size:13px;font-family: sans-serif !important;  text-align: right;padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px; border-top: none;"
+        colspan="4"><b>BTW 21%</b></td>
+      <td
+        style="font-size:13px;font-family: sans-serif !important;  text-align: center;border-left:none;border: 1px solid #d3d4d5; padding: 5px; border-top: none;border-left:none;"
+        colspan="1">
+        <span>€ </span> 31,34
+      </td>
+    </tr> -->
+
+      <tr>     
+        <td
+          style="font-family: sans-serif !important;  text-align: right; padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px; border-top: none;"
+          colspan="6">
+          <b>Total</b>
+        </td>
+        <td
+          style="font-family: sans-serif !important;  text-align: center;border-left:none;border: 1px solid #d3d4d5; padding: 5px; border-top: none;border-left:none;text-align: right;"
+          colspan="2">
+          <span>€ </span> {{SaleDetails.dTotalSaleValue | number:'1.2-2' }}
+        </td>
+      </tr>
+      <!-- <tr>
+        <td
+          style="font-family: sans-serif !important;  text-align: right; padding-right: 10px;border: 1px solid #d3d4d5; padding: 5px; border-top: none;"
+          colspan="6">
+          <b>Total Paid</b>
+        </td>
+        <td
+          style="font-family: sans-serif !important;  text-align: center;border-left:none;border: 1px solid #d3d4d5; padding: 5px; border-top: none;border-left:none;"
+          colspan="1">
+          <span>€ </span> {{SaleDetails.dTotalPaidValue}}
+        </td>
+      </tr> -->
+    </table>
+    <br>
+    <!-- <b>Medewerker handtekening: DC</b>
+    <br> -->
+    <br>
+    <div style="width: 100%;">
+      <p style="font-family: sans-serif !important;font-size: 11px;margin:0;">
+        <span style="float: left;">
+          <b>Remarks:</b>
+        </span>
+        <span style="margin-left: 18px;">
+          {{SaleDetails.sRemarks}}
+          <!-- sdfsdfsdfsdf -->
+        </span>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+<div class="card">
+        <div class="p-fluid p-formgrid p-grid p-pl-2 p-pr-2 p-pt-3 p-pb-3">
+            <div class="p-field p-col-6 p-md-6">
+                <label for="searchText"> Search</label>
+                <span class="p-input-icon-left">
+                     <i class="fas fa-search"></i>
+                    <input type="text" name="searchText" id=searchText
+                        (keypress)="onSearchTextChange($event.target.value)" [(ngModel)]="SearchText" required
+                        pInputText placeholder="Enter Search Text" />
+                </span>
+</div>
+</div>
+
+  <div class="card">
+    <div class="top-c">
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-grid">
+          <div class="p-col" *ngFor="let item of helpList">
+            <p-card header="{{item.Heading}}" [style]="{width: '260px'}" styleClass="p-card-shadow">
+              <ng-template pTemplate="header">
+                <img alt="Card" [src]="baseImagePath +item.Image">
+              </ng-template>
+              <p>{{item.Description}}</p>
+              <ng-template pTemplate="footer">
+                <p-button label="Read More" [routerLink]="'/extras/help-detail/'+item.ID" icon="pi pi-check"></p-button>
+              </ng-template>
+            </p-card>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>

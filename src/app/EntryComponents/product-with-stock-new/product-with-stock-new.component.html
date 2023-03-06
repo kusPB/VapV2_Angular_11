@@ -1,0 +1,76 @@
+
+ <div class="progress-spinner" *ngIf="IsSpinner">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+        
+    <div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+        <div class="card">
+      
+            <p-table #dt [value]="AllProductList"  [rows]="rows"  [totalRecords]="totalRecords" [(first)]="first"   
+               currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+               [loading]="loading"  [showCurrentPageReport]="true"  dataKey="id" 
+               [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]" 
+               [paginator]="true"  [rowHover]="true" styleClass="p-datatable-responsive-demo"
+               [filterDelay]="0"  [globalFilterFields]="['Product','RemainingStock','BLabel','Price']">
+       
+            
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0">Products</h5>
+                    <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" placeholder="Global Search"/>
+                </span>
+                </div>
+            </ng-template>
+             
+             <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th  pSortableColumn="ID">  ID <p-sortIcon field="ID"></p-sortIcon></th>
+                        <th pSortableColumn="Product">  Product <p-sortIcon field="Product"></p-sortIcon></th> 
+                        <th  pSortableColumn="Price">  Price <p-sortIcon field="Price"></p-sortIcon></th>
+                        <th pSortableColumn="minDiscValue">  MinDisc <p-sortIcon field="minDiscValue"></p-sortIcon></th> 
+                        <th  pSortableColumn="maxDiscValue">  MaxDisc <p-sortIcon field="maxDiscValue"></p-sortIcon></th>
+                        <th pSortableColumn="RemainingStock">  Stock <p-sortIcon field="RemainingStock"></p-sortIcon></th> 
+                        <th  pSortableColumn="PurchasePrice">  PurchasePrice <p-sortIcon field="PurchasePrice"></p-sortIcon></th>
+                        <th pSortableColumn="ProductID">  ProductID <p-sortIcon field="ProductID"></p-sortIcon></th>  -->
+                        <th  pSortableColumn="ProductImage">  Image <p-sortIcon field="ProductImage"></p-sortIcon></th>
+                        <th pSortableColumn="Product">  Product <p-sortIcon field="Product"></p-sortIcon></th> 
+                        <th  pSortableColumn="RemainingStock">  AvailableStock <p-sortIcon field="RemainingStockText"></p-sortIcon></th>
+                        <th pSortableColumn="BLabel">  Model <p-sortIcon field="BLabel"></p-sortIcon></th> 
+                        <th pSortableColumn="Price">  Price <p-sortIcon field="Price"></p-sortIcon></th>
+                        <!-- <th pSortableColumn="ArticalNo">  ArticleNumber <p-sortIcon field="ArticalNo"></p-sortIcon></th>  -->
+                        
+                    </tr>
+    
+                </ng-template>
+                <ng-template pTemplate="body" let-Product >
+                    <tr [pContextMenuRow]="Product" (click)="SelectRow(Product)">
+                        
+                        <!-- <td >{{Product.ID}}</td>
+                        <td>{{Product.Product}}</td>
+                        <td >{{Product.Price}}</td>
+                        <td>{{Product.minDiscValue}}</td>
+                        <td >{{Product.maxDiscValue}}</td>
+                        <td>{{Product.RemainingStock}}</td>
+                        <td >{{Product.PurchasePrice}}</td>
+                        <td>{{Product.ProductID}}</td> -->
+                        <td ><img  (click)="popUpImageFuction(imageBasePath + Product.ProductImage)" [src]="imageBasePath + Product.ProductImage" alt="Image Not Found"  width="100" height="100"  class="p-shadow-2" /> </td>
+                        <td>{{Product.Product}}</td>
+                        <td >{{Product.RemainingStock}}</td>
+                        <td>{{Product.BLabel}}</td>
+                        <td >{{this.currencySign + Product.Price}}</td>
+                        <!-- <td>{{Product.ArticalNo}}</td> -->
+                        
+                       
+                    </tr>
+                </ng-template>
+    
+            </p-table>
+    
+        
+        </div>
+    </div>
+    <p-dialog header="Product Image" [(visible)]="displayImage" modal="modal" showEffect="fade">
+            <img src="{{imgSrc}}"  height="500" width="500" >
+          </p-dialog>  

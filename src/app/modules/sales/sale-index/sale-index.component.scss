@@ -1,0 +1,25 @@
+.p-button-raised {
+    font-size: 15px;
+}
+.card {
+    padding: 0.8rem;
+}
+.toolbar-padding {
+    padding: 0.5rem;
+}
+@media only screen and (max-width: 1920px) {
+    .p-button-raised {
+        font-size: 13px;
+    }
+  }
+
+@media only screen and (max-width: 1440px) {
+    .p-button-raised {
+        font-size: 11px;
+    }
+}
+@media only screen and (max-width: 1366px) {
+    .p-button-raised {
+        font-size: 10px;
+    }
+}

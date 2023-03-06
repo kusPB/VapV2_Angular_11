@@ -1,0 +1,112 @@
+.stati{
+    background: #fff;
+    border-radius: 5px;
+    height: 10em;
+    padding:1em;
+    margin:1em 0; 
+      -webkit-transition: margin 0.5s ease,box-shadow 0.5s ease; /* Safari */
+      transition: margin 0.5s ease,box-shadow 0.5s ease; 
+  //   -moz-box-shadow:0px 0.2em 0.4em rgb(0, 0, 0,0.8);
+  // -webkit-box-shadow:0px 0.2em 0.4em rgb(0, 0, 0,0.8);
+  // box-shadow:0px 0.2em 0.4em rgb(0, 0, 0,0.8);
+  }
+  .stati:hover{ 
+    margin-top:0.5em;  
+  //   -moz-box-shadow:0px 0.4em 0.5em rgb(0, 0, 0,0.8); 
+  // -webkit-box-shadow:0px 0.4em 0.5em rgb(0, 0, 0,0.8); 
+  // box-shadow:0px 0.4em 0.5em rgb(0, 0, 0,0.8); 
+  }
+  .stati i{
+    font-size:2.5em; 
+  } 
+  .stati div{
+    width: calc(100% - 3.5em);
+    display: block;
+    float:right;
+    text-align:right;
+  }
+  .stati div b {
+    font-size:1.6em;
+    width: 100%;
+    padding-top:0px;
+    margin-top:-0.2em;
+    margin-bottom:-0.2em;
+    display: block;
+  }
+  a {
+  color: #fff;
+  }
+  
+  .stati div span {
+    font-size:1.5em;
+    width: 100%;
+    display: block;
+    margin-top: 45px;
+  }
+  
+  .stati.left div{ 
+    float:left;
+    text-align:left;
+  }
+  .sep {
+    font-size:3em;
+    margin: 25px 0px !important;
+  }
+  .center-float {
+    text-align: center;
+    margin-left: 15px;
+  }
+  
+.stati.bg-turquoise { background: rgb(26, 188, 156); color:white; border-radius: 10px;} 
+.stati.bg-emerald { background: rgb(46, 204, 113); color:white; border-radius: 10px;} 
+.stati.bg-peter_river { background: rgb(52, 152, 219); color:white; border-radius: 10px;} 
+.stati.bg-amethyst { background: rgb(155, 89, 182); color:white; border-radius: 10px;} 
+.stati.bg-wet_asphalt { background: rgb(52, 73, 94); color:white; border-radius: 10px;} 
+
+.stati.bg-silver { background: rgb(189, 195, 199); color:white;} 
+.stati.bg-light_gray { background: rgb(201,205,208); color:black;} 
+
+.stati.bg-gray { background: rgb(163, 174, 175); color:white;} 
+.stati.bg-asbestos { background: rgb(127, 140, 141); color:white;} 
+  
+.stati.peter_river { color: rgb(52, 152, 219); } 
+.stati.amethyst { color: rgb(155, 89, 182); } 
+.stati.belize_hole { color: rgb(41, 128, 185); } 
+.stati.midnight_blue { color: rgb(44, 62, 80); } 
+.stati.sun_flower { color: rgb(241, 196, 15);} 
+.stati.alizarin { color: rgb(231, 76, 60);} 
+  
+
+.button {
+    width: 18rem !important;
+    padding: 10px 20px;
+    font-size: 18px;  
+}
+
+.btn{
+    margin-top:1.5em; 
+      -webkit-transition: margin 0.5s ease,box-shadow 0.5s ease; /* Safari */
+      transition: margin 0.5s ease,box-shadow 0.5s ease; 
+  }
+  .btn:hover{ 
+    margin-top:1em;  
+  }
+
+  .btn-icon {
+    color: white;
+    background: #2196F3;
+    // border: 1px solid #2196F3;
+    // border-radius: 4px;
+    -webkit-box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+     box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+  }
+  .btn-text {
+    color: #6c757d;
+    background: white;
+    // border: 1px solid #6c757d;
+    margin-left: -10px;
+    // border-radius: 4px;
+    padding: 10px 30px;
+    -webkit-box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+    box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%), 0 1px 5px 0 rgb(0 0 0 / 12%);
+  }

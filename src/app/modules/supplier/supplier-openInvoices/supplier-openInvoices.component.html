@@ -1,0 +1,102 @@
+<p-toast></p-toast>
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="card">
+                    <p-toolbar styleClass="p-mb-4">
+                        <ng-template pTemplate="left">
+                            <button pButton pRipple label="cancel" (click)="CloseThis();" icon="fas fa-sync"
+                                class="p-button-raised  p-mr-2"></button>
+                        </ng-template>
+                    </p-toolbar>
+                    <div style="margin-bottom: 5px !important;">
+                        <p-fieldset legend="Payments">
+                            <div class="p-grid">
+                                <div class="p-field p-col-12 p-md-4 ">
+                                    <label for="remaining"><b> Remaining</b> </label>
+                                    <div>
+                                        <span >€ </span> {{txtRemaining | number:'1.2-2' }}
+                                    </div>
+                                </div>
+                                <div class="p-field p-col-12 p-md-4 ">
+                                    <div for="payment"><b> Payment</b> </div>
+                                    <div class="p-input-icon-left">
+                                        <i class="fas fa-address-book"></i>
+                                        <input type="number" name="balance" id=balance [(ngModel)]="EnteredBalance"
+                                            (blur)="calculatePayment()" pInputText placeholder="Enter Balance" />
+                                    </div>
+                                </div>
+                                <div class="p-field p-col-12 p-md-4 ">
+                                    <div for="paymentMode"><b> Payment Mode </b><span class="RequiredEror">*</span>
+                                    </div>
+                                    <p-dropdown id="paymentMode" name="paymentMode" placeholder="Select Payment Mode"
+                                        [options]="PaymentModeDropdown" [(ngModel)]="selectedPaymentModeID"
+                                        autoWidth="false" [style]="{'width':'100%'}" required filter="true">
+                                        <ng-template let-item pTemplate="selectedItem">
+                                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </p-fieldset>
+                    </div>
+                    <p-table [value]="SupplierOpenInvoicesList" dataKey="id" editMode="row">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>InvoiceNo</th>
+                                <th>DueDate</th>
+                                <th>Total</th>
+                                <th>Paid</th>
+                                <th>Remaining</th>
+                                <th>AddedPayment</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-supplierinvoice let-editing="editing" let-ri="rowIndex">
+                            <tr>
+                                <td><a href="javascript:void(0)"
+                                        (click)="RedirectToPurchaseDetail(supplierinvoice)">{{supplierinvoice.SuppierInvoiceNo}}</a>
+                                </td>
+                                <td> {{supplierinvoice.DueDate |date: 'dd/MM/YYYY HH:MM' }}</td>
+                                <td><span >€ </span> {{supplierinvoice.dTotalAmount | number:'1.2-2' }} </td>
+                                <td><span >€ </span> {{supplierinvoice.dPaidAmount | number:'1.2-2' }} </td>
+                                <td><span >€ </span> {{supplierinvoice.dRemainingAmount | number:'1.2-2' }} </td>
+                                <td pEditableColumn>
+                                    <input pInputText type="number" [(ngModel)]="supplierinvoice.purchaseAmount"
+                                        (onChange)="onChangeFieldAmount(supplierinvoice,ri)" style="width: 85px">
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+
+        <p-toolbar>
+            <div class="p-toolbar-group-left">
+
+            </div>
+
+            <div class="p-toolbar-group-right">
+                <span class="p-buttonset">
+                    <button pButton pRipple label="Cancel" icon="pi pi-times"
+                        [routerLink]="['/supplier/supplier-payment']"
+                        class="p-button-raised  p-button-secondary p-mr-2"></button>
+                </span>
+                <span class="p-buttonset">
+                    <button pButton pRipple label="Add Payment" icon="fas fa-plus" (click)="AddPaymentMain();"
+                        class="p-button-raised p p-mr-2"></button>
+                </span>
+            </div>
+        </p-toolbar>
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            [data]="AllSupplierLedgerlist" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+    </div>
+</div>

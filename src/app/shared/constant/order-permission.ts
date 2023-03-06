@@ -1,0 +1,15 @@
+export enum OrderPermissionEnum {
+    ViewAllInternalOrders = 'View All Internal Orders',
+    ApproveInternalOrders = 'Approve Internal Orders',
+    PurchaseInternalOrders = 'Purchase Internal Orders',
+    IncomingOrder = 'IncomingOrder',
+    ViewAllIncomingOrders = 'View All Incoming Orders',
+    SubMenuShipmentDocument = 'Sub Menu_Shipment Document',
+    InternalOrder = 'InternalOrder',
+    ShipmentTransfer = 'Shipment Transfer',
+    ShippingTransferListing='Shipping Transfer Listing',
+    ShippingTransferDetails='Shipping Transfer Details',
+    ShippingTransferReceive = 'Shipping Transfer Receive',
+    ShippingTransferAdd ='Shipping Transfer Add',
+    SUBMENU_INCOMINGSHIPMENTREPORT='Sub Menu_Incoming Shipment Report',
+  }

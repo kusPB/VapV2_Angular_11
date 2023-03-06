@@ -1,0 +1,145 @@
+<p-toast></p-toast>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col">
+                    <label>{{'GENRIC.SEARCHBYDATE'| translate}}</label>
+                    <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown" (onChange)="SearchByDate($event)"
+                        [(ngModel)]="selectedSearchByDateID" autoWidth="false" [style]="{'width':'200px'}" required
+                        filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+            </div>
+        </p-toolbar>
+        <div class="p-col-12">
+            <div class="card">
+                <h4>{{'SALESTATS.CURRENTSALESTATUS'| translate}}</h4>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-6 p-xl-3">
+                        <div class="card no-gutter widget-overview-box widget-overview-box-1">
+                            <span class="overview-icon"><i class="pi pi-shopping-cart"></i></span>
+                            <span class="overview-title">{{'SALESTATS.SALES'| translate}}</span>
+                            <div class="p-grid overview-detail">
+                                <div class="p-col-6">
+                                    <div class="overview-number">{{statsSalesIncTax}}</div>
+                                    <div class="overview-subtext">{{'SALESTATS.SALES(INC.TAX)'| translate}}</div>
+                                </div>
+                                <div class="p-col-6">
+                                    <div class="overview-number">{{statsSalesExTax}}</div>
+                                    <div class="overview-subtext">{{'SALESTATS.SALES(EX.TAX)'| translate}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-xl-3">
+                        <div class="card no-gutter widget-overview-box widget-overview-box-1">
+                            <span class="overview-icon"><i class="pi pi-undo"></i></span>
+                            <span class="overview-title">{{'SALESTATS.REFUND'| translate}}</span>
+                            <div class="p-grid overview-detail">
+                                <div class="p-col-6">
+                                    <div class="overview-number">{{statsRefunds}}</div>
+                                    <div class="overview-subtext">{{'SALESTATS.REFUNDS'| translate}}</div>
+                                </div>
+                                <div class="p-col-6">
+                                    <div class="overview-number">{{statsRefundCogs}}</div>
+                                    <div class="overview-subtext">{{'SALESTATS.REFUND(COGS)'| translate}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-xl-3">
+                        <div class="card no-gutter widget-overview-box widget-overview-box-1">
+                            <span class="overview-icon"><i class="pi pi-undo"></i></span>
+                            <span class="overview-title">{{'SALESTATS.TAXES'| translate}}</span>
+                            <div class="p-grid overview-detail">
+                                <div class="p-col-6">
+                                    <div class="overview-number">{{statsSalesTax}}</div>
+                                    <div class="overview-subtext">{{'SALESTATS.SALES(TAX)'| translate}}</div>
+                                </div>
+                                <div class="p-col-6">
+                                    <div class="overview-number">{{statsRefundTax}}</div>
+                                    <div class="overview-subtext">{{'SALESTATS.REFUND(TAX)'| translate}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-xl-3">
+                        <div class="card no-gutter widget-overview-box widget-overview-box-1">
+                            <span class="overview-icon"><i class="pi pi-dollar"></i></span>
+                            <span class="overview-title">{{'SALESTATS.OVERALL'| translate}}</span>
+                            <div class="p-grid overview-detail">
+                                <div class="p-col-6">
+                                    <div class="overview-number">{{statsCogs}}</div>
+                                    <div class="overview-subtext">{{'SALESTATS.COGS'| translate}}</div>
+                                </div>
+                                <div class="p-col-6">
+                                    <div class="overview-number">{{statsGrossProfit}}</div>
+                                    <div class="overview-subtext">{{'SALESTATS.GROSSPROFIT'| translate}}</div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="p-grid">
+            <div class="p-col-6">
+                <div class="p-grid">
+                    <div class="p-field p-col-6">
+                        <div for="dateFrom">Select Year</div>
+                        <ng-select [items]="yearList" [virtualScroll]="true" bindLabel="label" [(ngModel)]="currentYear"
+                            (ngModelChange)="changeyear($event)">
+                            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                <span>{{item.label}}</span>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <p-chart *ngIf="lineSaleChartdata" type="line" [data]="lineSaleChartdata"
+                    (onDataSelect)="selectLineSaleChartdata($event)"></p-chart>
+        
+            </div>
+            <div class="p-col-6">
+                <div class="p-grid">
+                    <div class="p-field p-col-6">
+                        <div for="name">Search By Date</div>
+                        <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+                            (onChange)="onChangeDates($event)" [(ngModel)]="selectedSearchByDateIdPie" autoWidth="false"
+                            [style]="{'width':'325px'}" filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+        
+                        </p-dropdown>
+                    </div>
+                </div>
+                <p-chart *ngIf="pieSaleChartData.labels.length > 0" type="pie" [data]="pieSaleChartData"
+                    (onDataSelect)="selectPieSaleChartData($event)"></p-chart>
+                <div *ngIf="pieSaleChartData.labels.length <= 0">
+                    <div style="text-align: center; margin-top: 80px; font-size: 40px; font-weight: bold;">No Data
+                        Available</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p-dialog header="Select Dates" [(visible)]="isCustomDate" modal="modal" showEffect="fade"
+[style]="{width: '50vw',height:'700px'}">
+<app-datepickerpopup (onSelectValue)='selectValue($event)'></app-datepickerpopup>
+</p-dialog>
+<p-dialog header="Select Dates" [(visible)]="isPieCustomDate" modal="modal" showEffect="fade"
+[style]="{width: '50vw',height:'700px'}">
+<app-datepickerpopup (onSelectValue)='selectValues($event)'></app-datepickerpopup>
+</p-dialog>
+

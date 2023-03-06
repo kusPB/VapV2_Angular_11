@@ -1,0 +1,134 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<p-toast></p-toast>
+<app-shipping-transfer-details-report [selectedshipping]="selectedshipping" [FromOutLetData]="FromOutLetData"
+    [ToOutLetData]="ToOutLetData" [totalData]="totalData"></app-shipping-transfer-details-report>
+
+<button style="margin-left: 2px" pButton pRipple type="button" (click)="viewDocuments()"
+    class="p-button p-button-primart" icon="pi pi-times" title="Close" label="Documents"></button>
+
+<button style="margin-left: 2px" pButton pRipple type="button" (click)="cancelClick()"
+    class="p-button p-button-secondary" icon="pi pi-times" title="Close" label="Close"></button>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card ">
+
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-9">
+                <div class="top-c" style="padding-top: 3rem !important;">
+                    <div class="p-grid">
+                        <div class="p-field p-col-2">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12">
+                                    <div>
+                                        <h5>FROM</h5>
+                                    </div>
+                                    <div> {{FromOutLetData.Name}}</div>
+                                    <div>{{FromOutLetData.PhoneNo}}</div>
+                                    <div> {{FromOutLetData.City}}</div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col-2">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12">
+                                    <div>
+                                        <h5>TO</h5>
+                                    </div>
+                                    <div>{{ToOutLetData.Name}}</div>
+                                    <div>{{ToOutLetData.PhoneNo}}</div>
+                                    <div> {{ToOutLetData.City}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col-4">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12">
+                                    <div>
+                                        <b>Shipment Date: </b>
+                                        {{ selectedshipping?.dtDate | date: 'M/dd/yyyy h:m:s a'}}
+                                    </div>
+                                    <div>
+                                        <b>Receive Date: </b>
+                                        {{ selectedshipping?.ReceivedDate ?
+                                        (selectedshipping?.ReceivedDate | date: 'M/dd/yyyy h:m:s a') : 'Not yet
+                                        received'}} <br>
+                                    </div>
+                                    <div>
+                                        <b>Tracking Code: </b>
+                                        {{selectedshipping?.TrackingCode}} <br>
+                                    </div>
+                                    <div>
+                                        <b>Tracking Website: </b>
+                                        {{selectedshipping?.TrackingWebsite}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col-4" style="padding-top: 10px">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12">
+                                    <div class="p-grid">
+                                        <div class="p-col-12">
+                                            <div> <b>Delivery Method</b></div>
+                                            <div> {{ selectedshipping?.ShippingMethod}}</div>
+                                        </div>
+                                        <div class="p-col-10">
+                                            <b>Remarks</b>
+                                            <textarea id="remarks" type="text" pInputText rows="3" cols="30"
+                                                [(ngModel)]="selectedshipping.sRemarks"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="p-field p-col-3">
+                <div class="top-c" style="padding-bottom: 3rem !important;">
+                    <div class="p-grid">
+                        <table style="width:100%">
+                            <tr>
+                                <th> <b> Total </b></th>
+                                <td> <b> {{totalData.totalQuantity}}</b> </td>
+                            </tr>
+                            <tr>
+                                <th><b> Total Price (RMB) </b></th>
+                                <td><b><span>€ </span>  {{totalData.totalRMB | number:'1.2-2' }} </b> </td>
+                            </tr>
+                            <tr>
+                                <th><b> Total Price (Dollar) </b></th>
+                                <td><b><span>€ </span>  {{totalData.totalDollar | number:'1.2-2' }} </b> </td>
+                            </tr>
+                            <tr>
+                                <th><b> Total Price (Euro) </b></th>
+                                <td><b><span>€ </span>  {{totalData.totalEuro | number:'1.2-2' }} </b> </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <app-genric-table [data]="ShipmentDetails" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+    </div>
+</div>
+
+
+<p-dialog header="Documents" *ngIf="IsDocumentDialog" [(visible)]="IsDocumentDialog" modal="modal" showEffect="fade"
+    [style]="{ width: '50vw' }">
+    <app-genric-table [data]="selectedshipping.ShipmentDocuments" [columnsData]="documentsColumns"
+        (emitRowClick)="selectValue($event)" [globalFilterFields]="documentGlobalFilterFields"
+        [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+    </app-genric-table>
+</p-dialog>

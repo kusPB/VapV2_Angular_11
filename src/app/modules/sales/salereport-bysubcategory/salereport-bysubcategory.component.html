@@ -1,0 +1,53 @@
+<p-toast></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <div class="p-fluid p-formgrid p-grid">
+
+
+                <div class="p-field p-col">
+                    <label>{{'REPORTS.SUBCATEGORY'| translate}}</label>
+
+                    <ng-select [items]="filteredSubCategory" [virtualScroll]="true" bindLabel="label"
+                        (ngModelChange)="RefreshReport($event,true)" [(ngModel)]="selectedSubCategory"
+                        [searchFn]="dataFunc" class="prod-d-d">
+                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                            <span>{{item.label}}</span>
+                        </ng-template>
+                    </ng-select>
+                </div>
+
+                <div class="p-field p-col">
+                    <label>{{'GENRIC.SEARCHBYDATE'| translate}}</label>
+                    <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+                        [(ngModel)]="selectedSearchByDateID" autoWidth="false" (onChange)="SearchByDate($event)"
+                        [style]="{'width':'200px'}" required filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+
+                <!-- <div class="p-field" style="margin-left: 1rem;margin-top: 1.7rem">
+                    <button pButton pRipple label="Refresh" (click)="RefreshReport()" icon="fas fa-sync-alt"
+                        class="p-button-raised  p-mr-2"></button>
+                </div> -->
+            </div>
+        </p-toolbar>
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" [data]="AllSalelist"
+            [columnsData]="columns" [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
+            [row]='25'>
+        </app-genric-table>
+
+
+    </div>
+</div>
+<p-dialog header="Select Dates" [(visible)]="isCustomDate" modal="modal" showEffect="fade"
+[style]="{width: '50vw',height:'700px'}">
+<app-datepickerpopup (onSelectValue)='selectValue($event)'></app-datepickerpopup>
+</p-dialog>

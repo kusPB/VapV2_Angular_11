@@ -1,0 +1,35 @@
+input {
+    width: 180px;
+}
+th, td, .font {
+    font-size: 15px;
+}
+@media only screen and (max-width: 1920px) {
+    input {
+        width: 150px;
+        font-size: 13px;
+    }
+    th, td, .font {
+        font-size: 13px;
+    }
+  }
+
+@media only screen and (max-width: 1440px) {
+
+    input {
+        width: 130px;
+        font-size: 12px;
+    }
+    th, td, .font{
+        font-size: 12px;
+    }
+}
+@media only screen and (max-width: 1366px) {
+    input {
+        width: 100px;
+        font-size: 10px;
+    }
+    th, td, .font {
+        font-size: 10px;
+    } 
+}

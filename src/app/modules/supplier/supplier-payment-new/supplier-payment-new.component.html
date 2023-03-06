@@ -1,0 +1,275 @@
+<p-toast></p-toast>
+<div class="progress-spinner" *ngIf="IsSpinner">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+<div class="p-col-12 p-md-1 pad-0">
+  <div class="p-col-12">
+    <button pButton pRipple label="cancel" (click)="CloseThis()" icon="fas fa-sync"
+      class="p-button-raised p-mr-2"></button>
+  </div>
+</div>
+<div class="p-col-12 p-m-0 p-p-0 p-shadow-2">
+  <div class="card c-card">
+    <!-- <p-toolbar styleClass="p-mb-4"> -->
+    <div class="p-grid">
+      <div class="p-col-6">
+        <div class="p-grid">
+          <div class="p-col-6 pad-0">
+            <div class="p-col-12">
+              <label for="supplier">Supplier</label>
+
+              <div class="p-grid">
+                <div class="p-col-10">
+                  <ng-select [items]="filteredSupplier" [virtualScroll]="true" bindLabel="label"
+                    [(ngModel)]="selectedSupplier" [searchFn]="dataFunc"
+                    (ngModelChange)="onSelectSupplierDataBinding($event)">
+                    <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                      <span>{{item.label}}</span>
+                    </ng-template>
+                  </ng-select>
+
+                </div>
+                <div class="p-col-2"><i class="pi pi-search search" (click)="OpenSupplierDialog();"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-col-6 pad-0">
+            <div class="p-col-12">
+              <div><strong>Open Balance</strong></div>
+              <div style="color: red" [ngStyle]=" txtCurrentBalance > 0 && {'color': '#32CD32'}">
+                <strong> <span>€ </span> {{ txtCurrentBalance | number:'1.2-2' }}</strong>
+              </div>
+              <br>
+              <div>Company</div>
+              <div>{{ txtSupplier }}</div>
+              <div>{{ txtSupplierAddress }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-col-6">
+        <div class="p-grid">
+          <div class="p-col-3 pad-0">
+            <div class="p-col-12">
+              <div for="balance"> Payment </div>
+              <div class="p-input-icon-left">
+                <i class="fas fa-euro-sign"></i>
+                <input type="number" name="balance" id="balance" [(ngModel)]="EnteredBalance" style="width: 140px"
+                  (blur)="calculatePayment()" pInputText placeholder="Enter Payment" />
+              </div>
+            </div>
+          </div>
+          <div class="p-col-5 p-md-5 pad-0">
+            <div class="  p-col-12">
+              <div> Remarks </div>
+              <div class="p-input-icon-left" style="width: 100%;">
+                <i class="pi pi-comments"></i>
+                <input type="text" name="remarks" id="remarks" [(ngModel)]="Remarks" pInputText style="width: 100%;"
+                  placeholder="Enter Remarks" />
+              </div>
+            </div>
+          </div>
+          
+          <div class="p-col-2 p-md-2 pad-0 pad-top">
+            <div class="p-col-12">
+              <!-- <div class="p-buttonset"> -->
+              <button pButton pRipple label="Add Payment" (click)="AddPaymentMain()" style="width: 100px;"
+                icon="fas fa-sync" class="p-button-raised p-mr-2"></button>
+              <!-- </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- </p-toolbar> -->
+  </div>
+
+  <div class="card">
+
+    <p-dialog header="Supplier" [(visible)]="displaySupplierDialog" modal="modal" showEffect="fade"
+      [style]="{ width: '60vw' }">
+      <div class="primeng-datatable-container">
+        <p-table #dt [value]="AllSuppliersList" [rows]="rows" [totalRecords]="totalRecords" [(first)]="first"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+          dataKey="id" [rowsPerPageOptions]="[25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+          styleClass="p-datatable-responsive-demo" [filterDelay]="0"
+          [globalFilterFields]="['FirstName', 'LastName', 'sCompanyName']">
+          <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                  placeholder="Search Supplier..." />
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="FirstName">
+                Supplier <p-sortIcon field="FirstName"></p-sortIcon>
+              </th>
+              <th pSortableColumn="sCompanyName">
+                Company <p-sortIcon field="sCompanyName"></p-sortIcon>
+              </th>
+              <th pSortableColumn="Address">
+                Address <p-sortIcon field="Address"></p-sortIcon>
+              </th>
+              <th pSortableColumn="PhoneNo">
+                Phone <p-sortIcon field="PhoneNo"></p-sortIcon>
+              </th>
+              <th pSortableColumn="CurrentBalance">
+                CurrentBalance <p-sortIcon field="CurrentBalance"></p-sortIcon>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-supplier>
+            <tr (click)="SelectRowSupplier(supplier)">
+              <td>{{ supplier.FirstName + " " + supplier.LastName }}</td>
+              <td>
+                {{
+                supplier.sCompanyName === "" || supplier.sCompanyName === null
+                ? "None"
+                : supplier.sCompanyName
+                }}
+              </td>
+              <td>
+                {{
+                supplier.City === "" || supplier.City === null
+                ? supplier.Address
+                : supplier.Address + ", " + supplier.City
+                }}
+              </td>
+              <td>{{ supplier.PhoneNo }}</td>
+              <td>
+                <span style="color: #32CD32" [ngStyle]="supplier.CurrentBalance < 0 && {'color': 'red'}">
+                  <span>€ </span> {{
+                  ( supplier.CurrentBalance === null ? 0 : supplier.CurrentBalance) | number:'1.2-2' }}
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-dialog>
+    <p-dialog header="DocumentAttachment" [(visible)]="AttachDocumentPopDisplay" modal="modal" showEffect="fade"
+      [style]="{ width: '65vw' }">
+      <div class="p-grid">
+        <div class="p-col-12">
+          <div class="card">
+            <h5>Document</h5>
+            <p-fileUpload name="demo[]" (onSelect)="onUpload($event)" #form (onClear)="onClear(form)"
+              maxFileSize="1000000" customUpload="true">
+              <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                  <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                </ul>
+              </ng-template>
+            </p-fileUpload>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
+    <p-dialog header="Password" *ngIf="displayPasswordPopup" [(visible)]="displayPasswordPopup" modal="modal"
+      showEffect="fade" [style]="{ width: '30vw' }">
+      <div class="">
+        <div class="card">
+          <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col">
+              <label for="firstname1">Password</label>
+              <input pInputText type="password" [(ngModel)]="password" />
+            </div>
+            <br />
+          </div>
+        </div>
+        <div class="p-fluid p-formgrid p-grid">
+          <div class="p-field p-col" style="margin-left: 15px">
+            <button pButton pRipple label="Submit" icon="fas fa-sync" (click)="PasswordSubmit()"
+              class="p-button-raised p p-mr-2"></button>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
+    <div class="p-grid">
+      <div class="p-col-6">
+        <!-- <p-table [value]="SupplierOpenInvoicesList" dataKey="id" editMode="row">
+          <ng-template pTemplate="header">
+            <tr style=padding:5;>
+              <th>OrderID</th>
+              <th>Date</th>
+              <th>Invoice No</th>
+              <th>Invoice Amount</th>
+                 </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-supplierinvoice let-editing="editing" let-ri="rowIndex">
+            <tr>
+              <td>
+                <a href="javascript:void(0)"
+                  (click)="RedirectToSaleDetail(supplierinvoice.SaleID)">{{supplierinvoice.SaleID
+                  }}</a>
+              </td>
+              <td>
+                {{ supplierinvoice.DueDate | date: "dd.MM.YYYY HH:MM" }}
+              </td>
+              <td>
+                {{ supplierinvoice.SupplierInvoiceNo }}
+              </td>
+              <td>
+                <span>€ </span> {{ supplierinvoice.dTotalAmount | number:'1.2-2' }}
+              </td>
+            </tr>
+          </ng-template>
+        </p-table> -->
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+          [data]="SupplierPurchaseList" [columnsData]="openSupplier" (emitHref)="RedirectToPurchaseDetail($event)" [rowGroup]="rowGroup"
+          [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]="25">
+        </app-genric-table>
+        <div class="card c-card">
+          <div style="padding-bottom: 1.25rem;">
+          <strong>
+            <div>Total Invoice Amount</div>
+            <div>
+              <span>€ </span> {{ txtTotalInvoiceAmount | number:'1.2-2' }}
+            </div>
+           
+          </strong>
+          </div>
+          <div  style="padding-bottom: 1.25rem;">
+            <strong>
+             
+              <div>Total Return Invoice Amount</div>
+              <div>
+                <span>€ </span> {{ txtTotalReturnInvoiceAmount | number:'1.2-2' }}
+              </div>
+            </strong>
+            </div>
+        </div>
+      </div>
+      
+      <div class="p-col-6">
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"  [rowGroup]="rowGroup1"
+          (emitAttachment)="DisplayAttachment($event)" [data]="AllSupplierLedgerlist" [columnsData]="columns"
+          [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]="25">
+        </app-genric-table>
+        <div class="card c-card">
+          <div style="padding-bottom: 1.25rem;">
+          <strong>
+            <div>Total Paid Amount</div>
+            <div>
+              <span>€ </span> {{ txtTotalPaidAmount | number:'1.2-2' }}
+            </div>
+          </strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<p-dialog header="User Captcha" [(visible)]="isCaptchaDisplayed" (onHide)="close()" modal="modal" showEffect="fade"
+    [style]="{width: '50vw'}">
+    <app-captcha-dialog  [firstNumber]='firstNumber'
+    [secondNumber]='secondNumber' (ReturnCall)='ValidateCaptcha($event)'></app-captcha-dialog>
+</p-dialog>

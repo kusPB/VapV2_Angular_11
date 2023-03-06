@@ -1,0 +1,89 @@
+<div style="height: 60vh">
+  <div
+    class="p-fluid p-formgrid p-grid"
+    style="display: flex ; align-items: end"
+  >
+    <div class="p-field p-col-12 p-md-12">
+      <span class="p-h">Product Name:</span>
+      <span class="p-n"> {{ ProductName }}</span>
+    </div>
+
+    <div class="p-field p-col-6 p-md-6">
+      <div for="supplier">{{ "Supplier*" }}</div>
+      <div class="p-grid" style="margin-top: 0px">
+        <div class="p-col-10">
+          <ng-select
+            [items]="filteredOrderBy"
+            [virtualScroll]="true"
+            bindLabel="label"
+            [(ngModel)]="selectedOrderBy"
+            [searchFn]="dataFunc"
+          >
+            <ng-template
+              ng-option-tmp
+              let-item="item"
+              let-index="index"
+              let-search="searchTerm"
+            >
+              <span>{{ item.label }}</span>
+            </ng-template>
+          </ng-select>
+        </div>
+        <div class="p-col-2">
+          <i class="pi pi-search search" (click)="OpenOrderByDialog()"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-field p-col-3 p-md-3">
+      <label for="quantity">
+        Quantity <span class="RequiredEror">*</span>
+      </label>
+      <span class="p-input-icon-left">
+        <i class="fas fa-shopping-basket"></i>
+        <input
+          type="text"
+          name="quantity"
+          id="quantity"
+          [(ngModel)]="Quantity"
+          required
+          pInputText
+          placeholder="Enter Quantity"
+        />
+      </span>
+    </div>
+
+    <div class="p-field p-col-3 p-md-3">
+      <button
+        pButton
+        pRipple
+        type="button"
+        icon="fas fa-shopping-cart"
+        label="Add"
+        (click)="CreateOrder()"
+        data-dismiss="modal"
+        icon="fas fa-plus"
+        class="p-button-raised p-mr-2"
+      ></button>
+    </div>
+  </div>
+  <p-dialog
+    header="{{ 'Supplier' }}"
+    [(visible)]="displayOrderByDialog"
+    modal="modal"
+    showEffect="fade"
+    [style]="{ width: '60vw' }"
+  >
+    <div class="primeng-datatable-container">
+      <app-genric-table
+        [data]="AllSupplierList"
+        [columnsData]="columns"
+        [globalFilterFields]="globalFilterFields"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [row]="25"
+        (emitRowClick)="SelectRowOrderBy($event)"
+      >
+      </app-genric-table>
+    </div>
+  </p-dialog>
+</div>

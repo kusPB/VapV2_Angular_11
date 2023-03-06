@@ -1,0 +1,41 @@
+<p-toast></p-toast>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<p-dialog header="Remarks" [(visible)]="displayDialog" [style]="{width: '50vw'}" [baseZIndex]="10000">
+    <p>{{DialogRemarks}}</p>  
+  </p-dialog>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+                    <button pButton pRipple *ngxPermissionsOnly="PurchasePermission.AddOpenPurchaseOrder" label="{{'PURCHASEORDERREPORT.ADDHOLDPURCHASEORDER'| translate}}" (click)="AddOpenPurchaseOrder();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+                    <!-- <button pButton pRipple label= "{{'REPORTS.5DaysOld'| translate}}" (click)="DeleteLastDaysReports();" icon="fas fa-trash" class="p-button-raised  p-mr-2"></button> -->
+                </ng-template> 
+                <ng-template pTemplate="right">
+                    <div class="p-field p-col">
+                        <label>{{'GENRIC.SEARCHBYDATE'| translate}}</label>
+                        <p-dropdown  placeholder="Select Search By Date" [options]="SearchByDateDropdown" [(ngModel)]="selectedSearchByDateID" (onChange)="SearchByDate($event)" autoWidth="false" [style]="{'width':'200px'}"  required filter="true" >
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle; margin-left: .5em" >{{item.label}}</span>
+                                </ng-template>
+                                
+                            </p-dropdown> 
+                    </div>
+                </ng-template>
+        </p-toolbar>
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        (emitRemarks)="showDialog($event)"
+        [data]="AllPurchaselist" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+        [rowGroup]="rowGroup"    [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+    
+ 
+ </div>
+</div>
+<p-dialog  header="Select Dates"  [(visible)]="isCustomDate" modal="modal" showEffect="fade"     [style]="{width: '50vw',height:'700px'}">
+    <app-datepickerpopup (onSelectValue)='selectValue($event)'></app-datepickerpopup>
+</p-dialog>

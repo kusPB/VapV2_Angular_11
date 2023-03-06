@@ -1,0 +1,37 @@
+<div class="primeng-datatable-container">
+                     
+        <p-table #dt [value]="AllProductTrackablesList"  [rows]="rows"  [totalRecords]="totalRecords" [(first)]="first"   
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+       [showCurrentPageReport]="true"  dataKey="id" 
+        [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"  
+        [paginator]="true"  [rowHover]="true" styleClass="p-datatable-responsive-demo"
+        [filterDelay]="0"  [globalFilterFields]="['Name']">
+
+ <ng-template pTemplate="caption">
+    <div class="p-d-flex p-ai-center p-jc-between">
+        
+        <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search Trackable Product..." />
+       </span>
+
+    </div>
+</ng-template>
+    <ng-template  pTemplate="header">
+        
+        <tr >
+                <th pSortableColumn="TrackableCode">TrackableCode<p-sortIcon field="TrackableCode"></p-sortIcon></th>
+                <th >Action </th>
+                
+            </tr>
+       
+    </ng-template>
+    <ng-template pTemplate="body" let-trackable >
+        <tr>
+            <td > {{trackable.TrackableCode }} </td>
+            <td > <button pButton label="Remove"  class="p-button-raised  p-mr-2" (click)="RemoveSelectedTrackable(trackable.TrackableCode)"></button> </td>
+              
+        </tr>
+    </ng-template>
+</p-table>
+</div>

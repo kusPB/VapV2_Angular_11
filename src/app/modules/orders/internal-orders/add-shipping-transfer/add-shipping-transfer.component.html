@@ -1,0 +1,364 @@
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<p-toast></p-toast>
+
+<div class="p-col-12 p-m-0 p-p-0 p-shadow-2">
+    <div class="card">
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+                <button style="margin-left: 2px" pButton pRipple type="button" (click)="Save()"
+                    class="p-button p-button-success" icon="pi pi-check" title="{{'ORDERS.SAVE'| translate}}" label="Save"></button>
+
+                <button style="margin-left: 2px" pButton pRipple type="button" routerLink="/orders/shipping-transfer"
+                    class="p-button p-button-secondary" icon="pi pi-times" title="{{'ORDERS.CLOSE'| translate}}"
+                    label="Close"></button>
+            </ng-template>
+        </p-toolbar>
+
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-3">
+                <p-fieldset legend="{{'ORDERS.OUTLET'| translate}}" [transitionOptions]="'0ms'" toggleable="true">
+                    <div class="p-col-12">
+                        <h5>{{'ORDERS.FROM'| translate}}</h5>
+                        <div class="p-grid">
+                            <div class="p-col-10">
+                                <ng-select [items]="OutletFilteredOrderBy" [virtualScroll]="true" bindLabel="label"
+                                    [(ngModel)]="OutLetFrom" [searchFn]="dataFunc"
+                                    (ngModelChange)="BindOutLetFrom($event)">
+                                    <ng-template ng-option-tmp let-item="item" let-index="index"
+                                        let-search="searchTerm">
+                                        <span>{{item.label}}</span>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                            <div class="p-col-2"><i class="pi pi-search search" (click)="OpenFromOutLetDialog();"></i>
+                            </div>
+                        </div>
+                        <br>
+                        <label for="phon">{{outLetFromContact}}</label>
+                        <br>
+                        <label for="address"> {{outLetFromAddress}}</label>
+                    </div>
+                    <br>
+
+                    <div class="p-col-12">
+                        <h5>{{'ORDERS.TO'| translate}}</h5>
+                        <div class="p-grid">
+                            <div class="p-col-10">
+                                <ng-select [items]="OutletFilteredOrderBy" [virtualScroll]="true" bindLabel="label"
+                                    [(ngModel)]="ToOutLet" [searchFn]="dataFunc" (ngModelChange)="BindOutLetTo($event)">
+                                    <ng-template ng-option-tmp let-item="item" let-index="index"
+                                        let-search="searchTerm">
+                                        <span>{{item.label}}</span>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                            <div class="p-col-2"> <i class="pi pi-search search" (click)="OpenToOutLetDialog();"></i>
+                            </div>
+                        </div>
+                        <br>
+                        <label for="phon">{{outLetToContact}}</label>
+                        <br>
+                        <label for="address"> {{outLetToAddress}}</label>
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div class="p-field p-col-3">
+                <div class="p-fluid p-formgrid p-grid">
+                    <p-fieldset legend="{{'ORDERS.SHIPMENT'| translate}}" [transitionOptions]="'0ms'" toggleable="true">
+                        <div class="p-field p-col-12">
+                            <div>
+                                <b>{{'ORDERS.SJIPMENTDATE'| translate}}: </b>
+                                <p-calendar [(ngModel)]="ShippingDate" [showIcon]="true" inputId="icon">
+                                </p-calendar>
+                            </div>
+                            <br>
+                            <div>
+                                <b>{{'ORDERS.TRACKINGCODE'| translate}}: </b>
+                                <input type="text" pInputText name="trackingCode" id="trackingCode"
+                                    [(ngModel)]="TrackingCode">
+                            </div>
+                            <br>
+                            <div>
+                                <b>{{'ORDERS.TRACKINGWEBSITE'| translate}}: </b>
+                                <input type="text" pInputText name="trackingWebsite" id="trackingWebsite"
+                                    [(ngModel)]="TrackingWebsite">
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+            </div>
+
+            <div class="p-field p-col-3" style="padding-top: 10px">
+                <div class="p-fluid p-formgrid p-grid">
+                    <p-fieldset legend="{{'ORDERS.DELIVERY'| translate}}" [transitionOptions]="'0ms'" toggleable="true">
+                        <div class="p-field p-col-12">
+                            <div class="p-grid">
+
+                                <!-- <div class="p-col-12">
+                                   
+                                    <div class="p-grid"> -->
+                                <div class="p-col-10">
+                                    <label for="lastname1">{{'ORDERS.DELIVERYMETHOD'| translate}}</label>
+                                    <ng-select [items]="filteredDeliveryMethod" [virtualScroll]="true" bindLabel="label"
+                                        [(ngModel)]="selectedDeliveryMethod" [searchFn]="dataFunc"
+                                        (ngModelChange)="BindShipmentCost($event)">
+                                        <ng-template ng-option-tmp let-item="item" let-index="index"
+                                            let-search="searchTerm">
+                                            <span>{{item.label}}</span>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                                <div class="p-col-2"> <i class="pi pi-search search" style="margin-top: 30px !important"
+                                        (click)="OpenDeliveryMethodDialog()"></i>
+
+                                </div>
+                                <!-- </div>
+                                </div> -->
+                                <br>
+                                <div class="p-col-12">
+                                    <b>{{'ORDERS.REMARKS'| translate}}</b>
+                                    <textarea id="remarks" type="text" pInputText rows="3" cols="30"
+                                        [(ngModel)]="addShipping.sRemarks"></textarea>
+                                </div>
+                                <br />
+                                <div class="p-col-6">
+                                    <button style="margin-top: 18px" pButton pRipple type="button"
+                                        (click)="viewDocuments()" class="p-button p-button-primart" icon="pi pi-times"
+                                        title="Close" label="{{'ORDERS.DOCUMENT'| translate}}"></button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+            </div>
+            <!-- </div>
+                </div>
+
+            </div> -->
+            <div class="p-field p-col-3">
+                <p-fieldset legend="{{'ORDERS.CARTSUMMARY'| translate}}" [transitionOptions]="'0ms'" toggleable="true">
+                    <!-- <div class="top-c" style="padding: 5rem 2rem !important;">
+                    <div class="p-grid"> -->
+                    <div style="padding: 45px 0px !important">
+                        <table style="width:100%">
+                            <tr>
+                                <th> <b> {{'ORDERS.TOTAL'| translate}} </b></th>
+                                <td> <b> {{totalData.totalQuantity}}</b> </td>
+                            </tr>
+                            <tr>
+                                <th><b> {{'ORDERS.TOTALPRICE'| translate}} (RMB) </b></th>
+                                <td><b> {{totalData.totalRMB}} </b> </td>
+                            </tr>
+                            <tr>
+                                <th><b> {{'ORDERS.TOTALPRICE'| translate}} (Dollar) </b></th>
+                                <td><b> {{totalData.totalDollar}} </b> </td>
+                            </tr>
+                            <tr>
+                                <th><b> {{'ORDERS.TOTALPRICE'| translate}} (Euro) </b></th>
+                                <td><b> {{totalData.totalEuro}} </b> </td>
+                            </tr>
+                        </table>
+                    </div>
+                </p-fieldset>
+                <!-- </div>
+                </div> -->
+            </div>
+        </div>
+
+        <p-table [value]="products" dataKey="id" editMode="row" [(contextMenuSelection)]="selectedRow"
+            [contextMenu]="cm">
+            <ng-template pTemplate="caption" style="margin-top: 20px">
+
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0">
+                        <button pButton label="Add Multiple Product" class="p-button-raised  p-mr-4"
+                            (click)="IsOpenMultiProductDialog = true"></button>
+                    </h5>
+                </div>
+            </ng-template>
+            <!-- <ng-template pTemplate="caption">
+                <div class="p-d-flex p-ai-center p-jc-between">
+                    <h5 class="p-m-0">Products</h5>
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText [(ngModel)]="mySearch" type="text" placeholder="Global Search" />
+                    </span>
+                </div>
+            </ng-template> -->
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 70px"> {{'ORDERS.ACTION'| translate}} </th>
+                    <th style="width: 340px"> {{'ORDERS.PRODUCT'| translate}} </th>
+                    <th style="width: 70px"> {{'ORDERS.CURRENCY'| translate}} </th>
+                    <th style="width: 70px"> {{'ORDERS.QUANTITY'| translate}} </th>
+                    <th style="width: 70px"> {{'ORDERS.TOTALPRICE'| translate}} </th>
+                </tr>
+                <tr [pContextMenuRow]="item" *ngFor="let item of productInfo" [pEditableRow]="item">
+                    <td>
+                        <!-- <button pButton pRipple type="button" icon="pi pi-list"
+                        class="p-button-rounded p-button-outlined btn-round" title="Open Trackables"
+                        *ngIf="item.IsTrackable" (click)="OpenProductTrackables();"></button> -->
+                        <button pButton pRipple type="button" (click)="AddProductToList()" icon="pi pi-plus"
+                            class="p-button-rounded p-button-success btn-round"></button>
+                    </td>
+                    <td style="padding: 1rem !important;" pEditableColumn>
+
+                        <div class="p-grid">
+                            <div class="p-col-10">
+                                <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"
+                                    [searchFn]="dataFunc" [(ngModel)]="item.selectedProduct"
+                                    (ngModelChange)="BindProductDetails($event, item)" #focus>
+                                    <ng-template ng-option-tmp let-item="item" let-index="index"
+                                        let-search="searchTerm">
+                                        <span>{{item.label}}</span>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                            <div class="p-col-2">
+                                <span>
+                                    <i class="pi pi-search search-pi" style="margin-top: 10px;"
+                                        (click)="OpenProductDialog(item)"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- {{OnChangeText(item)}} -->
+                    </td>
+                    <td pEditableColumn>
+                        <ng-select [items]="CurrencyData" bindLabel="currency" [(ngModel)]="item.currency"
+                            bindValue="id" #focus>
+                            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                <span>{{item.currency}}</span>
+                            </ng-template>
+                        </ng-select>
+                        <!-- {{item.currency}} -->
+                    </td>
+                    <td pEditableColumn>
+                        <input pInputText type="number" [(ngModel)]="item.Quantity" style="width: 100px"
+                            (blur)="OnChangeText(item)">
+                        <label *ngIf="item.IsTrackable">{{item.TrackableCodes.length}}</label>
+                    </td>
+                    <td pEditableColumn>
+                        <input pInputText type="number" [(ngModel)]="item.Price" style="width: 100px"
+                            (blur)="OnChangeText(item)" (change)="changePrice(item)">
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product let-editing="editing" let-ri="rowIndex">
+                <tr [pEditableRow]="product">
+                    <td>
+                        <!-- <button pButton pRipple type="button" icon="pi pi-list"
+                        class="p-button-rounded p-button-outlined btn-round" title="Open Trackables"
+                        *ngIf="product.IsTrackable" (click)="OpenProductTrackables(ri);"></button> -->
+                        <button pButton pRipple type="button" (click)="deleteItemFromProductArr(ri)" icon="pi pi-times"
+                            class="p-button-rounded p-button-danger btn-round"></button>
+                    </td>
+                    <td pEditableColumn>
+                        <div class="p-grid">
+                            <div class="p-col-10">
+                                <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"
+                                    [searchFn]="dataFunc" [(ngModel)]="product.selectedProduct"
+                                    (ngModelChange)="BindProductDetails($event, product)" #focus>
+                                    <ng-template ng-option-tmp let-item="item" let-index="index"
+                                        let-search="searchTerm">
+                                        <span>{{item.label}}</span>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                            <div class="p-col-2">
+                                <span>
+                                    <i class="pi pi-search search-pi" style="margin-top: 10px;"
+                                        (click)="OpenProductDialog(product,ri)"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                    <td pEditableColumn>
+                        <ng-select [items]="CurrencyData" bindLabel="currency" [(ngModel)]="product.currency"
+                            bindValue="id" #focus (ngModelChange)="OnChangeText(product)">
+                            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                <span>{{item.currency}}</span>
+                            </ng-template>
+                        </ng-select>
+                        <!-- {{item.currency}} -->
+                    </td>
+                    <td pEditableColumn>
+                        <input pInputText type="number" [(ngModel)]="product.Quantity" style="width: 100px"
+                            (blur)="OnChangeText(product)">
+                        <!-- <label *ngIf="item.IsTrackable">{{item.TrackableCodes.length}}</label> -->
+                    </td>
+                    <td pEditableColumn>
+                        <input pInputText type="number" [(ngModel)]="product.Price" style="width: 100px"
+                            (blur)="OnChangeText(product)" (change)="changePrice(product)">
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <!-- </div>
+            </div> -->
+
+
+        <p-dialog header="Documents" *ngIf="IsDocumentDialog" [(visible)]="IsDocumentDialog" modal="modal"
+            showEffect="fade" [style]="{ width: '25vw' }">
+            <!-- <app-genric-table [data]="selectedshipping.ShipmentDocuments" [columnsData]="documentsColumns"
+        (emitRowClick)="selectValue($event)" [globalFilterFields]="documentGlobalFilterFields"
+        [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+    </app-genric-table> -->
+
+            <p-fileUpload name="uploadedFiles" #form [files]="uploadedFiles" customUpload="true" accept="image/*"
+                (onSelect)="onUpload($event, form)" multiple="true" maxFileSize="1000000">
+                <!-- <ng-template let-file pTemplate='file'>
+           <div>{{file.name}}</div>
+           <div>{{file.size}}</div>
+       </ng-template> -->
+            </p-fileUpload>
+        </p-dialog>
+
+
+        <p-dialog header="Outlet" *ngIf="IsOpenFromOutLetDialog" [(visible)]="IsOpenFromOutLetDialog" modal="modal"
+            showEffect="fade" [style]="{ width: '50vw' }">
+            <app-genric-table [data]="OutletData" (emitRowClick)="SelectFromOuletOrderBy($event)"
+                [columnsData]="outLetColumns" [globalFilterFields]="OutletGlobalFilterFields"
+                [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+            </app-genric-table>
+        </p-dialog>
+
+        <p-dialog header="Outlet" *ngIf="IsOpenToOutLetDialog" [(visible)]="IsOpenToOutLetDialog" modal="modal"
+            showEffect="fade" [style]="{ width: '50vw' }">
+            <app-genric-table [data]="OutletData" (emitRowClick)="SelectToOuletOrderBy($event)"
+                [columnsData]="outLetColumns" [globalFilterFields]="OutletGlobalFilterFields"
+                [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+            </app-genric-table>
+        </p-dialog>
+
+        <p-dialog header="Products" *ngIf="IsOpenProductDialog" [(visible)]="IsOpenProductDialog" modal="modal"
+            showEffect="fade" [style]="{width: '70vw'}">
+            <app-genric-table (emitRowClick)="productSelectValue($event)" [menuItems]="[]" [data]="ProductData"
+                [columnsData]="productsColumn">
+            </app-genric-table>
+
+        </p-dialog>
+
+        <p-dialog header="DeliveryMethods" *ngIf="displayDeliveryMethod" [(visible)]="displayDeliveryMethod"
+            modal="modal" showEffect="fade" [style]="{ width: '60vw' }">
+            <app-delivery-method (onDeliveryMethodSelectValue)="onDeliveryMethodSelectValue($event)">
+            </app-delivery-method>
+        </p-dialog>
+        <p-dialog header="Products" *ngIf="IsOpenMultiProductDialog" [(visible)]="IsOpenMultiProductDialog"
+            modal="modal" showEffect="fade" [style]="{width: '70vw'}">
+            <app-multi-product-selection [menuItems]="[]" (emitSelectedProduct)="addMultipleProduct($event)"
+                [data]="ProductData" [columnsData]="productsColumn">
+            </app-multi-product-selection>
+        </p-dialog>
+
+        <p-dialog header="User Captcha" [(visible)]="isCaptchaDisplayed" (onHide)="close()" modal="modal" showEffect="fade"
+    [style]="{width: '50vw'}">
+    <app-captcha-dialog  [firstNumber]='firstNumber'
+    [secondNumber]='secondNumber' (ReturnCall)='ValidateCaptcha($event)'></app-captcha-dialog>
+</p-dialog>

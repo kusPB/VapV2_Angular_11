@@ -1,0 +1,182 @@
+<button style="margin-left: 2px" pButton pRipple type="button" (click)="UpdateSale()" 
+    class="p-button p-button-success" icon="pi pi-print" title="Save" label="Save"></button>
+    <button style="margin-left: 2px" pButton pRipple type="button" routerLink="/sale/sale-index"
+    class="p-button p-button-secondary" icon="pi pi-times" title="Close" label="Close"></button>
+    
+<app-sale-preview-report *ngIf="SaleDetails" [SaleDetails]="SaleDetails"></app-sale-preview-report>
+<div id="printArea" #screen *ngIf="SaleDetails">
+
+<p-panel header="Sale Information">
+  <div class="p-grid">
+    <div class="p-col">
+      <label>Order by:</label>
+      {{SaleDetails.Customer}} <br>
+      {{customerDetails.Number}} <br>
+      {{customerDetails.Address}} <br>
+      <label>Customer Balance:</label>
+      <span >€ </span> {{customerDetails.CurrentBalance | number:'1.2-2' }} <br>
+
+    </div>
+    <div class="p-col">
+      <label>Deliver To:</label>
+      {{SaleDetails.DeliveredTo}} <br>
+      {{DeliverToDetails.Number}} <br>
+      {{DeliverToDetails.Address}} <br>
+
+    </div>
+    <div class="p-col">
+      <label>Invoice No:</label>
+      {{SaleDetails.ID}} <br>
+      
+      <label>Deliver Date :</label>
+      {{SaleDetails.dtDate}} <br>
+      <label>Order Date :</label>
+      {{SaleDetails.SaleDate}} <br>
+      <label>Remarks :</label>
+      {{SaleDetails.sRemarks}} <br>
+      
+    </div>
+    <div class="p-col">
+      <label>Delivery Method:</label>
+      {{SaleDetails.ShippingMethod}} <br>
+      
+      <label>Type :</label>
+      {{SaleDetails.PaymentMode}} <br>
+      <label>Payment Condition :</label>
+      {{SaleDetails.PaymentCondition}} Days <br>
+      
+    </div>
+    
+  </div>
+
+</p-panel>
+<br><br>
+<p-panel header="Sale Detail Information">
+  <p-table [value]="SaleDetails.SaleDetails">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Unit Price</th>
+        <th>Discount(%)</th>
+        <th>Discount</th>
+        <th>Net Price</th>
+        
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td>{{((product.ProductVariant == null || product.ProductVariant == "" || product.ProductVariant == "Color N.A, Size N.A")?product.Product : product.Product + "  (" + product.ProductVariant + ")")}}
+          <span> <button style="margin-left: 2px; margin-right: 2px" pButton pRipple type="button" *ngIf="product.SaleDetailNonTrackableLocations.length>0"
+            icon="fa fa-map-marker" class="p-button-rounded p-button-outlined"
+            (click)="OpenProductLocations(product)"></button> </span>
+        </td>
+        
+        <td>{{product.Quantity}}         
+        </td>
+        <td pEditableColumn>
+          <input pInputText type="number" [(ngModel)]="product.dTotalUnitValue" style="width: 85px"
+            (blur)="OnChangeText(product)" />
+        </td>
+        <td pEditableColumn>
+          <input pInputText type="number" [(ngModel)]="product.dDiscountPer" style="width: 80px" (blur)="OnChangeText(product)"/>
+        </td>
+        <td>{{(product.dTotalDiscount) | number:'1.2-2' }}</td>
+        <!-- <td>{{(product.dTotalValue).toFixed(2)}} </td> -->
+        <td><span >€ </span> {{(product.dTotalValue - product.dTotalDiscount) | number:'1.2-2' }} </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-panel>
+<br>
+  <div class="p-grid" >
+    <div class="p-col-8">
+      <!-- <label>Supplier</label>
+      {{purchaseDetail.Supplier}}<br> -->
+    </div>
+  
+      
+    <div class="p-col-4">
+      
+    <p-card>
+      <div class="p-grid">
+        <div class="p-col">SubTotal</div>
+        <div class="p-col"><span >€ </span>  {{SaleDetails.subTotal | number:'1.2-2' }}</div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col">Total Discount</div>
+        <div class="p-col"><span >€ </span>  {{SaleDetails.totalDiscount | number:'1.2-2' }}</div>
+      </div>
+      <!-- <div class="p-grid">
+        <div class="p-col"><h4><b>Shipping Method</b></h4></div>
+        <div class="p-col"><h4><b>{{SaleDetails.ShippingMethod}}</b></h4></div>
+      </div> -->
+      <div class="p-grid">
+        <div class="p-col">Shipping Cost</div>
+        <div class="p-col">
+          <div class="p-col"> <input pInputText style="margin-left: 67px; width: 100px" type="number" [(ngModel)]="SaleDetails.ShippingCost"
+            (blur)="CalculateCartTotals()" />
+          </div>
+        </div>
+
+      </div>
+      <div class="p-grid">
+        <div class="p-col">Grand Total</div>
+        <div class="p-col"><span >€ </span>  {{SaleDetails.grandTotal | number:'1.2-2' }}</div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col">Payment</div>
+        <div class="p-col"><span >€ </span>  {{SaleDetails.dTotalPaidValue | number:'1.2-2' }}</div>
+      </div>
+      <div class="p-grid">
+        <div class="p-col">Rest Amount</div>
+        <div class="p-col"><span >€ </span>  {{SaleDetails.restAmount | number:'1.2-2' }}</div>
+      </div>
+    </p-card>
+    </div>
+  </div>
+</div>
+<p-dialog header="Location" *ngIf="displayProductLocations" [(visible)]="displayProductLocations" modal="modal"
+  showEffect="fade" [style]="{ width: '50vw' }">
+  
+  <p-table #dt [value]="AllProductLocationList" [rows]="25"
+    [totalRecords]="AllProductLocationList.length>0?AllProductLocationList.length:0"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+    dataKey="id" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+    styleClass="p-datatable-responsive-demo" [filterDelay]="0" [globalFilterFields]="['Location']">
+
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Search Location" />
+        </span>
+
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+
+      <tr>
+        <th>Location</th>
+        <th>Selected Quantity</th>
+
+      </tr>
+
+    </ng-template>
+    <ng-template pTemplate="body" let-location>
+      <tr>
+        <td> {{location.Location=== null ? 'No location assigned':location.Location }} </td>
+        <td> <input pInputText type="number" [disabled]="true" [(ngModel)]="location.Quantity" style="width: 100px"> </td>
+
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog>
+
+<p-dialog header="User Captcha" [(visible)]="isCaptchaDisplayed" (onHide)="close()" modal="modal" showEffect="fade"
+    [style]="{width: '50vw'}">
+    <app-captcha-dialog  [firstNumber]='firstNumber'
+    [secondNumber]='secondNumber' (ReturnCall)='ValidateCaptcha($event)'></app-captcha-dialog>
+</p-dialog>

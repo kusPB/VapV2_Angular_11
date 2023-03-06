@@ -1,0 +1,78 @@
+
+ <div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<p-toast></p-toast>
+
+    
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button *ngxPermissionsOnly="ExtrasPermission.AddWage" pButton pRipple label="Add Wage" (click)="SaveWageExpense();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+                <!-- <button pButton  pRipple label="Close"  icon="fas fa-plus" class="p-button-raised p-mr-2" (click)="CloseAddSection();" ></button> -->
+            </ng-template>
+
+        </p-toolbar>
+        <p-toolbar styleclass="p-mb-4" >
+            <div  >
+                <h5>User Information</h5>
+
+                <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="selectedUserID">User</label>
+                            <p-dropdown id="selectedUserID" name="selectedUserID" dataKey="value" placeholder="Select User" [options]="UsersDropdown" [(ngModel)]="selectedUserID" autoWidth="false" [style]="{'width':'200px'}"  required filter="true" >
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <span style="vertical-align:middle; margin-left: .5em" >{{item.label}}</span>
+                                    </ng-template>
+                                    
+                                </p-dropdown> 
+                        </div>
+                      
+                    </div>
+
+            </div>
+
+        </p-toolbar>
+        <p-toolbar styleclass="p-mb-4" >
+            <div>
+                <h5>Expense</h5>
+
+                <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="selectedExpenseTypeID">Expense Type</label>
+                            <p-dropdown id="selectedExpenseTypeID" name="selectedExpenseTypeID" dataKey="value" placeholder="Select Expense Type" [options]="ExpenseTypeDropdown" [(ngModel)]="selectedExpenseTypeID" autoWidth="false" [style]="{'width':'200px'}"  required filter="true" >
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <span style="vertical-align:middle; margin-left: .5em" >{{item.label}}</span>
+                                    </ng-template>
+                                    
+                                </p-dropdown>
+                        </div>
+                        <div class="p-field p-col">
+                                <label for="lastname1">Amount</label>
+                                <input id="lastname1" type="number" pInputText [(ngModel)]="expenseWage.dAmount">
+                            </div>
+                       
+                        <div class="p-field p-col">
+                            <label for="lastname2">Description</label>
+                            <input id="lastname2" type="text" pInputText [(ngModel)]="expenseWage.Description">
+                        </div>
+                      
+                    </div>
+
+            </div>
+
+        </p-toolbar>
+       
+    </div>
+</div>

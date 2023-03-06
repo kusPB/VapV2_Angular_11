@@ -1,0 +1,44 @@
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+           
+             <ng-template pTemplate="left">
+       
+                    <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col">
+                                <label>Search By Date</label>
+                                <p-dropdown  placeholder="Select Search By Date" [options]="SearchByDateDropdown" [(ngModel)]="selectedSearchByDateID" autoWidth="false" [style]="{'width':'200px'}" (onChange)="SearchByDate($event)"  required filter="true" >
+                                        <ng-template let-item pTemplate="selectedItem">
+                                            <span style="vertical-align:middle; margin-left: .5em" >{{item.label}}</span>
+                                        </ng-template>
+                                        
+                                    </p-dropdown> 
+                            </div>
+                           
+                        </div>
+             </ng-template>
+
+        </p-toolbar>
+
+        <!-- <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        [data]="AllOrderList" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+        [rowGroup]="rowGroup" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table> -->
+
+        <app-ss-generic-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" [data]="AllOrderList"
+         [rowGroup]="rowGroup" (emitHref)="Details($event)" [columnsData]="columns"
+        [totalRecords]="totalRecords" (getLazyData)="GetAllSaleDataWithLazyLoadinFunction($event)"
+         [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+    </app-ss-generic-table>
+       
+ 
+ </div>
+</div>
+<p-dialog  header="Select Dates"  [(visible)]="isCustomDate" modal="modal" showEffect="fade"     [style]="{width: '50vw',height:'700px'}">
+    <app-datepickerpopup (onSelectValue)='selectValue($event)'></app-datepickerpopup>
+    
+</p-dialog>
+
+<app-vp-sale-preview-report *ngIf="SaleDetails" [SaleDetails]="SaleDetails"></app-vp-sale-preview-report>
+<app-vp-sale-packing-report *ngIf="printingData" [SaleDetails]="printingData"></app-vp-sale-packing-report>

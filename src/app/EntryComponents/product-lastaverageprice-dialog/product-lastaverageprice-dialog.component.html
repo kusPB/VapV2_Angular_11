@@ -1,0 +1,48 @@
+<div class="p-col-12">
+  <div class="p-field p-col-12 p-md-12">
+   <b> <span class="p-h">Product Name:</span></b> <span class="p-n"> {{ProductName}}</span>
+</div>
+    <p-fieldset legend="Product Info" [transitionOptions]="'0ms'" toggleable="true">
+      <div class="p-grid">
+     
+        <div class="p-field p-col-3">
+          <div for="firstname1">Available Stock</div>
+          <div for="firstname1">{{ lastAvgPriceDetails.AvailableStock }}</div>
+        </div>
+        
+        <div class="p-field p-col-3">
+          <div for="firstname1">Average Purchase Price (last 3 purchases)</div>
+          <div for="firstname1">{{ lastAvgPriceDetails.AveragePurchasePrice }}</div>
+        </div>
+        
+        <div class="p-field p-col-3">
+          <div for="firstname1">Last Purchase Price</div>
+          <div for="firstname1">{{ lastAvgPriceDetails.LastPurchasePrice }}</div>
+        </div>
+        
+        <div class="p-field p-col-3">
+          <div for="firstname1">Profit</div>
+          <div for="firstname1">{{ lastAvgPriceDetails.Profit }}</div>
+        </div>
+        
+      </div>
+      <div class="p-grid">
+     
+        <div class="p-field p-col-3">
+          <div for="firstname1">Incoming Quantity</div>
+          <div for="firstname1">{{ lastAvgPriceDetails.IncomingQuantity }}</div>
+        </div>
+        
+        <div class="p-field p-col-3">
+          <div for="firstname1">Received Quantity</div>
+          <div for="firstname1">{{ lastAvgPriceDetails.ReceivedQuantity }}</div>
+        </div>
+        
+        <div class="p-field p-col-3">
+          <div for="firstname1">Remaining Quantity</div>
+          <div for="firstname1">{{ lastAvgPriceDetails.RemainingQuantity }}</div>
+        </div>
+        
+      </div>
+    </p-fieldset>
+  </div>

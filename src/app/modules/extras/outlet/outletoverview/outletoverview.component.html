@@ -1,0 +1,169 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+<!-- <p-toast></p-toast> -->
+
+<!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+    
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button *ngxPermissionsOnly="ExtrasPermission.AddOutlet" pButton pRipple label="{{'EXTRAS.ADDOUTLET'| translate}}" (click)="AddOutlet();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+                
+            </ng-template>
+
+        </p-toolbar>
+        <p-toolbar styleclass="p-mb-4" *ngIf="IsAdd">
+            
+            <div >
+                <h5>{{'EXTRAS.OUTLET'| translate}}</h5>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-6">
+                        <label for="firstname5" class="p-sr-only">{{'EXTRAS.NAME'| translate}}</label>
+                        <input id="firstname5" type="text" pInputText placeholder="Name" [(ngModel)]="outlet.Name">
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label for="email" class="p-sr-only">{{'EXTRAS.EMAIL'| translate}}</label>
+                        <input id="email" type="text" pInputText placeholder="EmailAddress" [(ngModel)]="outlet.EmailAddress">
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label for="phoneno" class="p-sr-only">{{'EXTRAS.PHONE'| translate}}</label>
+                        <input id="phoneno" type="text" pInputText placeholder="PhoneNo" [(ngModel)]="outlet.PhoneNo">
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-6">
+                        <p-fieldset legend="Physical Address" [transitionOptions]="'0ms'"  toggleable="true" collapsed="true">
+                            <div class="p-field ">
+                                <label for="Country"> {{'EXTRAS.COUNTRY'| translate}} </label>
+                                <p-dropdown id="Country" name="Country"  placeholder="Select Country" [options]="CountryDropdown" [(ngModel)]="selectedCountryID" (onChange)="onChangeCountry($event)" autoWidth="false" [style]="{'width':'100%'}"  required filter="true" >
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <span style="vertical-align:middle; margin-left: .5em" >{{item.label}}</span>
+                                    </ng-template>
+                                    
+                                </p-dropdown> 
+                            </div>
+                            <div class="p-field ">
+                                <label for="State"> {{'EXTRAS.STATE'| translate}}</label>
+                                <p-dropdown  id="State" name="State" placeholder="Select State" [options]="StateDropdown" [(ngModel)]="selectedStateID" (onChange)="onChangeState($event)" autoWidth="false" [style]="{'width':'100%'}"  required filter="true" >
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <span style="vertical-align:middle; margin-left: .5em" >{{item.label}}</span>
+                                    </ng-template>
+    
+                                </p-dropdown>
+                            </div>
+            
+                            <div class="p-field  ">
+                                <label for="City"> {{'EXTRAS.CITY'| translate}}</label>
+                              <p-dropdown   id="City" name="City" placeholder="Select City" [options]="CityDropdown" [(ngModel)]="selectedCityID" autoWidth="false" [style]="{'width':'100%'}"  required filter="true" >
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <span style="vertical-align:middle; margin-left: .5em" >{{item.label}}</span>
+                                    </ng-template>
+                               </p-dropdown>
+                            </div>
+                            <div class="p-field ">
+                                <label for="address" class="p-sr-only">{{'EXTRAS.STREETADDRES'| translate}}</label>
+                                <input id="address" type="text" pInputText placeholder="Street Address" [(ngModel)]="outlet.Address">
+                            </div>
+                        </p-fieldset>
+                    </div>
+                    <p-toolbar>
+                        <div class="p-toolbar-group-left">
+                            
+                         </div>
+        
+                        <div class="p-toolbar-group-right">
+                            <span class="p-buttonset">
+                                <button pButton  pRipple label="{{'EXTRAS.CLOSE'| translate}}" icon="fas fa-times"  class="p-button-raised p-mr-2" (click)="CloseAddSection();" class="p-button-raised  p-button-secondary p-mr-2"></button>                            </span>
+                            <span class="p-buttonset">
+                                <button pButton pRipple icon="fas fa-plus" label="{{'EXTRAS.SAVE'| translate}}" (click)="SaveUpdateOutletDetails();" icon="fas fa-plus" class="p-button-raised p p-mr-2" ></button>
+                            </span>
+                        </div>
+                    </p-toolbar>
+                    
+                </div>
+            </div>
+
+        </p-toolbar>
+        <!-- [(selection)]="selectedOneProduct" [contextMenu]="cm"  -->
+        <!-- <p-table #dt [value]="AllOutletList"  [rows]="rows"  [totalRecords]="totalRecords" [(first)]="first"   
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+           [loading]="loading"  [showCurrentPageReport]="true"  dataKey="id" 
+           [(contextMenuSelection)]="selectedOutlet"  
+           [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"  
+           [paginator]="true"  [rowHover]="true" styleClass="p-datatable-responsive-demo"
+           [filterDelay]="0"  [globalFilterFields]="['Name','EmailAddress','PhoneNo','Address']">
+   
+        
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">Outlet</h5>
+                <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" placeholder="Global Search"/>
+            </span>
+            </div>
+        </ng-template>
+         
+         <ng-template pTemplate="header">
+                <tr>
+                 
+                    <th style="width: 4.5rem;" >Status</th>
+                    <th pSortableColumn="Name"> Outlet <p-sortIcon field="Name"></p-sortIcon></th> 
+                    <th pSortableColumn="EmailAddress"> EmailAddress <p-sortIcon field="EmailAddress"></p-sortIcon></th>
+                    <th pSortableColumn="PhoneNo"> Phone No. <p-sortIcon field="PhoneNo"></p-sortIcon></th>
+                    <th pSortableColumn="Address"> Address <p-sortIcon field="Address"></p-sortIcon></th>
+                    
+                </tr>
+
+
+                <tr>
+                 
+                    <th style="width: 4.5rem" > </th>
+                    
+                   
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Name', 'contains')" placeholder="Search by Outlet" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'EmailAddress', 'contains')" placeholder="Search by EmailAddress" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'PhoneNo', 'contains')" placeholder="Search by Phone No." class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Address', 'contains')" placeholder="Search by Address" class="p-column-filter">
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-Outlet >
+                <tr [pContextMenuRow]="Outlet">
+                    <td>
+                      <p-inputSwitch  [(ngModel)]="Outlet.IsActive" (click)="UpdateOutletStatus(Outlet)"></p-inputSwitch>
+                    </td>
+                   
+                    <td>{{Outlet.Name}}</td>
+                    <td >{{Outlet.EmailAddress}}</td>
+                    <td >{{Outlet.PhoneNo}}</td>
+                    <td >{{Outlet.Address}}</td>
+
+
+                   
+                </tr>
+            </ng-template>
+
+        </p-table> -->
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        [data]="AllOutletList" [columnsData]="columns" (emitSwitch)="UpdateOutletStatus($event)">
+
+        </app-genric-table>
+    
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<!-- <div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div> -->
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+<p-toast></p-toast>
+
+<p-dialog header="Remarks" [(visible)]="displayDialog" [style]="{width: '50vw'}" [baseZIndex]="10000">
+    <p>{{DialogRemarks}}</p>
+</p-dialog>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+
+        <!-- <p-toolbar styleclass="p-mb-4"> -->
+
+        <div class="top-c" *ngIf="IsAdd">
+            <h5>{{'ORDERS.INTERNALORDER'| translate}}</h5>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-5">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-11">
+                            <label for="firstname1">{{'ORDERS.PRODUCT'| translate}}</label>
+ 
+                            <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectedProduct" [searchFn]="dataFunc">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="p-col-1">
+                            <i class="pi pi-search search-pi" (click)="OpenProductDialog();"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-1">
+                    <label for="lastname1">{{'ORDERS.QUANTITY'| translate}}</label>
+                    <input id="quantity" type="number" pInputText [(ngModel)]="Quantity">
+                </div>
+                <div class="p-field p-col-4">
+                    <label for="lastname1">{{'ORDERS.REMARKS'| translate}}</label>
+                    <input id="remarks" type="text" pInputText [(ngModel)]="Remarks">
+                </div>
+                <div class="p-field p-col-2" style="margin-top: 1.7rem">
+                    <button pButton pRipple type="button" icon="fas fa-plus" label="{{'ORDERS.ÄDDINTERNALORDER'| translate}}"
+                        (click)="SaveUpdateInternalOrderDetails();" icon="fas fa-plus" style="width: 80%;"
+                        class="p-button-raised p-mr-2"></button>
+
+                </div>
+                <!-- <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                                <button pButton  pRipple label="Close" icon="fas fa-times"  class="p-button-raised p-mr-2" (click)="CloseAddSection();" ></button>
+                        </div> -->
+            </div>
+
+        </div>
+
+        <!-- </p-toolbar> -->
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            (emitRemarks)="showDialog($event)" [data]="AllInternalOrderList" [columnsData]="columns"
+            [rowGroup]="rowGroup" [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+        <!-- [(selection)]="selectedOneProduct" -->
+
+    </div>
+</div>
+
+<p-dialog header="Products" *ngIf="IsOpenProductDialog" [(visible)]="IsOpenProductDialog" modal="modal"
+    showEffect="fade" [style]="{ width: '70vw' }">
+    <app-genric-table (emitRowClick)="selectValue($event)" [menuItems]="[]" [data]="ProductData"
+        [columnsData]="productsColumn">
+    </app-genric-table>
+    <!-- <app-productvariant-stock-DD-data (onSelectValue)="selectValue($event)"></app-productvariant-stock-DD-data> -->
+</p-dialog>

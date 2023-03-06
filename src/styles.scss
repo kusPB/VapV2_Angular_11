@@ -1,0 +1,191 @@
+$gutter: 1rem; //for primeflex grid system
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+p-fieldse{
+    .p-fieldse{
+        margin-top: 0.3em !important;
+        height: 13vh !important;
+        border: 2px solid red !important;
+    }
+} 
+
+
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
+@import "../node_modules/prismjs/themes/prism-coy.css";
+@import "../node_modules/@fullcalendar/core/main.min.css";
+@import "../node_modules/@fullcalendar/daygrid/main.min.css";
+@import "../node_modules/@fullcalendar/timegrid/main.min.css";
+
+$borderRadius:0px !default;
+.layout-menu-container{
+    padding:0;
+}
+
+.layout-sidebar-darkgray .layout-sidebar .layout-menu li a:focus {
+    background-color: #4b545c;
+}
+
+
+.layout-sidebar{
+    .logo{
+
+        margin: 0;
+    }
+} 
+
+
+.mobile-logo{
+    background-color: #495057;
+}
+
+.RequiredEror{
+    color: #B22222;
+    font-size: 15px;
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: blue orange;
+  }
+  
+  /* Works on Chrome/Edge/Safari */
+  *::-webkit-scrollbar {
+    width: 7px;
+  }
+  *::-webkit-scrollbar-track {
+    background: #f8f9fa;
+  
+  }
+  *::-webkit-scrollbar-thumb {
+
+    // for vaplong 
+    background-color: #2196f3;
+	// for mcservices 
+    //background-color: #2196f3;
+    
+    border-radius: 20px;
+    // border: 3px solid orange;
+  }
+
+  .progress-spinner {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;  
+    
+}
+
+
+.fa-pencil-alt:before{
+color: #1263e6!important;
+}
+
+.fa-fa-shapes:before{
+color: #218017!important;
+}
+
+.fa-map-marker-alt:before{
+color: #d8db0f !important;
+}
+
+.fa-euro-sign{
+color: #0cc6c9 !important;
+}
+.euro-sign {
+    font-weight: 500;
+    color: #0cc6c9 !important;
+  }
+.fa-trash-alt:before{
+color: #ba0a07!important;
+}
+  
+
+/*  .p-inputswitch .p-inputswitch-slider {
+    background: #4CAF50 !important;
+    border-radius: 4px !important;
+    height: 3vh !important;
+    border: 1px solid #f8f9fa !important; 
+}
+ */
+
+
+:host ::ng-deep {    
+    .p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 40rem) {
+    :host ::ng-deep {
+        .p-datatable {
+            &.p-datatable-responsive-demo {
+                .p-datatable-thead > tr > th,
+                .p-datatable-tfoot > tr > td {
+                    display: none !important;
+                }
+
+                .p-datatable-tbody > tr > td {
+                    text-align: left;
+                    display: block;
+                    width: 100%;
+                    float: left;
+                    clear: left;
+                    border: 0 none;
+
+                    .p-column-title {
+                        padding: .4rem;
+                        min-width: 30%;
+                        display: inline-block;
+                        margin: -.4em 1em -.4em -.4rem;
+                        font-weight: bold;
+                    }
+
+                    &:last-child {
+                        border-bottom: 1px solid var(--surface-d);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+.ui-datatable-tablewrapper{
+    min-height: 30vh;
+    }
+
+.selected-img{
+    border: 3px solid #2196f3;
+}    
+
+.attachment-images{
+
+    cursor: pointer;
+}
+
+.prod-d-d {
+    width: 410px !important;
+}
+.c-card {
+    background: #f8f9fa !important; 
+    border: 1px solid #dee2e6 !important;   
+    animation: none !important;
+    -webkit-box-shadow: none !important;
+    margin-bottom: 5px !important;
+}
+
+.search{
+    font-size: 1.3rem !important;
+    margin-top: 10px !important;
+  }
+
+
+

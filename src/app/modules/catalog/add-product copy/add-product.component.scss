@@ -1,0 +1,13 @@
+.discription{
+    text-overflow: ellipsis;
+    margin-bottom: 12px;
+    cursor: pointer;
+    word-break: break-all;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.discription:hover {
+    cursor: pointer;
+    word-break: break-all;
+    white-space: normal;
+}

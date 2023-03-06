@@ -1,0 +1,155 @@
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+<p-toast></p-toast>
+
+<p-dialog header="Remarks" [(visible)]="displayDialog" [style]="{width: '50vw'}" [baseZIndex]="10000">
+    <p>{{DialogRemarks}}</p>
+</p-dialog>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <div class="top-c">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-6">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-11">
+                            <label for="firstname1">{{'REPORTS.PRODUCTS'| translate}}</label>
+                            <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectedProduct" [searchFn]="dataFunc"
+                                (ngModelChange)="selectValue($event)">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="p-col-1">
+                            <i class="pi pi-search search-pi" (click)="OpenProductDialog();"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-2">
+                    <button pButton pRipple type="button" (click)="Close()" 
+                    class="p-button p-button-raised"  style="margin: 26px 26px 0px 0px;" icon="pi pi-times" title="Close" label="Close"></button>
+                </div>              
+                <div class="p-field p-col-4">
+                    <div class="p-field p-col-12 text-center" style="margin: 26px 26px 0px 0px;color: red;">
+                        <div><span >This product is </span> {{productHistory.Status }} </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+            <div class="top-c">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-2 text-center">
+                        <div>{{'REPORTS.LASTPURCHASEPRICE'| translate}} </div>
+                        <div><span >€ </span> {{(productHistory.LastPurchasePrice || 0) | number:'1.2-2' }} </div>
+                    </div>
+
+                    <div class="p-field p-col-2 ">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-6 " style="border-right: 1px solid #e9ecef;">
+                                <div class="text-right">{{'REPORTS.VAPLONGPRICE'| translate}}
+                                    <div><span >€ </span> {{(productHistory.VaplongPrice || 0) | number:'1.2-2' }} </div>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col-6">
+                                <div class="text-left">{{'REPORTS.WEBSITEPRICE'| translate}}
+                                    <div><span >€ </span> {{(productHistory.WebsitePrice || 0) | number:'1.2-2' }} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-field p-col-2">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-6" style="border-right: 1px solid #e9ecef;">
+                                <div class="text-right">{{'REPORTS.PURCHASE'| translate}}
+                                    <div> {{productHistory.PurchaseQuantity || 0}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-6">
+                                <div class="text-left">{{'REPORTS.RETURN'| translate}}
+                                    <div> {{productHistory.PurchaseReturnQuantity || 0}} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col-2">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-6" style="border-right: 1px solid #e9ecef;">
+                                <div class="text-right">{{'REPORTS.SALE'| translate}}
+                                    <div> {{productHistory.SaleQuantity || 0}}</div>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-6">
+                                <div class="text-left">{{'REPORTS.RETURN'| translate}}
+                                    <div> {{productHistory.SaleReturnQuantity || 0}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-field p-col-2">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-6" style="border-right: 1px solid #e9ecef;">
+                                <div class="text-right">{{'REPORTS.AVAILABLESTOCK'| translate}}
+                                <div> {{productHistory.AvailableQuantity || 0}} </div>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-6">
+                                <div class="text-left">{{'REPORTS.HoldStock'| translate}}
+                                <div> {{productHistory.HoldQuantity || 0}} </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-field p-col-2 text-center">
+                        <div>{{'REPORTS.STOCKLOCATION'| translate}} </div>
+                        <div *ngFor="let loc of productHistory.Locations">
+                            {{loc || 'N/A'}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p-tabView>
+            <p-tabPanel header="Purchases">
+                <div class="table-border">
+                    <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="Purchases" (emitHref)="getPurchasesByInvoiceNo($event)"
+                    [globalFilterFields]="purchaseGlobalFilterFields" [columnsData]="purchaseColumns" [rowGroup]="rowGroup"
+                    [totalRecords]="purchaseTotalRecords" (getLazyData)="GetAllPurchaseDataWithLazyLoadinFunction($event)"
+                     [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+                    </app-ss-generic-table>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Sales">
+                <div class="table-border">
+                    <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="Sales" (emitHref)="getSalesByInvoiceNo($event)"
+                    [globalFilterFields]="saleGlobalFilterFields" [columnsData]="saleColumn" [rowGroup]="rowGroup1"
+                    [totalRecords]="saleTotalRecords" (getLazyData)="GetAllSaleDataWithLazyLoadinFunction($event)"
+                     [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+                    </app-ss-generic-table>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Activity Logs">
+                <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="allActivity"
+                [globalFilterFields]="activityGlobalFilterFields" [columnsData]="activityColumns" [rowGroup]="rowGroup2"
+                [totalRecords]="activityTotalRecords" (getLazyData)="GetAllActivityDataWithLazyLoadinFunction($event)"
+                 [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+                </app-ss-generic-table>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+
+<p-dialog header="Products" *ngIf="IsOpenProductDialog" [(visible)]="IsOpenProductDialog" modal="modal"
+    showEffect="fade" [style]="{ width: '70vw' }">
+    <app-genric-table (emitRowClick)="selectValue($event)" [menuItems]="[]" [data]="ProductData"
+        [columnsData]="productsColumn">
+    </app-genric-table>
+</p-dialog>

@@ -1,0 +1,29 @@
+<div>
+
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12 p-md-12">
+         <span class="p-h">Product Name:</span> <span class="p-n"> {{ProductName}}</span>
+        </div>
+
+        <div class="p-field p-col-2 p-md-2 ">
+            <label for="quantity"> Quantity <span class="RequiredEror">*</span> </label>
+            <span class="p-input-icon-left">
+                <i class="fas fa-shopping-basket"></i>
+                <input type="text" name="quantity" id=quantity [(ngModel)]="Quantity" required pInputText
+                    placeholder="Enter Quantity" />
+            </span>
+        </div>
+        <div class="p-field p-col-10 p-md-10 ">
+            <label for="remarks"> Remarks </label>
+            <span class="p-input-icon-left">
+                <i class="fas fa-comments"></i>
+                <input type="text" name="remarks" id=remarks rows="3" cols="50" [(ngModel)]="Remarks"
+                    aria-multiline="true" pInputText placeholder="Enter Remarks" />
+            </span>
+        </div>
+        <div class="p-col-10"></div>
+        <div class="p-field p-col-2 p-md-2 ">
+            <button pButton pRipple type="button" icon="fas fa-shopping-cart" label="Add" (click)="CreateOrder();"
+                data-dismiss="modal" icon="fas fa-plus" class="p-button-raised p-mr-2"></button>
+        </div>
+    </div>

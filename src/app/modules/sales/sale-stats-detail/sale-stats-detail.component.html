@@ -1,0 +1,131 @@
+
+<div class="p-col-12 p-m-0 p-p-0 p-shadow-2">
+  <div class="card">
+    <!-- <p-toolbar styleclass="p-mb-4">
+      <div class="p-formgroup-inline">
+        <div class="p-field-radiobutton">
+          <p-radioButton
+            name="reportfilter"
+            value="1"
+            [(ngModel)]="selectedFilter"
+            (onClick)="filterReport()"
+            inputId="checkb1"
+          ></p-radioButton>
+          <label for="checkb1">{{ "ORDERS.ALLORDERS" | translate }}</label>
+        </div>
+        <div class="p-field-radiobutton">
+          <p-radioButton
+            name="reportfilter"
+            value="2"
+            [(ngModel)]="selectedFilter"
+            (onClick)="filterReport()"
+            inputId="checkb2"
+          ></p-radioButton>
+          <label for="checkb2">{{ "ORDERS.ONLINEORDERS" | translate }}</label>
+        </div>
+        <div class="p-field-radiobutton">
+          <p-radioButton
+            name="reportfilter"
+            value="3"
+            [(ngModel)]="selectedFilter"
+            (onClick)="filterReport()"
+            inputId="checkb3"
+          ></p-radioButton>
+          <label for="checkb3">{{ "ORDERS.VPORDERS" | translate }}</label>
+        </div>
+        <div class="p-field p-col">
+          <label>{{ "GENRIC.SEARCHBYDATE" | translate }}</label>
+          <p-dropdown
+            placeholder="Select Search By Date"
+            [options]="SearchByDateDropdown"
+            (onChange)="onChangeDate($event)"
+            [(ngModel)]="selectedSearchByDateID"
+            autoWidth="false"
+            [style]="{ width: '200px' }"
+            required
+            filter="true"
+          >
+            <ng-template let-item pTemplate="selectedItem">
+              <span style="vertical-align: middle; margin-left: 0.5em">{{
+                item.label
+              }}</span>
+            </ng-template>
+          </p-dropdown>
+        </div>
+        
+      </div>
+    </p-toolbar> -->
+
+    <p-toolbar styleClass="p-mb-4 toolbar-padding" >
+
+      <ng-template pTemplate="left">
+        <div class="p-field-radiobutton">
+          <p-radioButton
+            name="reportfilter"
+            value="1"
+            [(ngModel)]="selectedFilter"
+            (onClick)="filterReport()"
+            inputId="checkb1"
+          ></p-radioButton>
+          <label for="checkb1">{{ "ORDERS.ALLORDERS" | translate }}</label>
+        </div>
+        <div class="p-field-radiobutton">
+          <p-radioButton
+            name="reportfilter"
+            value="2"
+            [(ngModel)]="selectedFilter"
+            (onClick)="filterReport()"
+            inputId="checkb2"
+          ></p-radioButton>
+          <label for="checkb2">{{ "ORDERS.ONLINEORDERS" | translate }}</label>
+        </div>
+        <div class="p-field-radiobutton">
+          <p-radioButton
+            name="reportfilter"
+            value="3"
+            [(ngModel)]="selectedFilter"
+            (onClick)="filterReport()"
+            inputId="checkb3"
+          ></p-radioButton>
+          <label for="checkb3">{{ "ORDERS.VPORDERS" | translate }}</label>
+        </div>
+
+      </ng-template>  
+      <ng-template pTemplate="right">
+        <div class="p-field p-col">
+          <label>{{ "GENRIC.SEARCHBYDATE" | translate }}</label>
+          <p-dropdown
+            placeholder="Select Search By Date"
+            [options]="SearchByDateDropdown"
+            (onChange)="onChangeDate($event)"
+            [(ngModel)]="selectedSearchByDateID"
+            autoWidth="false"
+            [style]="{ width: '200px' }"
+            required
+            filter="true"
+          >
+            <ng-template let-item pTemplate="selectedItem">
+              <span style="vertical-align: middle; margin-left: 0.5em">{{
+                item.label
+              }}</span>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </ng-template>
+  </p-toolbar>
+
+    <app-genric-table
+      [menuItems]="genericMenuItems"
+      [data]="AllSaleStatList"
+      [columnsData]="columns"
+      [globalFilterFields]="globalFilterFields"
+      [rowsPerPageOptions]="rowsPerPageOptions"
+      [row]="25"
+    >
+    </app-genric-table>
+  </div>
+</div>
+<p-dialog header="Select Dates" [(visible)]="isCustomDate" modal="modal" showEffect="fade"
+[style]="{width: '50vw',height:'700px'}">
+<app-datepickerpopup (onSelectValue)='selectValue($event)'></app-datepickerpopup>
+</p-dialog>

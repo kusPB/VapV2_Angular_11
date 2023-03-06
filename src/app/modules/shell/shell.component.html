@@ -1,0 +1,41 @@
+<div class="layout-wrapper" [ngClass]="{
+  'layout-overlay': menuMode === 'overlay',
+  'layout-static': menuMode === 'static',
+  'layout-slim': menuMode === 'slim',
+  'layout-sidebar-dim': colorScheme === 'dim',
+  'layout-sidebar-dark': colorScheme === 'dark',
+  'layout-overlay-active': overlayMenuActive,
+  'layout-mobile-active': staticMenuMobileActive,
+  'layout-static-inactive': staticMenuDesktopInactive && menuMode === 'static',
+  'p-input-filled': inputStyle === 'filled', 'p-ripple-disabled': !ripple}"
+  [class]="colorScheme === 'light' ? menuTheme : ''" [attr.data-theme]="colorScheme" (click)="onLayoutClick()">
+
+  <div class="layout-content-wrapper">
+
+    <div class="progress-spinner" [hidden]="!loading">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+    <app-topbar></app-topbar>
+    <!--<div class="newclass">
+      <p>babar</p>
+    </div>-->
+    <!-- <app-breadcrumb class="pull-left"></app-breadcrumb> -->
+    <div class="layout-content">
+      <!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+      <app-notifications></app-notifications>
+      <router-outlet> </router-outlet>
+    </div>
+
+    <app-footer></app-footer>
+  </div>
+
+  <app-config></app-config>
+
+  <app-menu></app-menu>
+
+  <app-search></app-search>
+
+  <app-rightmenu></app-rightmenu>
+
+  <div class="layout-mask modal-in"></div>
+</div>

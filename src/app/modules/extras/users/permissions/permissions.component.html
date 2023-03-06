@@ -1,0 +1,151 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<p-toast></p-toast>
+<div class="p-grid">
+    <!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+    <div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+        <!-- <div class="p-grid"> -->
+        <div class="p-col-5 p-m-0 p-p-0  p-shadow-2" style="float: right;margin-right: -10px !important">
+            <div class="card">
+
+                <!-- <p-table #dt [value]="AllAssignedActionList" [rows]="rows" [totalRecords]="AllAssignedActionList.length"
+                    [(first)]="first" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [loading]="loading" [showCurrentPageReport]="true" dataKey="id"
+                    [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+                    styleClass="p-datatable-responsive-demo" [filterDelay]="0" [globalFilterFields]="['Action','ActionDescription']">
+
+
+                    <ng-template pTemplate="caption">
+                        <div class="p-d-flex p-ai-center p-jc-between">
+                            <h5 class="p-m-0">Role Permissions</h5>
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text"
+                                    placeholder="Global Search" />
+                            </span>
+                        </div>
+                    </ng-template>
+
+                    <ng-template pTemplate="header">
+                        <tr>
+
+                            <th style="width: 4.5rem;">Status</th>
+                            <th pSortableColumn="Action"> Assigned Permission <p-sortIcon field="Action"></p-sortIcon>
+                                <th pSortableColumn="ActionDescription"> Description <p-sortIcon field="ActionDescription"></p-sortIcon>
+                            </th>
+                           
+                        </tr>
+
+
+                        <tr>
+
+                            <th style="width: 4.5rem"> </th>
+
+                            <th>
+                                <input pInputText type="text"
+                                    (input)="dt.filter($event.target.value, 'Action', 'contains')"
+                                    placeholder="Search by Action" class="p-column-filter">
+                            </th>
+                            <th>
+                                <input pInputText type="text"
+                                    (input)="dt.filter($event.target.value, 'ActionDescription', 'contains')"
+                                    placeholder="Search by Description" class="p-column-filter">
+                            </th>
+
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-AssignedAction>
+                        <tr [pContextMenuRow]="AssignedAction">
+                            <td>
+                                <p-inputSwitch [(ngModel)]="AssignedAction.IsActive"
+                                    (click)="UpdateAssignedActionStatus(AssignedAction)"></p-inputSwitch>
+                            </td>
+                            <td>{{AssignedAction.Action}}</td>
+                            <td>{{AssignedAction.ActionDescription}}</td>
+
+                        </tr>
+                    </ng-template>
+
+                </p-table> -->
+                <h5 class="p-m-0">Role Permissions</h5>
+            <app-genric-table  
+                [data]="AllAssignedActionList" [columnsData]="columns" (emitSwitch)="UpdateAssignedActionStatus($event)" 
+                [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+            </app-genric-table>
+
+            </div>
+        </div>
+
+
+        <div class="p-col-7 p-m-0 p-p-0  p-shadow-2">
+            <div class="card">
+                <h5 class="p-m-0">All Permissions</h5>
+
+                <p-table #dt1 [value]="AllActionsList" [rows]="rowsAction" [totalRecords]="totalRecords"
+                    [(first)]="first"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [loading]="loading"
+                    [showCurrentPageReport]="true" dataKey="id"
+                    [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+                    styleClass="p-datatable-responsive-demo" [filterDelay]="0"
+                    [globalFilterFields]="['Name','Description']">
+
+
+                    <ng-template pTemplate="caption">
+                        <div class="p-d-flex p-ai-center p-jc-between">
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                    type="text" placeholder="Global Search" />
+                            </span>
+                        </div>
+                    </ng-template>
+
+                    <ng-template pTemplate="header">
+                        <tr>
+
+                            <th pSortableColumn="Name"> Name <p-sortIcon field="Name"></p-sortIcon>
+                            </th>
+                            <th pSortableColumn="Description"> Description <p-sortIcon field="Description"></p-sortIcon>
+                            </th>
+                        </tr>
+
+
+                        <tr>
+
+                            <th>
+                                <input pInputText type="text"
+                                    (input)="dt1.filter($event.target.value, 'Name', 'contains')"
+                                    placeholder="Search by Name" class="p-column-filter">
+                            </th>
+                            <th>
+                                <input pInputText type="text"
+                                    (input)="dt1.filter($event.target.value, 'Description', 'contains')"
+                                    placeholder="Search by Description" class="p-column-filter">
+                            </th>
+
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-Actions>
+                        <tr [pContextMenuRow]="Actions">
+                            <td><i class="pi pi-plus" (click)="AssignAction(Actions.ID)"></i> {{Actions.Name}}</td>
+                            <td>{{Actions.Description}}</td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+
+
+            </div>
+        </div>
+        <!-- </div> -->
+    </div>
+</div>

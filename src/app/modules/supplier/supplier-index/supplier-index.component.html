@@ -1,0 +1,60 @@
+<p-toast></p-toast>
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+                <button pButton pRipple label="{{'SUPPLIERINDEX.ADDSUPPLIER'| translate}}" *ngxPermissionsOnly="SupplierPermission.AddClient" (click)="AddSupplier();" icon="fas fa-plus"
+                    class="p-button-raised  p-mr-2"></button>
+                <button pButton pRipple label="{{'SUPPLIERINDEX.ADDMULTIPLE'| translate}}" *ngxPermissionsOnly="SupplierPermission.AddMultipleSupplier" (click)="AddMultipleSupplier();" icon="fas fa-plus"
+                    class="p-button-raised  p-mr-2"></button>
+            </ng-template>
+        </p-toolbar>
+        
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        (emitSwitch)="UpdateSupplierStatus($event)"
+        [data]="AllSupplierlist" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+       
+
+    </div>
+</div>
+<p-dialog
+  header="DocumentAttachment"
+  [(visible)]="AttachDocumentPopDisplay"
+  modal="modal"
+  showEffect="fade"
+  [style]="{ width: '30vw' }"
+>
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <h5>Document</h5>
+        <p-fileUpload
+        name="myfile[]" 
+        mode="advanced"
+        customUpload="true"
+        (uploadHandler)="myUploader($event)"
+        accept="text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          maxFileSize="1000000"
+        >
+          <ng-template pTemplate="content">
+            <ul *ngIf="uploadedFiles.length">
+              <li *ngFor="let file of uploadedFiles">
+                {{ file.name }} - {{ file.size }} bytes
+              </li>
+            </ul>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+    </div>
+  </div>
+</p-dialog>

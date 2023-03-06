@@ -1,0 +1,181 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<p-toast></p-toast>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <!-- <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button pButton pRipple label="Save" (click)="SaveTrackable();" icon="fas fa-plus"
+                    class="p-button-raised  p-mr-2"></button>
+
+
+
+            </ng-template>
+
+        </p-toolbar> -->
+        <!-- <p-toolbar styleclass="p-mb-4"> -->
+
+        <div class="card c-card">
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-5">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-11">
+                            <label for="firstname1">{{'Product'| translate}}</label>
+
+                            <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectedProduct" [searchFn]="dataFunc"
+                                (ngModelChange)="BindProductStockDetail(($event))">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="p-col-1">
+                            <i class="pi pi-search search-pi" (click)="OpenProductDialog();"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-2">
+                    <label for="firstname1">{{'MANAGEDPRODUCT.PRODUCTASSIGNEDQUANTITY'| translate}}</label>
+                    <input id="firstname5" type="text" pInputText [(ngModel)]="quantity"
+                        [disabled]="IsTrackable? true : false">
+                </div>
+                <div class="p-field p-col-2">
+                    <label for="lastname1">{{'MANAGEDPRODUCT.OUTLET'| translate}}:</label>
+                    <p>{{outlet}}</p>
+                </div>
+                <div class="p-field p-col-2">
+                    <label for="lastname1">{{'MANAGEDPRODUCT.OUTLET'| translate}} Stock:</label>
+
+                    <p>{{outletStock}}</p>
+
+                </div>
+                <div class="p-field p-col-1">
+                    <button pButton pRipple label="{{'MANAGEDPRODUCT.SAVE'| translate}}" (click)="SaveTrackable();" icon="fas fa-plus"
+                        class="p-button-raised  p-mr-2"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- </p-toolbar> -->
+
+        <!-- <p-toolbar styleclass="p-mb-4"> -->
+
+        <div class="card c-card">
+            <!-- <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-5">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-11">
+                            <label for="firstname1">{{'Product'| translate}}</label>
+                            <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectedProduct" [searchFn]="dataFunc"
+                                (ngModelChange)="BindProductStockDetail(($event))">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="p-col-1">
+                            <i class="pi pi-search search-pi" (click)="OpenProductDialog();"></i>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- </p-toolbar> -->
+            <!-- [loading]="loading" -->
+            <div class="table-border">
+                <p-table #dt [value]="AllTrackbleReturnDetailsItemList" *ngIf="IsTrackable" [rows]="rows"
+                    [totalRecords]="totalRecords" [(first)]="first"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [showCurrentPageReport]="true" dataKey="id"
+                    [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+                    styleClass="p-datatable-responsive-demo" [filterDelay]="0">
+
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <!-- <p-checkbox [(ngModel)]="isAllChecked"  inputId="binary" (onChange)="CheckAllCheckBox()"></p-checkbox> -->
+                            <th style="width: 4.5rem;"> </th>
+                            <th pSortableColumn="Name"> {{'TrackableCode' | translate}} <p-sortIcon field="Name">
+                                </p-sortIcon>
+                            </th>
+
+
+                        </tr>
+
+                    </ng-template>
+                    <ng-template pTemplate="body" let-Trackable>
+                        <tr [pContextMenuRow]="Trackable">
+                            <td>
+                                <p-checkbox [(ngModel)]="Trackable.isProductSelected" inputId="binary"
+                                    (onChange)="TrackableCheckboxChange(Trackable,$event)"></p-checkbox>
+                            </td>
+                            <td>{{Trackable.TrackableCode}}</td>
+
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+            </div>
+            <!-- [loading]="loading" -->
+            <!-- <p-table #dt [value]="AllNonTrackbleReturnDetailsItemList" *ngIf="!IsTrackable" [rows]="rows"
+            [totalRecords]="totalRecords" [(first)]="first"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [showCurrentPageReport]="true" dataKey="id" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"
+            [paginator]="true" [rowHover]="true" styleClass="p-datatable-responsive-demo" [filterDelay]="0">
+
+            <ng-template pTemplate="header">
+                <tr>
+
+                    <th pSortableColumn="Location"> {{'Product' | translate}} <p-sortIcon field="Location"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Quantity"> {{'Quantity' | translate}} <p-sortIcon field="Quantity">
+                        </p-sortIcon>
+                    </th>
+
+
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body" let-NonTrackable>
+                <tr [pContextMenuRow]="NonTrackable">
+
+                    <td>{{NonTrackable.Product}} + ' (' + {{NonTrackable.ProductVariant}} + ')' </td>
+                    <td>{{NonTrackable.TotalRemainingStock}}</td>
+
+                </tr>
+            </ng-template>
+
+        </p-table> -->
+
+            <div class="table-border" *ngIf="!IsTrackable">
+                <app-ss-generic-table [data]="AllNonTrackbleReturnDetailsItemList" [columnsData]="columns"
+                    [rowsPerPageOptions]="rowsPerPageOptions" [row]='25' [filterGlobal]="filterGlobal">
+                </app-ss-generic-table>
+            </div>
+
+        </div>
+    </div>
+
+    <p-dialog header="Products" [(visible)]="IsOpenProductDialog" modal="modal" showEffect="fade"
+        [style]="{ width: '70vw' }">
+        <app-genric-table (emitRowClick)="selectValue($event)" [menuItems]="[]" [data]="ProductData"
+            [columnsData]="productsColumn">
+        </app-genric-table>
+        <!-- <app-product-dialog (onSelectValue)='selectValue($event)'></app-product-dialog> -->
+
+    </p-dialog>

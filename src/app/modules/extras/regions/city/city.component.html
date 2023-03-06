@@ -1,0 +1,143 @@
+
+ <div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<p-toast></p-toast>
+
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+    
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button pButton pRipple label="{{'EXTRAS.ADDCITY'| translate}}" (click)="AddCity();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+                
+            </ng-template>
+
+        </p-toolbar>
+        <p-toolbar styleclass="p-mb-4" *ngIf="IsAdd">
+            
+            <div >
+                <h5>{{'EXTRAS.CITY'| translate}}</h5>
+
+                <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col">
+                            <label for="firstname1">{{'EXTRAS.NAME'| translate}}</label>
+                            <input id="firstname5" type="text" pInputText [(ngModel)]="city.Name">
+                        </div>
+                        <div class="p-field p-col">
+                                <label for="firstname1">{{'EXTRAS.POSTALCODE'| translate}}</label>
+                                <input id="firstname5" type="text" pInputText placeholder="Postal Code" [(ngModel)]="city.PostalCode">
+                            </div>
+                        <div class="p-field p-col">
+                            <label for="lastname1">{{'EXTRAS.COUNTRY'| translate}}</label>
+                            <p-dropdown id="selectedCountryID" name="selectedCountryID" dataKey="value" placeholder="Select Country" [options]="CountryDropdown" (onChange)="onChangeCountry($event)" [(ngModel)]="selectedCountryID" autoWidth="false" [style]="{'width':'200px'}"  required filter="true" >
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <span style="vertical-align:middle; margin-left: .5em" >{{item.label}}</span>
+                                    </ng-template>
+                                    
+                                </p-dropdown> 
+                        </div>
+                        <div class="p-field p-col">
+                                <label for="lastname1">{{'EXTRAS.STATE'| translate}}</label>
+                                <p-dropdown id="selectedStateID" name="selectedStateID" dataKey="value" placeholder="Select State" [options]="StateDropdown" [(ngModel)]="selectedStateID" autoWidth="false" [style]="{'width':'200px'}"  required filter="true" >
+                                        <ng-template let-item pTemplate="selectedItem">
+                                            <span style="vertical-align:middle; margin-left: .5em" >{{item.label}}</span>
+                                        </ng-template>
+                                        
+                                    </p-dropdown> 
+                            </div>
+                        <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                            <button pButton pRipple type="button" icon="fas fa-plus" label="{{'EXTRAS.SAVE'| translate}}" (click)="SaveUpdateCityDetails();"icon="fas fa-plus" class="p-button-raised p-mr-2"></button>
+                    
+                        </div>
+                        <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                            <button pButton pRipple label="{{'EXTRAS.CLOSE'| translate}}" icon="fas fa-times" class="p-button-raised p-mr-2" (click)="CloseAddSection();"></button>
+                        </div>
+                    </div>
+
+            </div>
+
+        </p-toolbar>
+        <!-- [(selection)]="selectedOneProduct" -->
+        <!-- <p-table #dt [value]="AllCityList"  [rows]="rows"  [totalRecords]="totalRecords" [(first)]="first"   
+           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+           [loading]="loading"  [showCurrentPageReport]="true"  dataKey="id" 
+           [(contextMenuSelection)]="selectedCity" [contextMenu]="cm"  
+           [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"  
+           [paginator]="true"  [rowHover]="true" styleClass="p-datatable-responsive-demo"
+           [filterDelay]="0"  [globalFilterFields]="['Name','PostalCode','Country','State']">
+   
+        
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">City</h5>
+                <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" placeholder="Global Search"/>
+            </span>
+            </div>
+        </ng-template>
+         
+         <ng-template pTemplate="header">
+                <tr>
+                 
+                    <th style="width: 4.5rem;" >Status</th>
+                    <th pSortableColumn="Name"> Name <p-sortIcon field="Name"></p-sortIcon></th> 
+                    <th pSortableColumn="PostalCode"> Postal Code <p-sortIcon field="PostalCode"></p-sortIcon></th>
+                    <th pSortableColumn="Country"> Country <p-sortIcon field="Country"></p-sortIcon></th>
+                    <th pSortableColumn="State"> State <p-sortIcon field="State"></p-sortIcon></th>
+                    
+                </tr>
+
+                <tr>
+                 
+                    <th style="width: 4.5rem" > </th>
+                   
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Name', 'contains')" placeholder="Search by Product" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'PostalCode', 'contains')" placeholder="Search by Postal Code" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'Country', 'contains')" placeholder="Search by Country" class="p-column-filter">
+                    </th>
+                    <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'State', 'contains')" placeholder="Search by State" class="p-column-filter">
+                    </th>
+                    
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-City >
+                <tr [pContextMenuRow]="City">
+                    <td>
+                      <p-inputSwitch  [(ngModel)]="City.IsActive" (click)="UpdateCityStatus(City)"></p-inputSwitch>
+                    </td>
+                   
+                    <td>{{City.Name}}</td>
+                    <td >{{City.PostalCode}}</td>
+                    <td >{{City.Country}}</td>
+                    <td >{{City.State}}</td>
+                   
+                </tr>
+            </ng-template>
+
+        </p-table> -->
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        [data]="AllCityList" [columnsData]="columns" (emitSwitch)="UpdateCityStatus($event)">
+
+        </app-genric-table>
+    
+    </div>
+</div>

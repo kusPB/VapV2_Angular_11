@@ -1,0 +1,64 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+<p-toast></p-toast>
+<p-dialog header="Product Image" [(visible)]="displayImage" modal="modal" showEffect="fade">
+    <img src="{{imgSrc}}" height="500" width="500">
+</p-dialog>
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <!-- <p-toolbar styleClass="p-mb-4">
+
+            <ng-template pTemplate="right"> -->
+        <div class="top-c">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-7">
+                    <!-- <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-11">
+                            <label for="firstname1">{{'REPORTS.PRODUCTS'| translate}}</label>
+
+                            <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectedProduct" [searchFn]="dataFunc"
+                                (ngModelChange)="SearchByProduct($event)">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="p-col-1">
+                            <i class="pi pi-search search-pi" (click)="OpenProductDialog();"></i>
+                        </div>
+                    </div> -->
+
+                </div>
+
+
+            </div>
+        </div>
+        <!-- </ng-template>
+
+        </p-toolbar> -->
+        <app-ss-generic-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" [data]="AllStockList"
+            [columnsData]="columns" [totalRecords]="totalRecords"
+            (getLazyData)="GetAllStockDataWithLazyLoadinFunction($event)" [rowsPerPageOptions]="rowsPerPageOptions"
+            [row]='25'>
+        </app-ss-generic-table>
+        <!-- <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        [data]="AllStockList" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table> -->
+    </div>
+</div>
+
+
+<p-dialog header="Products" *ngIf="IsOpenProductDialog" [(visible)]="IsOpenProductDialog" modal="modal"
+    showEffect="fade" [style]="{ width: '70vw' }">
+    <app-genric-table (emitRowClick)="selectValue($event)" [menuItems]="[]" [data]="ProductData"
+        [columnsData]="productsColumn">
+    </app-genric-table>
+</p-dialog>

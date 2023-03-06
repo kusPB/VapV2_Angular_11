@@ -1,0 +1,40 @@
+
+<p-toast></p-toast>
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+                <button pButton pRipple label="cancel" (click)="CloseThis();" icon="fas fa-sync" class="p-button-raised  p-mr-2"></button>      
+            </ng-template>
+        </p-toolbar>
+        <div class="card c-card">
+
+            <div class="p-grid">
+                <div class="p-field p-col-4">
+                    <div><b>Supplier</b> </div>
+                    <div>{{ txtSupplier }}</div>
+                </div>
+                <div class="p-col-4">
+                    <div><b>Previous Balance </b> </div>
+                    <div> <span >€</span> {{ txtPreviousBalance | number:'1.2-2' }}</div>
+                </div>
+                <div class="p-col-4">
+                    <div><b>Current Balance </b></div>
+                    <div> <span >€</span> {{txtCurrentBalance | number:'1.2-2' }}</div>
+                </div>
+            </div>
+        </div>
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        [data]="AllSupplierlist" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+        [rowGroup]="rowGroup"  [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+ </div>
+</div>
+
+

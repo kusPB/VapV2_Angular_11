@@ -1,0 +1,143 @@
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+<p-toast></p-toast>
+
+<p-dialog header="Remarks" [(visible)]="displayDialog" [style]="{width: '50vw'}" [baseZIndex]="10000">
+    <p>{{DialogRemarks}}</p>
+</p-dialog>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <div class="top-c">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-6">
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col-11">
+                            <label for="firstname1">{{'REPORTS.CUSTOMER'| translate}}</label>
+                            <ng-select [items]="filteredCustomer" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectedCustomer" [searchFn]="dataFunc"
+                                (ngModelChange)="selectValue($event)">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="p-col-1">
+                            <i class="pi pi-search search-pi" (click)="OpenOrderByDialog();"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-3">
+                    <label for="customer">{{'REPORTS.CUSTOMERDETAIL'| translate}}</label>
+                    <div> {{lifeLineCustomer.FirstName}} {{lifeLineCustomer.LastName}}</div>
+                    <div> {{lifeLineCustomer.Address}}</div>
+                </div>
+                <div class="p-col-3">
+                    <label for="currentBalance">{{'REPORTS.CUSTOMERBALANCE'| translate}}</label>
+                    <div *ngIf="lifeLineCustomer.CurrentBalance"><span >€ </span>
+                        {{lifeLineCustomer.CurrentBalance | number:'1.2-2' }} </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+            <div class="top-c">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-2 text-center">
+                        <div>{{'REPORTS.CREDITLIMIT'| translate}}</div>
+                        <div *ngIf="lifeLineCustomer.dCreditLimit"><span >€ </span>
+                            {{(lifeLineCustomer.dCreditLimit || 0) | number:'1.2-2' }} </div>
+                    </div>
+                    <div class="p-field p-col-2 text-center">
+                        <div>{{'REPORTS.SHIPPINGMETHOD'| translate}}</div>
+                        <div> {{selectedShippingMethod.Name || 'N/A'}} </div>
+                    </div>
+
+                    <div class="p-field p-col-2 text-center">
+                        <div>{{'REPORTS.BESTORDER'| translate}}</div>
+                        <div>
+                            {{bestOrder || 'N/A'}}
+                        </div>
+                    </div>
+                    <div class="p-field p-col-2 text-center">
+                        <div>{{'REPORTS.LASTORDERON'| translate}} </div>
+                        <div> {{lastOrderOn || 'N/A'}} </div>
+                    </div>
+
+                    <div class="p-field p-col-2 text-center">
+                        <div>{{'REPORTS.ORDERCOUNT'| translate}}</div>
+                        <div>
+                            {{orderCount || 0}}
+                        </div>
+                    </div>
+                    <div class="p-field p-col-2 text-center">
+                        <div>{{'REPORTS.EXTERNAL'| translate}}</div>
+                        <div>
+                            <span *ngIf="lifeLineCustomer?.CustomerID >= 1; else other_content">
+                                {{lifeLineCustomer.IsOrderCreater === null ? 'No' :
+                                lifeLineCustomer.IsOrderCreater === true ? 'Yes' :
+                                'No'}}
+                            </span>
+                            <ng-template #other_content>N/A</ng-template>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <p-tabView>
+            <p-tabPanel header="Sale Invoices">
+                <div class="table-border">
+                    <!-- <app-genric-table [data]="Sales" [columnsData]="saleColumn" (emitHref)="getSalesByInvoiceNo($event)"
+                        [globalFilterFields]="saleGlobalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"   [rowGroup]="rowGroup"
+                        [row]='25'>
+                    </app-genric-table> -->
+
+                    <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="Sales" (emitHref)="getSalesByInvoiceNo($event)"
+                    [globalFilterFields]="saleGlobalFilterFields" [columnsData]="saleColumn" [rowGroup]="rowGroup"
+                    [totalRecords]="saleTotalRecords" (getLazyData)="GetAllSaleDataWithLazyLoadinFunction($event)"
+                     [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+                    </app-ss-generic-table>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Top Products">
+                <div class="table-border">
+                    <app-genric-table [data]="TopProducts" [columnsData]="topProductColumn"
+                        [globalFilterFields]="topProductGlobalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
+                        [row]='25'>
+                    </app-genric-table>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Open Payment">
+                <!-- <app-genric-table [data]="openPayments" [columnsData]="openPaymentColumn" [rowGroup]="rowGroup1"
+                    [globalFilterFields]="openPaymentGlobalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions"
+                    [row]='25'>
+                </app-genric-table> -->
+                <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="openPayments" 
+                [globalFilterFields]="openPaymentGlobalFilterFields" [columnsData]="openPaymentColumn" [rowGroup]="rowGroup1"
+                [totalRecords]="openInvoicesTotalRecords" (getLazyData)="GetAllOpenInvoicesDataWithLazyLoadinFunction($event)"
+                 [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+                </app-ss-generic-table>
+            </p-tabPanel>
+            <p-tabPanel header="Activity Logs">
+                <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="allActivity"
+                [globalFilterFields]="activityGlobalFilterFields" [columnsData]="activityColumns" [rowGroup]="rowGroup2"
+                [totalRecords]="activityTotalRecords" (getLazyData)="GetAllActivityDataWithLazyLoadinFunction($event)"
+                 [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+                </app-ss-generic-table>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+
+
+
+<p-dialog header="Customer" *ngIf="displayCustomerDialog" [(visible)]="displayCustomerDialog" modal="modal"
+    showEffect="fade" [style]="{ width: '60vw' }">
+    <app-genric-table (emitRowClick)="selectValue($event)" [data]="AllCustomersList" [columnsData]="customerColumns"
+        [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+    </app-genric-table>
+</p-dialog>

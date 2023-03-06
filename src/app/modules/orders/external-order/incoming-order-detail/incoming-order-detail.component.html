@@ -1,0 +1,53 @@
+<button style="margin-left: 2px" pButton pRipple type="button" (click)="Print()" 
+    class="p-button p-button-success" icon="pi pi-print" title="Print" label="Print"></button>
+    <button style="margin-left: 2px" pButton pRipple type="button" routerLink="/orders/manage-incoming-order"
+    class="p-button p-button-secondary" icon="pi pi-times" title="Close" label="Close"></button>
+    
+<app-incoming-order-detail-report *ngIf="SaleDetails" [SaleDetails]="SaleDetails"></app-incoming-order-detail-report>
+<div id="printArea" #screen *ngIf="SaleDetails">
+
+<p-panel header="Order Information">
+  <div class="p-grid">
+    <div class="p-col">
+      <label>Order by:</label>
+      {{SaleDetails.Customer}} <br>
+      {{customerDetails.Number}} <br>
+      {{customerDetails.Address}} <br>
+     
+
+    </div> 
+    
+    <div class="p-col">
+    
+      <label>Order Date :</label>
+      {{SaleDetails.SaleDate}} <br>
+      <label>Remarks :</label>
+      {{SaleDetails.sRemarks}} <br>
+      
+    </div>  
+  </div>
+
+</p-panel>
+<br><br>
+<p-panel header="Order Detail Information">
+  <p-table [value]="SaleDetails.PerfomaSaleDetails">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Product</th>
+        <th>Model No</th>
+        <th>Quantity</th>
+       
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td>{{product.Product}}</td>
+        <td>{{product.BLabel}}</td>
+        <td>{{product.Quantity}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-panel>
+<br>
+
+</div>

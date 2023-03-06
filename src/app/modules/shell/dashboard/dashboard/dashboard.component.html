@@ -1,0 +1,315 @@
+<div *ngIf="showDashboard" >
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<div class="card c-card" style="padding: 15px 0px 25px 25px !important;">
+    <div class="p-grid">
+        <div class="col-3"  *ngxPermissionsOnly="salesPermission.AddSale">
+            <div class="btn" pTooltip="New Order" tooltipPosition="bottom">
+                <a class="nav-link" [routerLink]="['../sale/add-receipt-new']" routerLinkActive="active">
+                    <span class="btn-icon button p-mr-2">
+                        <i class="pi pi-shopping-cart fa-lg"></i>
+                    </span>
+                    <span class="btn-text button p-mr-2">
+                        Create Invoice
+                    </span>
+                </a>
+            </div>
+        </div>
+        <div class="col-3" *ngxPermissionsOnly="CustomerPermission.DirectPayment">
+            <div class="btn" pTooltip="Direct Payments" tooltipPosition="bottom">
+                <a class="nav-link" [routerLink]="['../customer/payments-new']" routerLinkActive="active">
+                    <span class="btn-icon button p-mr-2">
+                        <i class="pi pi-money-bill fa-lg"></i>
+                    </span>
+                    <span class="btn-text button p-mr-2" style="padding: 10px 15px" >
+                        Customer Payments
+                    </span>
+                </a>
+            </div>
+        </div>
+        <div class="col-3" *ngxPermissionsOnly="[CustomerPermissionEnum.BlackListedCustomerListing , CustomerPermissionEnum.ClientsListing]">
+            <div class="btn" pTooltip="Blaclisted List" tooltipPosition="bottom">
+                 <a class="nav-link" [routerLink]="['../customer/customer-blacklisted']" routerLinkActive="active">
+                <span class="btn-icon button p-mr-2">
+                    <i class="pi pi-list fa-lg"></i>
+                </span>
+                <span class="btn-text button p-mr-2" style="padding: 10px 15px">
+                    BlackListed Customers
+                </span>
+                </a> 
+            </div>
+        </div>
+        <div class="col-3" *ngxPermissionsOnly="[SalesPermission.AddSaleByExternalIncomingOrder]">
+            <div class="btn" pTooltip="New External Incoming Orders" tooltipPosition="bottom">
+                 <a class="nav-link" [routerLink]="['../orders/manage-incoming-order']" routerLinkActive="active">
+                <span class="btn-icon button p-mr-2">
+                    <i class="pi pi-list fa-lg"></i>
+                </span>
+                <span class="btn-text button p-mr-2" style="padding: 10px 15px">
+                    {{(TotalExternalIncomingOrders|| 0)}} New External Incoming Orders
+                </span>
+                </a> 
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div class="p-grid">
+    <div class="p-col-6">
+        <div class="stati p-shadow-2 left">
+            <div>
+                <b>Financial Overview</b>
+                <span *ngIf="isCustomerbalance">€ {{TotalCustomerBalance}}</span>
+            </div>
+            <i *ngIf="isCustomerbalance" class="pi pi-eye-slash" pTooltip="Hide Total Balance"
+                (click)="Customerbalance()"></i>
+            <i *ngIf="!isCustomerbalance" class="pi pi-eye" pTooltip="Show Total Balance"
+                (click)="Customerbalance()"></i>
+        </div>
+    </div>
+    <div class="p-col-6">
+        <div class="stati p-shadow-2 left">
+            <div>
+                <b>Financial Supplier Overview</b>
+                <span *ngIf="isSupplierbalance">€ {{TotalSupplierBalance}}</span>
+            </div>
+            <i *ngIf="isSupplierbalance" class="pi pi-eye-slash" pTooltip="Hide Total Balance"
+                (click)="Supplierbalance()"></i>
+            <i *ngIf="!isSupplierbalance" class="pi pi-eye" pTooltip="Show Total Balance"
+                (click)="Supplierbalance()"></i>
+        </div>
+    </div>
+</div>
+<div class="sep">
+    <b>
+        <i class="fa fa-building"></i> Current Status
+    </b>
+</div>
+<br> -->
+<div class="p-grid">
+    <div class="p-col-2" *ngxPermissionsOnly="[CustomerPermission.SubMenuViewCustomers, CustomerPermission.SubMenuCustomersAccounts,
+    CustomerPermission.SubMenuAddressReport]">
+        
+        <div class="stati p-shadow-2 sun_flower left" style="width: 100%; border-left: 5px solid rgb(241, 196, 15);">
+            <div>
+                Financial Overview <b>Customer</b>
+                <span *ngIf="isCustomerbalance">€ {{TotalCustomerBalance | number:'1.2-2' }}</span>
+            </div>
+            <i *ngIf="isCustomerbalance" class="pi pi-eye-slash" pTooltip="Hide Total Balance"
+                (click)="Customerbalance()"></i>
+            <i *ngIf="!isCustomerbalance" class="pi pi-eye" pTooltip="Show Total Balance"
+                (click)="Customerbalance()"></i>
+        </div>
+    </div>
+    <div class="p-col-2" *ngxPermissionsOnly="[SupplierPermission.SubMenuViewSuppliers, SupplierPermission.SubMenuSupplierAccounts,
+    ReportPermission.SubMenuInvoicePayments, ReportPermission.SubMenuSupplierInvoices]">
+        <div class="stati p-shadow-2 alizarin left" style="width: 100%; border-left: 5px solid rgb(231, 76, 60);">
+            <div>
+                Financial Overview <b>Supplier</b>
+                <span *ngIf="isSupplierbalance">€ {{TotalSupplierBalance | number:'1.2-2' }}</span>
+            </div>
+            <i *ngIf="isSupplierbalance" class="pi pi-eye-slash" pTooltip="Hide Total Balance"
+                (click)="Supplierbalance()"></i>
+            <i *ngIf="!isSupplierbalance" class="pi pi-eye" pTooltip="Show Total Balance"
+                (click)="Supplierbalance()"></i>
+        </div>
+    </div>
+    <div class="p-col-2"  *ngxPermissionsOnly="[SalesPermission.SubMenuStats, SalesPermission.SubMenuSaleInvoicesOverview,
+    SalesPermission.SubMenuInvoiceOverview, SalesPermission.SubMenuCreditNote, SalesPermission.SubMenuHoldSale,
+    SalesPermission.SubMenuProformaInvoiceOverview, SalesPermission.SubMenuProforma,
+    SalesPermission.SubMenuSaleInvoicesOverview]">
+    <!-- , ReportPermission.OnlineOrdersReport -->
+        <div class="stati p-shadow-2 peter_river left" style="width: 100%; border-left: 5px solid rgb(52, 152, 219);">
+            <div>
+                Today <b> Sales</b>
+                <span>€ {{(TodaySales || 0) | number:'1.2-2' }}</span>
+            </div>
+            <i class="pi pi-dollar" style="font-size: 2em;"></i>
+        </div>
+    </div>
+    <div class="p-col-2" *ngxPermissionsOnly="[PurchasePermission.SubMenuPurchaseOverview, PurchasePermission.SubMenuReturnPurchase, PurchasePermission.SubMenuBackOrderOverview]">
+        <div class="stati p-shadow-2 amethyst left" style="width: 100%; border-left: 5px solid rgb(155, 89, 182);">
+            <div>
+                Today<b> Purchases</b>
+                <span>€ {{(TodayPurchases || 0) | number:'1.2-2' }}</span>
+            </div>
+            <i class="pi pi-dollar" style="font-size: 2em;"></i>
+        </div>
+    </div>
+    <div class="p-col-2" *ngxPermissionsOnly="[ExtrasPermission.SubMenuExpensesOverview, ExtrasPermission.SubMenuManageWages]">
+        <div class="stati p-shadow-2 belize_hole left" style="width: 100%; border-left: 5px solid rgb(41, 128, 185);">
+            <div>
+                Today <b>Expenses </b>
+                <span>€ {{(TodayExpenses || 0) | number:'1.2-2' }}</span>
+            </div>
+            <i class="pi pi-dollar" style="font-size: 2em;"></i>
+        </div>
+    </div>
+    <div class="p-col-2" *ngxPermissionsOnly="[ExtrasPermission.GrossProfitStats]">
+        <div class="stati p-shadow-2 midnight_blue left" style="width: 100%; border-left: 5px solid rgb(44, 62, 80);">
+            <div>
+                Today<b> Gross Profit</b>
+                <span>€ {{(TodayProfit || 0) | number:'1.2-2' }}</span>
+            </div>
+            <i class="pi pi-dollar" style="font-size: 2em;"></i>
+        </div>
+    </div>  
+</div>
+    <div class="p-grid">
+    <div class="p-col-2">
+        <div class="stati p-shadow-2 peter_river left" style="width: 100%; border-left: 5px solid rgb(35, 107, 214);">
+            <div>
+                Today Online<b> Orders</b>
+                <span> {{(TotalOnlineOrder || 0) | number:'1.0-0' }}</span>
+            </div>
+            <i class="pi pi-sort-numeric-up-alt" style="font-size: 2em;"></i>
+        </div>
+    </div>
+    <div class="p-col-2">
+        <div class="stati p-shadow-2 midnight_blue left" style="width: 100%; border-left: 5px solid rgb(41, 55, 75);">
+            <div>
+                Today Online<b> Orders Amount</b>
+                <span>€ {{(TotalOnlineOrderAmount || 0) | number:'1.2-2' }}</span>
+            </div>
+            <i class="pi pi-dollar" style="font-size: 2em;"></i>
+        </div>
+    </div>
+    <div class="p-col-2" >
+        <div class="stati p-shadow-2  belize_hole left" style="width: 100%; border-left: 5px solid rgb(17, 115, 228);">
+            <div>
+                Today System<b> Orders</b>
+                <span> {{(TotalVaplongOrder || 0) | number:'1.0-0' }}</span>
+            </div>
+            <i class="pi pi-sort-numeric-up-alt" style="font-size: 2em;"></i>
+        </div>
+    </div>
+    
+    <div class="p-col-2" >
+        <div class="stati p-shadow-2  sun_flower left" style="width: 100%; border-left: 5px solid rgb(219, 153, 9);">
+            <div>
+                Today System<b> Orders Amount</b>
+                <span>€ {{(TotalVaplongOrderAmount || 0) | number:'1.2-2' }}</span>
+            </div>
+            <i class="pi pi-dollar" style="font-size: 2em;"></i>
+        </div>
+    </div>
+</div>
+<!-- 
+<div class="p-grid">
+    <div class="p-col-12 p-md-6 p-xl-3">
+        <div class="card no-gutter widget-overview-box widget-overview-box-1">
+            <span class="overview-title">Today Sales</span>
+            <div class="p-grid overview-detail">
+                <div class="p-col-12">
+                    <div class="overview-number">€ {{TodaySales || 0}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<p-tabView>
+    <p-tabPanel header="Sale Invoices" *ngxPermissionsOnly="[SalesPermission.SubMenuSaleInvoicesOverview, SalesPermission.SubMenuInvoiceOverview, SalesPermission.SubMenuCreditNote,
+    SalesPermission.SubMenuHoldSale]">
+        <div class="p-grid">
+            <div class="p-col-6" >
+                <div class="p-grid">
+                    <div class="p-field p-col-6">
+                        <div for="dateFrom">Select Year</div>
+                        <ng-select [items]="yearList" [virtualScroll]="true" bindLabel="label" [(ngModel)]="currentYear"
+                            (ngModelChange)="changeyear($event)">
+                            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                <span>{{item.label}}</span>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <p-chart *ngIf="lineSaleChartdata" type="line" [data]="lineSaleChartdata"
+                    (onDataSelect)="selectLineSaleChartdata($event)"></p-chart>
+
+            </div>
+            <div class="p-col-6">
+                <div class="p-grid">
+                    <div class="p-field p-col-6">
+                        <div for="name">Search By Date</div>
+                        <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+                            (onChange)="onChangeDate($event)" [(ngModel)]="selectedSearchByDateID" autoWidth="false"
+                            [style]="{'width':'325px'}" filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+                </div>
+                <p-chart *ngIf="pieSaleChartData.labels.length > 0" type="pie" [data]="pieSaleChartData"
+                    (onDataSelect)="selectPieSaleChartData($event)"></p-chart>
+                <div *ngIf="pieSaleChartData.labels.length <= 0">
+                    <div style="text-align: center; margin-top: 80px; font-size: 40px; font-weight: bold;">No Data
+                        Available</div>
+                </div>
+            </div>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Purchase Invoices" *ngxPermissionsOnly="PurchasePermission.SubMenuReturnPurchase">
+        <div class="p-grid">
+            <div class="p-col-6">
+                <div class="p-grid">
+                    <div class="p-field p-col-6">
+                        <div for="dateFrom">Select Year</div>
+                        <ng-select [items]="yearList" [virtualScroll]="true" bindLabel="label" [(ngModel)]="currentYear"
+                            (ngModelChange)="changeyear($event)">
+                            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                <span>{{item.label}}</span>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <p-chart type="line" [data]="linePurchaseChartdata"
+                    (onDataSelect)="selectLinePurchaseChartdata($event)"></p-chart>
+
+            </div>
+            <div class="p-col-6">
+                <div class="p-grid">
+                    <div class="p-field p-col-6">
+                        <div for="name">Search By Date</div>
+                        <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+                            (onChange)="onChangeDate($event)" [(ngModel)]="selectedSearchByDateID" autoWidth="false"
+                            [style]="{'width':'325px'}" filter="true">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                            </ng-template>
+
+                        </p-dropdown>
+                    </div>
+                </div>
+
+                <p-chart *ngIf="piePurchaseChartData.labels.length > 0" type="pie" [data]="piePurchaseChartData"
+                    (onDataSelect)="selectPiePurchaseChartData($event)"></p-chart>
+                <div *ngIf="piePurchaseChartData.labels.length <= 0">
+                    <div style="text-align: center; margin-top: 80px; font-size: 40px; font-weight: bold;">No Data
+                        Available</div>
+                </div>
+            </div>
+        </div>
+    </p-tabPanel>
+</p-tabView>
+</div>
+<div class="p-grid" *ngIf="totalRecordsCount>0" >
+    <div>
+        <br/>
+        <h2>Open Cart Failed Logs</h2>
+        <br/>
+    </div>
+    <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="allLogs"(emitMenuAction)="emitAction($event)"
+    [globalFilterFields]="globalFilterFields" [columnsData]="columns" [rowGroup]="rowGroup" (emitHref)="getDetailsPage($event)"
+    [totalRecords]="totalRecords" (getLazyData)="GetAllDataWithLazyLoadinFunction($event)"
+     [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+    </app-ss-generic-table>
+</div>
+<div *ngIf="!showDashboard">
+    <h1>Welcome to system</h1>
+</div>
+
+<p-dialog header="Select Dates" [(visible)]="isCustomDate" modal="modal" showEffect="fade"   [style]="{width: '50vw',height:'700px'}">
+    <app-datepickerpopup (onSelectValue)='selectValue($event)'></app-datepickerpopup>
+</p-dialog>

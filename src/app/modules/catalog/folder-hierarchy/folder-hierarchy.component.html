@@ -1,0 +1,152 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<p-toast></p-toast>
+
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button pButton pRipple label="{{'MANAGEDPRODUCT.ADDFOLDER'| translate}}" (click)="AddFolder();"
+                    icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+
+            </ng-template>
+
+        </p-toolbar>
+        <!-- <p-toolbar styleclass="p-mb-4"> -->
+
+        <div class="card .c-card" *ngIf="IsAdd">
+            <h5>{{'MANAGEDPRODUCT.FOLDERHIERARCY'| translate}}</h5>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-6">
+                    <label for="lastname1">{{'MANAGEDPRODUCT.FOLDER'| translate}}</label>
+                    <!-- <input id="lastname5" type="text" pInputText [(ngModel)]="folderHierarchy.Description"> -->
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-10">
+                            <ng-select [items]="filteredFolderHierarchy" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectFolderHierarchy" [searchFn]="dataFunc">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="p-col2">
+                            <i class="pi pi-search search-pi" (click)="OpenHierarchyDialog();"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-4">
+                    <label for="firstname1">{{'MANAGEDPRODUCT.NAME'| translate}}</label>
+                    <input id="firstname5" type="text" pInputText [(ngModel)]="folderHierarchy.Name">
+                </div>
+
+                <div class="p-field p-col-1" style="margin-top: 1.7rem">
+                    <button pButton pRipple type="button" icon="fas fa-plus"
+                        label="{{'MANAGEDPRODUCT.SAVE'| translate}}" (click)="SaveUpdateFolderHierarchyDetails();"
+                        icon="fas fa-plus" class="p-button-raised p-mr-2"></button>
+
+                </div>
+                <div class="p-field p-col-1" style="margin-top: 1.7rem">
+                    <button pButton pRipple label="{{'MANAGEDPRODUCT.CLOSE'| translate}}" icon="fas fa-times"
+                        class="p-button-raised p-mr-2" (click)="CloseAddSection();"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- </p-toolbar> -->
+        <!-- <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            (emitSwitch)="UpdateFolderHierarchyStatus($event)" [data]="FolderHierarchyList" [columnsData]="columns"
+            [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table> -->
+        <app-ss-generic-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            [globalFilterFields]="globalFilterFields" (emitSwitch)="UpdateFolderHierarchyStatus($event)"
+            [data]="FolderHierarchyList" [columnsData]="columns" [totalRecords]="totalRecords"
+            (getLazyData)="GetAllFolderDataWithLazyLoadinFunction($event)" [rowsPerPageOptions]="rowsPerPageOptions"
+            [row]='25'>
+        </app-ss-generic-table>
+    </div>
+</div>
+
+<p-dialog header="Folders" *ngIf="IsOpenHierarchyDialog" [(visible)]="IsOpenHierarchyDialog" modal="modal"
+    showEffect="fade" [style]="{ width: '70vw' }">
+    <app-genric-table (emitRowClick)="selectValue($event)" [menuItems]="[]" [data]="FolderHierarchyList"
+        [columnsData]="FolderColumn">
+    </app-genric-table>
+</p-dialog>
+<p-dialog header="DocumentAttachment" [(visible)]="AttachDocumentPopDisplay" modal="modal" showEffect="fade"
+     [style]="{ width: '65vw' }">
+    <div class="progress-spinner" *ngIf="IsSpinner">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+    <div class="p-grid">
+        <div class="p-col-6">
+            <div class="card">
+                <h5>Document</h5>
+                <p-fileUpload name="uploadedFiles" #form [files]="uploadedFiles" customUpload="true" accept="image/*"
+                    (onSelect)="onUpload($event, form)" (uploadHandler)="UpdateImage(form)"
+                     multiple="true" maxFileSize="3000000">
+                    <!-- <ng-template let-file pTemplate='file'>
+                        <div>{{file.name}}</div>
+                        <div>{{file.size}}</div>
+                    </ng-template> -->
+                </p-fileUpload>
+            </div>
+        </div>
+        <div class="p-col-6">
+            <div class="card p-grid">
+                <div class="p-col-12">
+                    <h5>Images</h5>
+                </div>
+
+                <!-- <p-carousel [value]="Images" [numVisible]="2" [numScroll]="2" [circular]="false" 
+                [responsiveOptions]="responsiveOptions">
+                    <ng-template let-product pTemplate="item">
+                        <div class="product-item">
+                            <div class="product-item-content">
+                                <div class="p-mb-3">
+                                    <img Height= "140" width="140" [src]="imageBasePath + folderHierarchy.Description + '/' + product" [alt]="product" class="product-image" />
+                                </div>
+                                <div>
+                                   <div class="car-buttons p-mt-5">
+                                        <p-button type="button" styleClass="p-button p-button-rounded p-button-danger p-mr-2"
+                                        (click)="DeleteImage(product);" icon="pi pi-times"></p-button>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-carousel> -->
+
+                <!-- <div *ngFor="let item of Images" class="p-col-4">
+                    <img [src]="imageBasePath + folderHierarchy.Description + '/' + item" alt="Image Not Found"
+                        Height="140" width="140" class="p-shadow-2" />
+                        <div style="text-align: center;">
+                            <button pButton pRipple type="button" icon="pi pi-times"
+                                class="p-button-rounded p-button-danger p-mr-2 p-mb-2"
+                                (click)="DeleteImage(item);"></button>
+                        </div>
+                </div> -->
+                <app-genric-table  (emitDeleteBtnClick)="DeleteImage($event)"
+                [data]="Images" [columnsData]="columns1" [globalFilterFields]="globalFilterFields1"
+                [rowsPerPageOptions]="rowsPerPageOptions1" [row]='3'>
+                </app-genric-table> 
+            </div>
+        </div>
+
+        <!-- </div> -->
+    </div>
+</p-dialog>

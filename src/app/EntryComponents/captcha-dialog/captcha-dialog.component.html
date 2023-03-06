@@ -1,0 +1,20 @@
+<div>
+
+    <div class="p-fluid p-formgrid p-grid">
+        <!-- <div class="p-field p-col-12 p-md-12">
+         <span class="p-h">Product Name:</span> <span class="p-n"> {{ProductName}}</span>
+        </div> -->
+
+        <div class="p-field p-col-12 p-md-12 ">
+            <label for="Sum"> Please enter the sum of these numbers:( {{firstNumber}} + {{secondNumber}} )</label>
+            <span class="p-input-icon-left">
+                <i class="fas fa-plus"></i>
+                <input type="text" name="Sum" id=Sum [(ngModel)]="SumOfTwoNo" required pInputText
+                    placeholder="Enter Sum" />
+            </span>
+        </div>
+        <div class="p-field p-col-12 p-md-12 ">
+            <button pButton pRipple type="button" label="Submit" (click)="SubmitSum();"
+                data-dismiss="modal" class="p-button-raised p-mr-2"></button>
+        </div>
+    </div>

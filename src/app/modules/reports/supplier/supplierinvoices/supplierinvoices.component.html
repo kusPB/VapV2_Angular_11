@@ -1,0 +1,143 @@
+<p-toast></p-toast>
+<p-dialog  header="Purchases"  [(visible)]="displayPurchasePopup" modal="modal" showEffect="fade" [style]="{width: '75vw'}">
+    <div class="primeng-datatable-container">
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        (emitHref)="PurchaseDetails($event)"
+        [data]="PurchaseTableModel" [columnsData]="columns1" [globalFilterFields]="globalFilterFields1"
+          [rowsPerPageOptions]="rowsPerPageOptions" [row]='10'>
+        </app-genric-table>
+
+    <!-- <p-table #dprices  [value]="PurchaseTableModel"  [rows]="5" [paginator]="true" dataKey="id"   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+     [showCurrentPageReport]="true" >
+     <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between">
+            
+            <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dprices.filterGlobal($event.target.value, 'contains')" placeholder="Search Product..." />
+           </span>
+
+        </div>
+    </ng-template>
+        <ng-template  pTemplate="header">
+            
+            <tr >
+                <th pSortableColumn="ID"> Order No <p-sortIcon field="ID"></p-sortIcon></th>
+                <th pSortableColumn="Supplier"> Supplier <p-sortIcon field="Supplier"></p-sortIcon></th>
+                <th pSortableColumn="dTotalPurchaseValue"> Purchase Price <p-sortIcon field="dTotalPurchaseValue"></p-sortIcon></th>
+                <th pSortableColumn="dTotalPaidValue"> Paid Amount <p-sortIcon field="dTotalPaidValue"></p-sortIcon></th>
+                <th pSortableColumn="PurchaseDateString"> Date <p-sortIcon field="PurchaseDateString"></p-sortIcon></th>
+                </tr>
+           
+        </ng-template>
+        <ng-template pTemplate="body" let-PurchaseModel >
+            <tr >
+                <td ><a href="javascript:void(0)" (click)="PurchaseDetails(PurchaseModel.ID)">{{PurchaseModel.ID}}</a></td>
+                <td >  {{PurchaseModel.Supplier}} </td>
+                <td > <span >€ </span> {{PurchaseModel.dTotalPurchaseValue | number:'1.2-2' }} </td>
+                <td ><span >€ </span> {{PurchaseModel.dTotalPaidValue | number:'1.2-2' }} </td>
+                <td >  {{PurchaseModel.PurchaseDateString}} </td>
+
+            </tr>
+        </ng-template>
+    </p-table>  -->
+    </div>
+</p-dialog>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+                <ng-template pTemplate="left">
+                    <button pButton pRipple label="{{'REPORTS.REFRESH'| translate}}" (click)="refreshReport();" icon="fas fa-sync" class="p-button-raised  p-mr-2"></button>      
+                </ng-template>
+        </p-toolbar>
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        (emitHref)="getPurchasesBySupplierInvoiceNo($event)"
+        [data]="AllInvoicelist" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+        [rowGroup]="rowGroup"    [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+        <!-- <p-table #dt [value]="AllInvoicelist"  [rows]="rows"  [totalRecords]="totalRecords" [(first)]="first"   
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+        [loading]="loading"  [showCurrentPageReport]="true"  dataKey="id" 
+        [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"  
+        [paginator]="true"  [rowHover]="true" styleClass="p-datatable-responsive-demo"
+        [filterDelay]="0" [globalFilterFields]="['Product','BLabel']">
+
+     
+     <ng-template pTemplate="caption">
+         <div class="p-d-flex p-ai-center p-jc-between">
+                <div class="p-d-flex">
+                        <button type="button" pButton pRipple icon="pi pi-file-o" (click)="dt.exportCSV()" class="p-mr-2" pTooltip="CSV" tooltipPosition="bottom"></button>
+                        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()" class="p-button-success p-mr-2"  pTooltip="XLS" tooltipPosition="bottom"></button>
+                        <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()" class="p-button-warning p-mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+                        
+                    </div>
+             <span class="p-input-icon-left">
+             <i class="pi pi-search"></i>
+             <input pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" placeholder="Global Search"/>
+         </span>
+         </div>
+     </ng-template>
+      
+      <ng-template pTemplate="header">
+             <tr>
+              
+                 <th pSortableColumn="SupplierInvoice"> Supplier Invoice No <p-sortIcon field="SupplierInvoice"></p-sortIcon></th>
+                 <th pSortableColumn="Supplier"> Supplier <p-sortIcon field="Supplier"></p-sortIcon></th> 
+                 <th pSortableColumn="InvoiceDate"> Invoice Date <p-sortIcon field="InvoiceDate"></p-sortIcon></th>
+                 <th pSortableColumn="dTotalOriginalAmount"> Invoice Amount(Purchase Price) <p-sortIcon field="dTotalOriginalAmount"></p-sortIcon></th>
+                 <th pSortableColumn="dPaidAmount"> Paid Amount <p-sortIcon field="dPaidAmount"></p-sortIcon></th>
+                 <th pSortableColumn="dRemainingAmount"> Rest Amount(Remaining) <p-sortIcon field="dRemainingAmount"></p-sortIcon></th>
+                 <th pSortableColumn="dTotalReturnedAmount">Returned Amount <p-sortIcon field="dTotalReturnedAmount"></p-sortIcon></th>
+                 
+             </tr>
+
+
+             <tr>
+              
+                 <th>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'SupplierInvoice', 'contains')" placeholder="Search by Supplier Invoice No" class="p-column-filter thwidth">
+                     </th>
+                 
+                 <th>
+                     <input pInputText type="text" (input)="dt.filter($event.target.value, 'Supplier', 'contains')" placeholder="Search by Supplier" class="p-column-filter thwidth">
+                 </th>
+                 <th>
+                     <input pInputText type="text" (input)="dt.filter($event.target.value, 'InvoiceDate', 'contains')" placeholder="Search by Invoice Date" class="p-column-filter thwidth">
+                 </th>
+                 <th>
+                     <input pInputText type="text" (input)="dt.filter($event.target.value, 'dTotalOriginalAmount', 'contains')" placeholder="Search by Invoice Amount" class="p-column-filter thwidth">
+                 </th>
+                 <th>
+                     <input pInputText type="text" (input)="dt.filter($event.target.value, 'dPaidAmount', 'contains')" placeholder="Search by Paid Amount" class="p-column-filter thwidth">
+                 </th>
+                 <th>
+                     <input pInputText type="text" (input)="dt.filter($event.target.value, 'dRemainingAmount', 'contains')" placeholder="Search by Rest Amount" class="p-column-filter thwidth">
+                 </th>
+                 <th>
+                     <input pInputText type="text" (input)="dt.filter($event.target.value, 'dTotalReturnedAmount', 'contains')" placeholder="Search by Returned Amount" class="p-column-filter thwidth">
+                 </th>
+             </tr>
+         </ng-template>
+         <ng-template pTemplate="body" let-PurchasePaymentModel >
+            <tr [pContextMenuRow]="PurchasePaymentModel">
+
+                <td><a href="javascript:void(0)"  (click)="getPurchasesBySupplierInvoiceNo(PurchasePaymentModel.SupplierInvoice)">{{PurchasePaymentModel.SupplierInvoice}}</a></td>
+                 <td>{{PurchasePaymentModel.Supplier}}</td>
+                 <td>{{PurchasePaymentModel.InvoiceDate}}</td>
+                 <td><span >€ </span> {{PurchasePaymentModel.dTotalOriginalAmount | number:'1.2-2' }}</td>
+                 <td><span >€ </span> {{PurchasePaymentModel.dPaidAmount | number:'1.2-2' }}</td>
+                 <td><span >€ </span> {{PurchasePaymentModel.dRemainingAmount | number:'1.2-2' }}</td>
+                 <td><span >€ </span> {{PurchasePaymentModel.dTotalReturnedAmount | number:'1.2-2' }}</td>
+
+                 
+             </tr>
+         </ng-template>
+
+     </p-table> -->
+ 
+ </div>
+</div>

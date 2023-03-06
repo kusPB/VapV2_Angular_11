@@ -1,0 +1,80 @@
+<p-overlayPanel #op1>
+  <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+<p-toast></p-toast>
+
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+  <div class="card" >
+    <div class="top-c">
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-2">
+          <h6>{{'GENRIC.SEARCHBYDATE'| translate}}</h6>
+          <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+            [(ngModel)]="dateId" autoWidth="false" [style]="{'width':'200px'}"
+            (onChange)="SearchByDate($event)" required filter="true">
+            <ng-template let-item pTemplate="selectedItem">
+              <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+            </ng-template>
+
+          </p-dropdown>
+        </div>
+        <div class="p-field p-col-3" >
+
+          <h5>{{'EXTRAS.USER'| translate}}</h5>
+
+          <p-dropdown [options]="UserDropDownList" [filter]="true" (onChange)="SearchByUser($event)"
+           [(ngModel)]="selectedID" placeholder="Please select user" optionLabel="label"
+            [showClear]="true"></p-dropdown>
+
+        </div>
+      </div> 
+  </div>
+
+      <app-ss-generic-table  [menuItems]="genericMenuItems" [data]="allActivity"
+      [globalFilterFields]="globalFilterFields" [columnsData]="columns" [rowGroup]="rowGroup"
+      [totalRecords]="totalRecords" (getLazyData)="GetAllDataWithLazyLoadinFunction($event)"
+       [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+      </app-ss-generic-table>
+        </div>  
+     
+      </div>
+      <!-- <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+        (emitRemarks)="showDialog($event)" [data]="AllActivityList" [columnsData]="columns" [rowGroup]="rowGroup"
+        [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+      </app-genric-table> -->
+
+
+
+
+      <!-- <label for="lastname1">Remarks</label>
+            <input id="remarks" type="text" pInputText [(ngModel)]="Remarks">
+        </div>
+        <div class="p-field p-col-2" style="margin-top: 1.7rem">
+            <button pButton pRipple type="button" icon="fas fa-plus" label="Add Internal Order"
+                (click)="SaveUpdateActivityDetails();" icon="fas fa-plus" style="width: 80%;"
+                class="p-button-raised p-mr-2"></button>
+
+        </div>
+        
+                         
+    </div>
+    <div class="p-field p-col">
+      
+  </div>
+</div>
+
+</div>
+</div>
+
+<p-dialog header="Products" *ngIf="IsOpenProductDialog" [(visible)]="IsOpenProductDialog" modal="modal"
+showEffect="fade" [style]="{ width: '70vw' }">
+<app-genric-table (emitRowClick)="selectValue($event)" [menuItems]="[]" [data]="ProductData"
+[columnsData]="productsColumn">
+</app-genric-table>
+
+</p-dialog> -->
+<p-dialog header="Select Dates" [(visible)]="isCustomDate" modal="modal" showEffect="fade"
+    [style]="{width: '50vw',height:'400px'}">
+    <app-datepickerpopup (onSelectValue)='selectValue($event)'></app-datepickerpopup>
+</p-dialog>

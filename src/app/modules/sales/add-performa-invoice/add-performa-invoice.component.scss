@@ -1,0 +1,128 @@
+.pay-btn-w{
+    width: 110px;
+}
+
+.pad-0 {
+    padding: 0 !important;
+}
+.mb-90 {
+    margin-bottom: 90px !important;
+}
+.search{
+    margin-left: 25px;
+  }
+
+p-fieldset{
+    div{
+      padding: 0px;
+    }
+  }
+.search-pi{
+    font-size: 1.3rem;
+    padding-left: 10px;
+}
+table{
+    width: 100%;
+}
+table, th, td {
+    border-bottom: 1px solid #e6e7e7;
+    border-collapse: collapse;
+  }
+  input {
+    width: 100px;
+}
+th{
+  padding: 3px;
+  font-size: 15px;
+  text-align: left;
+}
+td {
+    padding: 3px;
+    font-size: 15px;
+}
+.product-width{
+  width: 650px;
+}
+
+.p-mt-4 {
+    margin-top: 0.5rem !important;
+}
+
+@media only screen and (max-width: 1920px) {
+    input {
+        width: 90px;
+        font-size: 13px;
+    }
+    th{
+      padding: 3px;
+      font-size: 13px;
+    }
+    td {
+        padding: 3px;
+        font-size: 13px;
+    }
+    .deliverToAddress, .ngSelectWidth{
+        width: 245px;
+    }
+    .product-width{
+      width: 520px;
+    }
+  }
+
+@media only screen and (max-width: 1440px) {
+
+    input {
+        width: 80px;
+        font-size: 12px;
+    }
+    th{
+      padding: 2px;
+      font-size: 12px;
+    }
+    td {
+        padding: 2px;
+        font-size: 12px;
+    }
+    .cart{
+      padding: 4px;
+      font-size: 12px;
+    }
+    .deliverToAddress, .ngSelectWidth{
+        width: 230px;
+    }
+    .product-width{
+      width: 500px;
+    }
+}
+@media only screen and (max-width: 1366px) {
+    input {
+        width: 70px;
+        font-size: 10px;
+    }
+    th{
+      padding: 1px;
+      font-size: 10px;
+    }
+    td {
+        padding: 1px;
+        font-size: 10px;
+    }
+    .product-width{
+      width: 460px;
+      font-size: 10px;
+    }
+    .cart{
+      padding: 3px;
+      font-size: 13px;
+    }
+    .deliverToAddress, .ngSelectWidth{
+        width: 210px;
+    }
+    .search-pi{
+      font-size: 1rem;
+      padding-left: 5px;
+  }
+  .search{
+    margin-left: 15px;
+  }
+}

@@ -1,0 +1,836 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+  <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+<p-toast></p-toast>
+
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<div class="p-col-12 p-m-0 p-p-0 p-shadow-2">
+  <div class="card">
+    <!-- <h4>Row Expand</h4> -->
+    <p-toolbar styleClass="p-mb-4">
+      <ng-template pTemplate="left">
+        <span>
+          <i class="pi pi-mailbox"></i>
+          <i class="fas fa-plus"></i>
+        </span>
+        <button pButton pRipple label="Save" *ngxPermissionsOnly="'Add Sale'" icon="fas fa-plus" class="p-button-raised p-mr-2"
+          (click)="AddSale(false)"></button>
+        <button pButton pRipple label="Save And Print" *ngxPermissionsOnly="'Add Sale'" icon="fas fa-print" class="p-button-raised p-mr-2"
+          (click)="SaveAndPrint()"></button>
+        <button pButton pRipple label="Save And Email" *ngxPermissionsOnly="'Add Sale'" icon="pi pi-mailbox" class="p-button-raised p-mr-2"
+          (click)="SaveAndEmail()"></button>
+        <button pButton pRipple label="Hold" *ngxPermissionsOnly="'Add Hold Sale'" icon="fas fa-sticky-note" class="p-button-raised p-mr-2"
+          (click)="ConfirmHold()"></button>
+        <button pButton pRipple label="Close" icon="fas fa-times" class="p-button-raised p-mr-2"
+          (click)="Close()"></button>
+        <button pButton pRipple label="Review" icon="fas fa-sticky-note" class="p-button-raised p-mr-2"
+          (click)="SaleOrderReview()"></button>
+      </ng-template>
+ 
+    </p-toolbar>
+
+    <!-- <p-toolbar styleclass="p-mb-4"> -->
+    <!-- <div> -->
+    <div class="p-fluid p-formgrid p-grid">
+
+      <div class="p-md-3 p-lg-3 pad-0">
+        <p-fieldset legend="Order By" [transitionOptions]="'0ms'" toggleable="true">
+          <div class="p-field p-col-12">
+            <label for="firstname1">OrderedBy</label>
+            <i class="pi pi-search search" (click)="OpenOrderByDialog()"></i>
+            <p-autoComplete [(ngModel)]="selectedOrderBy" [suggestions]="filteredOrderBy"
+              (completeMethod)="searchOrderBy($event)" (onSelect)="BindDeliveryAddress($event)" field="label"
+              [minLength]="1">
+            </p-autoComplete>
+            <label for="phon">{{ orderByContact }}</label>
+          </div>
+
+          <div class="p-field p-col-10">
+            <label for="firstname1">Delivery Address</label>
+            <p-dropdown placeholder="Select Delivery Address" [options]="deliveryAddressDropdown"
+              [(ngModel)]="selectedDeliveryAddress" autoWidth="false" [style]="{'width':'100%'}" required filter="true">
+              <ng-template let-item pTemplate="selectedItem">
+                <span style="vertical-align: middle; margin-left: 0.5em">{{
+                  item.label
+                  }}</span>
+              </ng-template>
+            </p-dropdown>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="firstname1">PreviousInvoice</label>
+            <i class="pi pi-search search-pi" (click)="OpenCustomerPreviousInvoiceDialog()"></i><br />
+            <!-- <input
+                    id="lastname5"
+                    type="text"
+                    pInputText
+                    [disabled]="true"
+                  /> -->
+          </div>
+          <!-- style="width: 270px" -->
+          <div class="p-field p-col-10">
+            <label for="firstname1">CustomerPreviousBalance</label><br />
+            <input id="lastname5" type="text" pInputText [(ngModel)]="customerPreviousBalance" [disabled]="true" />
+          </div>
+          <div class="p-col-12" style="padding-bottom: 45px;">
+            <p-radioButton name="type" value="Cash" [(ngModel)]="type" inputId="type1" (click)="onChange()">
+            </p-radioButton>
+            <label for="city1" style="margin-right: 8px; margin-left: 8px; margin-top: 28px">Cash</label>
+            <p-radioButton name="type" value="Credit" [(ngModel)]="type" inputId="type2" (click)="onChange()">
+            </p-radioButton>
+            <label for="city2" style="margin-right: 8px; margin-left: 8px">Credit</label>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="p-md-3 p-lg-3 pad-0">
+        <p-fieldset legend="Deliver To" [transitionOptions]="'0ms'" toggleable="true">
+          <div class="p-field p-col-12">
+            <label for="firstname1">DeliveryTo</label>
+            <i class="pi pi-search search" (click)="OpenDeliveryToDialog()"></i>
+            <p-autoComplete [(ngModel)]="selectedDeliverTo" [suggestions]="filteredDeliverTo"
+              (completeMethod)="searchDeliverTo($event)" (onSelect)="BindDeliveryToDetails($event)" field="label"
+              [minLength]="1">
+            </p-autoComplete>
+            <label for="phon">{{ deliverToContact }}</label> <br />
+            <label for="phon" style="width: 270px">{{
+              deliverToAddress
+              }}</label>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="lastname1">DeliveryMethod</label>
+            <i class="pi pi-search search" (click)="OpenDeliveryMethodDialog()"></i>
+            <p-autoComplete [(ngModel)]="selectedDeliveryMethod" [suggestions]="filteredDeliveryMethod"
+              (completeMethod)="searchDeliveryMethod($event)" (onSelect)="BindShipmentCost($event)" field="label"
+              [minLength]="1">
+            </p-autoComplete>
+          </div>
+
+          <div class="p-field p-col-12" style="padding-bottom: 90px;">
+            <label for="lastname1">PaymentCondition</label>
+            <i class="pi pi-search search" (click)="OpenPaymentConditionDialog()"></i>
+            <p-autoComplete [(ngModel)]="selectedPaymentCondition" [suggestions]="filteredPaymentCondition"
+              (completeMethod)="searchPaymentCondition($event)" [disabled]="disabled" field="label" [minLength]="1">
+            </p-autoComplete>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="p-md-2 p-lg-2 p-mt-3 pad-0">
+        <div class="p-grid">
+          <div class="p-col-12">
+            <p-fieldset legend="Dates Section" [transitionOptions]="'0ms'" toggleable="true">
+              <div class="p-field p-col-12">
+                <label for="firstname1">DeliverDate</label>
+                <p-calendar [(ngModel)]="deliverDate" [showIcon]="true" inputId="icon"></p-calendar>
+              </div>
+              <div class="p-field p-col-12">
+                <label for="firstname1">OrderDate</label>
+                <p-calendar [(ngModel)]="orderDate" [showIcon]="true" inputId="icon"></p-calendar>
+              </div>
+            </p-fieldset>
+          </div>
+          <div class="p-col-12 p-mt-4">
+            <p-fieldset legend="Remarks" [transitionOptions]="'0ms'" toggleable="true">
+              <div class="p-col-12">
+                <!-- <label for="lastname1">Remarks</label> -->
+                <textarea id="lastname5" type="text" pInputText [(ngModel)]="remarks" cols="30" rows="4"></textarea>
+                <!-- <input /> -->
+              </div>
+            </p-fieldset>
+          </div>
+        </div>
+      </div>
+      <div class="p-md-4 p-lg-4 p-mt-2 pad-0">
+        <p-fieldset legend="Cart Summary" [transitionOptions]="'0ms'" toggleable="true">
+          <div class="p-col-12" style="float: left; padding: 2px; padding-bottom: 58px; padding-top: 40px;">
+            <!-- margin-top: 10px; margin-right: -30px -->
+            <!-- <div class="card"> -->
+            <table style="width:100%">
+              <tr>
+                <th>SubTotal</th>
+                <td>{{ subTotal }}</td>
+              </tr>
+              <tr>
+                <th>Total Discount</th>
+                <td>{{ totalDiscount }}</td>
+              </tr>
+              <tr>
+                <th>Shipment Cost</th>
+                <td> <input pInputText style="margin-left: 67px; width: 100px" type="text" [(ngModel)]="shipmentCost"
+                    (blur)="CalculateCartTotals()" /></td>
+              </tr>
+              <tr>
+                <th>Grand Total</th>
+                <td>{{ grandTotal }}</td>
+              </tr>
+              <tr>
+                <th>
+                  <button pButton icon="pi pi-list" label="Payment" class="p-button-raised p-mr-2 pay-btn-w p-mt-4"
+                    (click)="OpenAddPaymentPopup()" [disabled]="isPaymentButtonDisable"></button>
+                </th>
+                <td></td>
+              </tr>
+              <tr>
+                <th>Paid Payment</th>
+                <td>{{ paidPayment }}</td>
+              </tr>
+              <tr>
+                <th>Customer Current Balance</th>
+                <td>{{ customerCurrentBalance }}</td>
+              </tr>
+            </table>
+
+            <!-- <div class="p-pt-2">
+                    <span> SubTotal : </span>
+                    <span style="margin-left: 121px">{{ subTotal }}</span>
+                  </div>
+  
+                  <div class="p-pt-2">
+                    <span> Total Discount :</span>
+                    <span style="margin-left: 87px">{{ totalDiscount }}</span>
+                  </div> -->
+
+            <!-- <div class="p-pt-2">
+                    <span> Shipment Cost :</span>
+                    <span>
+                      <input
+                        pInputText
+                        style="margin-left: 67px; width: 100px"
+                        type="text"
+                        [(ngModel)]="shipmentCost"
+                        (blur)="CalculateCartTotals()"
+                      />
+                    </span>
+                  </div> -->
+
+            <!-- <div class="p-pt-2">
+                    <span> Grand Total :</span>
+                    <span style="margin-left: 104px">{{ grandTotal }}</span>
+                  </div>
+  
+                  <button
+                    pButton
+                    icon="pi pi-list"
+                    label="Payment"
+                    class="p-button-raised p-mr-2 pay-btn-w p-mt-4"
+                    (click)="OpenAddPaymentPopup()"
+                    [disabled]="isPaymentButtonDisable"
+                  ></button>
+                  <div class="p-pt-2">
+                    <span>Paid Payment : </span
+                    ><span style="margin-left: 90px">{{ paidPayment }} </span>
+                  </div>
+  
+                  <div class="p-pt-2">
+                    <span>Customer Current Balance : </span
+                    ><span style="margin-left: 13px"
+                      >{{ customerCurrentBalance }}
+                    </span>
+                  </div> -->
+            <!-- </div> -->
+          </div>
+        </p-fieldset>
+      </div>
+    </div>
+    <!-- <div class="p-fluid p-formgrid p-grid" style="margin-top: 10px">
+                              
+                                     
+  
+                              
+                             
+  
+                         
+                              
+                          </div> -->
+    <!-- </div> -->
+    <!-- </p-toolbar> -->
+
+    <p-table [value]="products" dataKey="id" editMode="row" [(contextMenuSelection)]="selectedRow" [contextMenu]="cm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 100px">Action</th>
+          <th style="width: 310px">Product</th>
+          <th style="width: 210px">Quantity</th>
+          <th style="width: 85px">Unit Price</th>
+          <th style="width: 80px">Discount(%)</th>
+          <th style="width: 80px">Discount</th>
+          <th style="width: 80px">Net Price</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product let-editing="editing" let-ri="rowIndex">
+        <tr [pContextMenuRow]="product" [pEditableRow]="product">
+          <td>
+            <button pButton pRipple style="margin-right: 5px" type="button" icon="pi pi-list"
+              *ngIf="product.IsTrackable" class="p-button-rounded p-button-outlined" title="Open Trackables"
+              (click)="OpenProductTrackables(ri)"></button>
+            <button pButton pRipple type="button" icon="pi pi-times" *ngIf="product.IsAdded"
+              class="p-button-rounded p-button-outlined" title="Remove!" (click)="RemoveCartProduct(ri)"></button>
+          </td>
+          <td pEditableColumn>
+            <p-autoComplete [(ngModel)]="product.selectedProduct" [suggestions]="filteredProduct"
+              (completeMethod)="search($event)" (onSelect)="BindProductDetails($event, ri)" field="label"
+              [minLength]="1">
+            </p-autoComplete>
+            <i class="pi pi-search search-pi" (click)="OpenProductDialog(product)"></i>
+            <button style="margin-left: 2px" pButton pRipple type="button" icon="pi pi-list"
+              *ngIf="product.IsSelectedTrackables" class="p-button-rounded p-button-outlined"
+              title="Show selected Trackables" (click)="OpenSelectedProductTrackables(ri)"></button>
+          </td>
+          <td pEditableColumn>
+            <input pInputText type="text" [(ngModel)]="product.Quantity" style="width: 100px"
+              (blur)="OnChangeText(product)" [disabled]="product.IsQtyDisable" />
+            <button style="margin-left: 2px; margin-right: 2px" pButton pRipple type="button" *ngIf="product.IsLocation"
+              icon="fa fa-map-marker" class="p-button-rounded p-button-outlined"
+              (click)="OpenProductLocations(ri)"></button>
+            <button style="margin-right: 2px; margin-right: 2px" pButton pRipple type="button"
+              *ngIf="product.IsLastAvgPrice" icon="pi pi-money-bill" class="p-button-rounded p-button-outlined"
+              title="Last Avarage Purchase Price" (click)="GetLastAvaragePrice(ri)"></button>
+            <button pButton pRipple type="button" icon="pi pi-shopping-cart" *ngIf="product.IsAddToWishList"
+              class="p-button-rounded p-button-outlined" title="Add to wishlist"
+              (click)="OpenAddToWishlistPopup(ri)"></button>
+          </td>
+
+          <td pEditableColumn>
+            <input pInputText type="text" [(ngModel)]="product.Price" style="width: 85px"
+              (blur)="OnChangeText(product)" />
+          </td>
+          <td pEditableColumn>
+            <input pInputText type="text" [(ngModel)]="product.DiscPer" style="width: 80px"
+              (blur)="OnChangeText(product, ri)" />
+          </td>
+
+          <td pEditableColumn>
+            <input pInputText type="text" [(ngModel)]="product.DiscVal" style="width: 80px" [disabled]="true" />
+          </td>
+          <td pEditableColumn>
+            <input pInputText type="text" [(ngModel)]="product.NetPrice" style="width: 80px" [disabled]="true" />
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+    <div></div>
+  </div>
+</div>
+
+<p-dialog header="Customer" [(visible)]="displayOrderByDialog" modal="modal" showEffect="fade"
+  [style]="{ width: '60vw' }">
+  <div class="primeng-datatable-container">
+    <p-table #dt [value]="AllCustomersList" [rows]="rows" [totalRecords]="totalRecords" [(first)]="first"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+      dataKey="id" [rowsPerPageOptions]="[25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+      styleClass="p-datatable-responsive-demo" [filterDelay]="0" [globalFilterFields]="['FirstName', 'LastName']">
+      <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search Customer..." />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <!-- <th pSortableColumn="CustomerID">ID <p-sortIcon field="CustomerID"></p-sortIcon></th> -->
+          <th pSortableColumn="FirstName">
+            Customer <p-sortIcon field="FirstName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="sCompanyName">
+            Company <p-sortIcon field="sCompanyName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Address">
+            Address <p-sortIcon field="Address"></p-sortIcon>
+          </th>
+          <th pSortableColumn="PhoneNo">
+            Phone <p-sortIcon field="PhoneNo"></p-sortIcon>
+          </th>
+          <th pSortableColumn="CurrentBalance">
+            CurrentBalance <p-sortIcon field="CurrentBalance"></p-sortIcon>
+          </th>
+          <!-- <th pSortableColumn="dCreditLimit">CreditLimit <p-sortIcon field="dCreditLimit"></p-sortIcon></th>
+                          <th pSortableColumn="ShippingMethodID">DeliveryMethod <p-sortIcon field="ShippingMethodID"></p-sortIcon></th> -->
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-customer>
+        <tr (click)="SelectRowOrderBy(customer)">
+          <!-- <td > {{customer.CustomerID}}</td> -->
+          <td>{{ customer.FirstName + " " + customer.LastName }}</td>
+          <td>
+            {{
+            customer.sCompanyName === "" || customer.sCompanyName === null
+            ? "None"
+            : customer.sCompanyName
+            }}
+          </td>
+          <td>
+            {{
+            customer.City === "" || customer.City === null
+            ? customer.Address
+            : customer.Address + ", " + customer.City
+            }}
+          </td>
+          <td>{{ customer.PhoneNo }}</td>
+          <td>
+            {{
+            customer.CurrentBalance === null || customer.CurrentBalance < 0 ? "0" : customer.CurrentBalance }} </td>
+              <!-- <td > {{customer.dCreditLimit}}</td>
+                      <td > {{customer.ShippingMethodID}}</td> -->
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</p-dialog>
+
+<p-dialog header="Customer" [(visible)]="displayDeliverToDialog" modal="modal" showEffect="fade"
+  [style]="{ width: '60vw' }">
+  <div class="primeng-datatable-container">
+    <p-table #dt [value]="AllCustomersList" [rows]="rows" [totalRecords]="totalRecords" [(first)]="first"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true"
+      dataKey="id" [rowsPerPageOptions]="[25, 50, 100, 200, 500, 1000, 5000]" [paginator]="true" [rowHover]="true"
+      styleClass="p-datatable-responsive-demo" [filterDelay]="0" [globalFilterFields]="['FirstName', 'LastName']">
+      <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search Customer..." />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <!-- <th pSortableColumn="CustomerID">ID <p-sortIcon field="CustomerID"></p-sortIcon></th> -->
+          <th pSortableColumn="FirstName">
+            Customer <p-sortIcon field="FirstName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="sCompanyName">
+            Company <p-sortIcon field="sCompanyName"></p-sortIcon>
+          </th>
+          <th pSortableColumn="Address">
+            Address <p-sortIcon field="Address"></p-sortIcon>
+          </th>
+          <th pSortableColumn="PhoneNo">
+            Phone <p-sortIcon field="PhoneNo"></p-sortIcon>
+          </th>
+          <th pSortableColumn="CurrentBalance">
+            CurrentBalance <p-sortIcon field="CurrentBalance"></p-sortIcon>
+          </th>
+          <!-- <th pSortableColumn="dCreditLimit">CreditLimit <p-sortIcon field="dCreditLimit"></p-sortIcon></th>
+                          <th pSortableColumn="ShippingMethodID">DeliveryMethod <p-sortIcon field="ShippingMethodID"></p-sortIcon></th> -->
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-customer>
+        <tr (click)="SelectRow(customer)">
+          <!-- <td > {{customer.CustomerID}}</td> -->
+          <td>{{ customer.FirstName + " " + customer.LastName }}</td>
+          <td>
+            {{
+            customer.sCompanyName === "" || customer.sCompanyName === null
+            ? "None"
+            : customer.sCompanyName
+            }}
+          </td>
+          <td>
+            {{
+            customer.City === "" || customer.City === null
+            ? customer.Address
+            : customer.Address + ", " + customer.City
+            }}
+          </td>
+          <td>{{ customer.PhoneNo }}</td>
+          <td>
+            {{
+            customer.CurrentBalance === null || customer.CurrentBalance < 0 ? "0" : customer.CurrentBalance }} </td>
+              <!-- <td > {{customer.dCreditLimit}}</td>
+                      <td > {{customer.ShippingMethodID}}</td> -->
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</p-dialog>
+
+<p-dialog header="DeliveryMethods" *ngIf="displayDeliveryMethod" [(visible)]="displayDeliveryMethod" modal="modal"
+  showEffect="fade" [style]="{ width: '60vw' }">
+  <app-delivery-method (onDeliveryMethodSelectValue)="onDeliveryMethodSelectValue($event)"></app-delivery-method>
+</p-dialog>
+
+<p-dialog header="PaymentCondition" *ngIf="displayPaymentCondition" [(visible)]="displayPaymentCondition" modal="modal"
+  showEffect="fade" [style]="{ width: '60vw' }">
+  <app-payment-condition (onPaymentConditionSelectValue)="onPaymentConditionSelectValue($event)">
+  </app-payment-condition>
+</p-dialog>
+
+<p-dialog header="CustomerPreviousInvoices" *ngIf="displayCustomerPreviousInvoice"
+  [(visible)]="displayCustomerPreviousInvoice" modal="modal" showEffect="fade" [style]="{ width: '60vw' }">
+  <app-customer-previous-invoice [OrderByID]="selectedOrderBy"></app-customer-previous-invoice>
+</p-dialog>
+
+<p-dialog header="Products" *ngIf="IsOpenProductDialog" [(visible)]="IsOpenProductDialog" modal="modal"
+  showEffect="fade" [style]="{ width: '70vw' }">
+  <app-product-with-stock [OrderByID]="selectedOrderBy" (onSelectValue)="selectValue($event)"></app-product-with-stock>
+</p-dialog>
+
+<p-dialog header="TrackableCodesfor {{ trackablePopupHeading }}" *ngIf="displayProductTrackables"
+  [(visible)]="displayProductTrackables" modal="modal" showEffect="fade" [style]="{ width: '70vw' }">
+  <app-product-trackables [selectedProduct]="selectedRow.selectedProduct" [productTrackableList]="productTracablesList"
+    (onTrackableSelectValue)="onTrackableSelectValue($event)"></app-product-trackables>
+</p-dialog>
+
+<p-dialog header="TrackableCodesfor {{ trackablePopupHeading }}" *ngIf="displaySelectedProductTrackables"
+  [(visible)]="displaySelectedProductTrackables" modal="modal" showEffect="fade" [style]="{ width: '70vw' }">
+  <app-selected-product-trackables [details]="details" [currentQuantity]="selectedRow.Quantity"
+    [productTrackables]="trackables" [selectedProduct]="selectedRow.selectedProduct"
+    [selectedTrackables]="selectedProductTrackables" (onRemoveSelectedTrackable)="onRemoveSelectedTrackable($event)">
+  </app-selected-product-trackables>
+</p-dialog>
+
+<p-dialog header="ProductInfo " *ngIf="displayLastAvgPrice" [(visible)]="displayLastAvgPrice" modal="modal"
+  showEffect="fade" [style]="{ width: '70vw' }">
+  <div class="p-col-12">
+    <!-- <div class="card"> -->
+    <p-fieldset legend="Product Info" [transitionOptions]="'0ms'" toggleable="true">
+      <div class="p-grid">
+        <div class="p-field p-col-3">
+          <div for="firstname1">Available Stock</div>
+          <div for="firstname1">{{ latAvgPriceDetails.AvailableStock }}</div>
+        </div>
+        <!-- <div class="p-field p-col">
+          
+          </div> -->
+        <div class="p-field p-col-3">
+          <div for="firstname1">Average Purchase Price</div>
+          <div for="firstname1">{{ latAvgPriceDetails.AveragePurchasePrice }}</div>
+        </div>
+        <!-- <div class="p-field p-col">
+           
+          </div> -->
+        <div class="p-field p-col-3">
+          <div for="firstname1">Last Purchase Price</div>
+          <div for="firstname1">{{ latAvgPriceDetails.LastPurchasePrice }}</div>
+        </div>
+        <!-- <div class="p-field p-col">
+           
+          </div> -->
+        <div class="p-field p-col-3">
+          <div for="firstname1">Profit</div>
+          <div for="firstname1">{{ latAvgPriceDetails.Profit }}</div>
+        </div>
+        <!-- <div class="p-field p-col">
+           
+          </div> -->
+      </div>
+    </p-fieldset>
+    <!-- </div> -->
+  </div>
+</p-dialog>
+
+<p-dialog header="Add to Wishlist" *ngIf="displayAddToWishlist" [(visible)]="displayAddToWishlist" modal="modal"
+  showEffect="fade" [style]="{ width: '50vw' }">
+  <app-addwishlist-dialog [ProductVariantID]="selectedRow.selectedProduct.value"
+    [ProductName]="selectedRow.selectedProduct.label" (ReturnCall)="CloseDialog($event)"></app-addwishlist-dialog>
+</p-dialog>
+
+<p-dialog header="Payment" *ngIf="displayAddPaymentPopup" [(visible)]="displayAddPaymentPopup" modal="modal"
+  showEffect="fade" [style]="{ width: '50vw' }">
+  <div class="">
+    <p-fieldset legend="Payment" [transitionOptions]="'0ms'" toggleable="true">
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col">
+          <label for="firstname1">AddPaymentInInvoice</label>
+          <input pInputText type="text" [(ngModel)]="payment" />
+        </div>
+        <div class="p-field p-col">
+          <label for="firstname1">Password</label>
+          <input pInputText type="text" [(ngModel)]="password" />
+        </div>
+        <br />
+      </div>
+    </p-fieldset>
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col">
+        <button pButton icon="pi pi-plus" label="Save & Close" style="width: 135px ; float:right" class="p-button-raised p-mr-2"
+          (click)="AddSale(false)"></button>
+        <button pButton icon="pi pi-times" label="Close" style="width: 100px ; float:right" class="p-button-raised p-mr-2"
+          (click)="ClosePaymentPopup()"></button>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+<p-dialog header="Location" *ngIf="displayProductLocations" [(visible)]="displayProductLocations" modal="modal"
+  showEffect="fade" [style]="{ width: '70vw' }">
+  <app-product-locations [selectedProduct]="selectedRow.selectedProduct" [isAdded]="isAdded"
+    [isLocationChangedByField]="isLocationChangedByField" [quantityField]="selectedRow.Quantity"
+    [productLocations]="productLocations" [details]="details"
+    [autoAssignLocationWhenProduct]="autoAssignLocationWhenProduct"></app-product-locations>
+</p-dialog>
+
+<div class="row" id="printable" style="display: none">
+  <div class="col-12">
+    <div class="row">
+      <div class="col-6">
+        <h1 style="font-size: xx-large; font-weight: 900; margin-top: 50px">
+          PACKING LIST
+        </h1>
+      </div>
+      <div class="col-6 text-right">
+        <div class="row margin-top-5p">
+          <div class="col-9">
+            <label class="font-bold">InvoiceNo </label>
+          </div>
+          <div class="col-3">
+            <label id="txtPrintSaleInvoiceNo">{{ invoiceNo }}</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <label class="font-bold">Invoice Date </label>
+          </div>
+          <div class="col-4">
+            <label id="txtPrintSaleDate">{{ orderDate }}</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <label style="font-size: medium; font-weight: 800">Amount Due:
+            </label>
+          </div>
+          <div class="col-4">
+            <label style="font-size: medium; font-weight: 800" class="txtPrintTotalGrandTotal">{{ grandTotal }}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+    <label class="font-bold">Bill To: </label>
+    <br />
+    <label id="txtPrintCustomer">{{ deliverToName }}</label>
+    <br />
+    <label id="txtPrintCompany">{{ deliverToName }}</label>
+    <br />
+    <label id="txtPrintShippingAddress">{{ selectedDeliveryAddressID }}</label>
+
+    <div class="">
+      <table id="tblPrintReport" class="table table-bordered table-bordered dt-responsive nowrap" cellspacing="0"
+        width="100%">
+        <thead class="thead-dark">
+          <tr>
+            <th>SKU</th>
+            <th>ProductName</th>
+            <!-- <th>Location</th> -->
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="printbody"></tbody>
+      </table>
+      <div class="row">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-3">
+          <table class="table table-bordered table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+            <thead class="thead-dark">
+              <tr>
+                <td> SubTotal</td>
+                <td id="txtPrintSubTotal">{{ subTotal }}</td>
+              </tr>
+              <tr>
+                <td>Discount</td>
+                <td id="txtPrintDiscount">{{ totalDiscount }}</td>
+              </tr>
+              <tr>
+                <td>ShipmentCost</td>
+                <td id="txtPrintTotalShipment">
+                  {{ currencySign + " " + shipmentCost }}
+                </td>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>GrandTotal</th>
+                <th class="txtPrintTotalGrandTotal">
+                  {{ currencySign + " " + grandTotal }}
+                </th>
+              </tr>
+              <tr>
+                <th>Payment</th>
+                <th class="txtPrintPayment">
+                  {{ currencySign + " " + payment }}
+                </th>
+              </tr>
+              <tr>
+                <th>Rest Amount</th>
+                <th class="txtPrintRestAmount">
+                  {{ currencySign + " " + restAmount }}
+                </th>
+              </tr>
+            </tfoot>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <hr />
+    <div class="row">
+      <div class="col-12">
+        <label class="font-bold">Notes</label>
+      </div>
+      <div class="col-12">
+        <label class="font-bold">Thanks for your order, I hope your business will grow and be
+          successful</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog [(visible)]="displayReview" modal="modal" showEffect="fade" [style]="{ width: '70vw' }">
+  <div class="row" id="printableReview">
+    <div class="col-12">
+      <div class="row">
+        <div class="col-6">
+          <h1 style="font-size: xx-large; font-weight: 900; margin-top: 50px">
+            PACKING LIST
+          </h1>
+        </div>
+        <div class="col-6 text-right">
+          <div class="row margin-top-5p">
+            <div class="col-9">
+              <label class="font-bold">InvoiceNo </label>
+            </div>
+            <div class="col-3">
+              <label id="txtPrintSaleInvoiceNo">{{ invoiceNo }}</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-8">
+              <label class="font-bold">Invoice Date </label>
+            </div>
+            <div class="col-4">
+              <label id="txtPrintSaleDate">{{ orderDate }}</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-8">
+              <label style="font-size: medium; font-weight: 800">Amount Due:
+              </label>
+            </div>
+            <div class="col-4">
+              <label style="font-size: medium; font-weight: 800" class="txtPrintTotalGrandTotal">{{ grandTotal
+                }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <label class="font-bold">Bill To: </label>
+      <br />
+      <label id="txtPrintCustomer">{{ deliverToName }}</label>
+      <br />
+      <label id="txtPrintCompany">{{ deliverToName }}</label>
+      <br />
+      <label id="txtPrintShippingAddress">{{
+        selectedDeliveryAddressID
+        }}</label>
+
+      <div class="">
+        <table id="tblReview" class="table table-bordered table-bordered dt-responsive nowrap" cellspacing="0"
+          width="100%">
+          <thead class="thead-dark">
+            <tr>
+              <th>SKU</th>
+              <th>ProductName</th>
+              <!-- <th>Location</th> -->
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="printbodyReview">
+            <tr *ngFor="let col of salePrintDetails">
+              <td>
+                {{ col.ProductVariantID }}
+              </td>
+              <td>
+                {{ col.Product }}
+              </td>
+              <td>
+                {{ col.Quantity }}
+              </td>
+              <td>
+                {{ currencySign + " " + col.dTotalUnitValue }}
+              </td>
+              <td>
+                {{ currencySign + " " + col.dtotal }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row">
+          <div class="col-sm-9"></div>
+          <div class="col-sm-3">
+            <table class="table table-bordered table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+              <thead class="thead-dark">
+                <tr>
+                  <td>SubTotal</td>
+                  <td id="txtPrintSubTotal">{{ subTotal }}</td>
+                </tr>
+                <tr>
+                  <td>Discount</td>
+                  <td id="txtPrintDiscount">{{ totalDiscount }}</td>
+                </tr>
+                <tr>
+                  <td>ShipmentCost</td>
+                  <td id="txtPrintTotalShipment">
+                    {{ currencySign + " " + shipmentCost }}
+                  </td>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>GrandTotal</th>
+                  <th class="txtPrintTotalGrandTotal">
+                    {{ currencySign + " " + grandTotal }}
+                  </th>
+                </tr>
+                <tr>
+                  <th>Payment</th>
+                  <th class="txtPrintPayment">
+                    {{ currencySign + " " + payment }}
+                  </th>
+                </tr>
+                <tr>
+                  <th>Rest Amount</th>
+                  <th class="txtPrintRestAmount">
+                    {{ currencySign + " " + restAmount }}
+                  </th>
+                </tr>
+              </tfoot>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <hr />
+      <div class="row">
+        <div class="col-12">
+          <label class="font-bold">Notes</label>
+        </div>
+        <div class="col-12">
+          <label class="font-bold">Thanks for your order, I hope your business will grow and be
+            successful</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

@@ -1,0 +1,48 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+<p-toast></p-toast>
+
+<p-dialog header="Remarks" [(visible)]="displayDialog" [style]="{width: '50vw'}" [baseZIndex]="10000">
+    <p>{{DialogRemarks}}</p>  
+  </p-dialog>
+
+<!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+    
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <p-toolbar styleclass="p-mb-4" *ngIf="IsAdd">
+            
+            <div >
+                <div class="p-formgroup-inline">
+                    <!-- <div class="p-field-radiobutton">
+                         <p-radioButton name="reportfilter" value="1" [(ngModel)]="selectedFilter" (onClick)="filterReport()" inputId="checkb1"></p-radioButton> 
+                        <label for="checkb1">{{'ORDERS.OVERALL'| translate}}</label> 
+                        </div> -->
+                        <div class="p-field-radiobutton">      
+                        <p-radioButton name="reportfilter" value="2" [(ngModel)]="selectedFilter" (onClick)="filterReport()" inputId="checkb2"></p-radioButton>
+                        <label for="checkb2">{{'ORDERS.PURCHASED'| translate}}</label>
+                        </div>
+                        <div class="p-field-radiobutton">      
+                        <p-radioButton name="reportfilter" value="3" [(ngModel)]="selectedFilter" (onClick)="filterReport()" inputId="checkb3"></p-radioButton>
+                        <label for="checkb3">{{'ORDERS.NOTPURCHASED'| translate}}</label>  
+                        </div>
+
+                </div>
+            </div>
+
+        </p-toolbar>
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        (emitRemarks)="showDialog($event)"
+        [data]="AllInternalOrderList" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+        [rowGroup]="rowGroup"  [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+       
+    
+    </div>
+</div>
+

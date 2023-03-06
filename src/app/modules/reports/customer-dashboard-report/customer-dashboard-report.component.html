@@ -1,0 +1,169 @@
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+<p-toast></p-toast>
+
+<p-dialog header="Remarks" [(visible)]="displayDialog" [style]="{width: '50vw'}" [baseZIndex]="10000">
+    <p>{{DialogRemarks}}</p>
+</p-dialog>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <div class="top-c">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-6">
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col-11">
+                            <label for="firstname1">{{'REPORTS.CUSTOMER'| translate}}</label>
+                            <ng-select [items]="filteredCustomer" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectedCustomer" [searchFn]="dataFunc"
+                                (ngModelChange)="selectValue($event)">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="p-col-1">
+                            <i class="pi pi-search search-pi" (click)="OpenOrderByDialog();"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-3">
+                    <label for="customer">{{'REPORTS.CUSTOMERDETAIL'| translate}}</label>
+                    <div> {{lifeLineCustomer.FirstName}} {{lifeLineCustomer.LastName}}</div>
+                    <div> {{lifeLineCustomer.Address}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-2">
+                <div class="stati p-shadow-2 peter_river left" style="width: 100%; border-left: 5px solid rgb(35, 107, 214);">
+                    <div>
+                        Customer<b> Current Balance</b>
+                        <span>€ {{(lifeLineCustomer.CurrentBalance  || 0) | number:'1.2-2' }}</span>
+                    </div>
+                    <i class="pi pi-dollar" style="font-size: 2em;"></i>
+                </div>
+            </div>
+            <div class="p-col-2">
+                <div class="stati p-shadow-2 midnight_blue left" style="width: 100%; border-left: 5px solid rgb(41, 55, 75);">
+                    <div>
+                        Customer<b> Best Order</b>
+                        <span>€ {{(bestOrder || 0) | number:'1.2-2' }}</span>
+                    </div>
+                    <i class="pi pi-dollar" style="font-size: 2em;"></i>
+                </div>
+            </div>
+            <div class="p-col-2" >
+                <div class="stati p-shadow-2  belize_hole left" style="width: 100%; border-left: 5px solid rgb(17, 115, 228);">
+                    <div>
+                        Last <b> Order On</b>
+                        <span> {{(lastOrderOn) | date:'mediumDate'}}</span>
+                    </div>
+                    <i class="pi pi-calendar-plus" style="font-size: 2em;"></i>
+                </div>
+            </div>
+            
+            <div class="p-col-2" >
+                <div class="stati p-shadow-2  sun_flower left" style="width: 100%; border-left: 5px solid rgb(219, 153, 9);">
+                    <div>
+                        Last<b> Payment On</b>
+                        <span> {{(lastPaymentOn) | date:'mediumDate' }}</span>
+                    </div>
+                    <i class="pi pi-calendar-plus" style="font-size: 2em;"></i>
+                </div>
+            </div>
+            <div class="p-col-2">
+                <div class="stati p-shadow-2 midnight_blue left" style="width: 100%; border-left: 5px solid rgb(41, 55, 75);">
+                    <div>
+                        Total<b> Order Count</b>
+                        <span> {{(orderCount || 0)  }}</span>
+                    </div>
+                    <i class="pi pi-sort-numeric-up-alt" style="font-size: 2em;"></i>
+                </div>
+            </div>
+            <div class="p-col-2">
+            <div class="stati p-shadow-2 peter_river left" style="width: 100%; border-left: 5px solid rgb(35, 107, 214);">
+                <div>
+                    Customer<b> Credit Limit</b>
+                    <span>€ {{(lifeLineCustomer.dCreditLimit || 0) | number:'1.2-2'  }}</span>
+                </div>
+                <i class="pi pi-dollar" style="font-size: 2em;"></i>
+            </div>
+            </div>
+        </div>
+    </div>  
+    <div class="p-grid"> 
+        <div class="p-col-6">
+            <div class="card">
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <h3>Top 10 Products</h3>
+                        <div class="p-grid">
+                            <div class="p-field p-col-6">
+                                <div for="name">Search By Date</div>
+                                <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+                                    (onChange)="onChangeDate($event)" [(ngModel)]="selectedSearchByDateID" autoWidth="false"
+                                    [style]="{'width':'325px'}" filter="true">
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                    </ng-template>
+        
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <p-chart *ngIf="pieSaleChartData.labels.length > 0" type="pie" [data]="pieSaleChartData"
+                            (onDataSelect)="selectPieSaleChartData($event)"></p-chart>
+                        <div *ngIf="pieSaleChartData.labels.length <= 0">
+                            <div style="text-align: center; margin-top: 80px; font-size: 40px; font-weight: bold;">No Data
+                                Available</div>
+                        </div>
+                    </div>
+                    <div class="p-col-12" >
+                        <h3>Orders & Payments</h3>
+                        <div class="p-grid">
+                            <div class="p-field p-col-6">
+                                <div for="dateFrom">Select Year</div>
+                                <ng-select [items]="yearList" [virtualScroll]="true" bindLabel="label" [(ngModel)]="currentYear"
+                                    (ngModelChange)="changeyear($event)">
+                                    <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                        <span>{{item.label}}</span>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <p-chart *ngIf="lineSaleChartdata" type="line" [data]="lineSaleChartdata"
+                            (onDataSelect)="selectLineSaleChartdata($event)"></p-chart>
+                            <div *ngIf="lineSaleChartdata.labels.length <= 0">
+                                <div style="text-align: center; margin-top: 80px; font-size: 40px; font-weight: bold;">No Data
+                                    Available</div>
+                            </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div  class="p-col-6" >
+            <div class="card">
+                <app-ss-generic-table (emitAttachment)="DisplayAttachment($event)" [menuItems]="genericMenuItems" [data]="CustomerAttachment"
+                [columnsData]="customerColumns" [totalRecords]="TotalRecords"
+                (getLazyData)="GetAllCustomerAttachmentDataWithLazyLoadinFunction($event)" [rowsPerPageOptions]="rowsPerPageOptions"
+                [row]='25'>
+            </app-ss-generic-table>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+
+
+
+
+<p-dialog header="Customer" *ngIf="displayCustomerDialog" [(visible)]="displayCustomerDialog" modal="modal"
+    showEffect="fade" [style]="{ width: '60vw' }">
+    <app-genric-table (emitRowClick)="selectValue($event)" [data]="AllCustomersList" [columnsData]="customerColumns1"
+        [globalFilterFields]="globalFilterFields1" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+    </app-genric-table>
+</p-dialog>

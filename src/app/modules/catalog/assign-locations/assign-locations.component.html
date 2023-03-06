@@ -1,0 +1,270 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<p-toast></p-toast>
+<div class="p-grid">
+    <div class="p-col-5">
+        <div class="card">
+
+            <p-toolbar styleclass="p-mb-4">
+                <div>
+                    <span *ngIf="!btnDisabled">
+                    <button pButton pRipple type="button" icon="fas fa-plus" label="{{'MANAGEDPRODUCT.SAVE'| translate}}" (click)="Save();"
+                        icon="fas fa-plus" class="p-button-raised p-mr-2"></button>
+                    </span>
+                    <div class="p-grid">
+
+                        <div class="p-col-3">
+                            <div for="firstname1">{{'MANAGEDPRODUCT.WAREHOUSE'| translate}}</div>
+                            <p-dropdown id="Warehouse" name="Warehouse" placeholder="Select Warehouse"
+                                [options]="WarehouseDropdown" [(ngModel)]="selectedWarehouseID"
+                                (onChange)="onChangeWareHouse($event)" autoWidth="false" [style]="{'width':'120px'}"
+                                required filter="true">
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                </ng-template>
+
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-3">
+                            <div for="firstname1">{{'MANAGEDPRODUCT.ZONE'| translate}}</div>
+                            <p-dropdown id="Zone" name="Zone" placeholder="Select Zone" [options]="ZoneDropdown"
+                                (onChange)="onChangeZone($event)" [(ngModel)]="selectedZoneID" autoWidth="false"
+                                [style]="{'width':'120px'}" required filter="true">
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                </ng-template>
+
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-3">
+                            <div for="firstname1">{{'MANAGEDPRODUCT.SECTION'| translate}}</div>
+                            <p-dropdown id="Section" name="Section" placeholder="Select Section"
+                                [options]="SectionDropdown" [(ngModel)]="selectedSectionID" autoWidth="false"
+                                (onChange)="onChangeSection($event)" [style]="{'width':'120px'}" required filter="true">
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                </ng-template>
+
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-3">
+                            <div for="firstname1">{{'MANAGEDPRODUCT.LEVEL'| translate}}</div>
+                            <p-dropdown id="Level" (onChange)="onChangeLevel($event)" name="Level" placeholder="Select Level" [options]="LevelDropdown"
+                                [(ngModel)]="selectedLevelID" autoWidth="false" [style]="{'width':'120px'}" required
+                                filter="true">
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                                </ng-template>
+
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-3">
+                            <div for="lastname1">{{'MANAGEDPRODUCT.QUANTITY'| translate}}</div>
+                            <input style="padding: 8px; width: 100%; border: 1px solid #ced4da; border-radius: 5px;"
+                                id="txtQuantity" type="number" [(ngModel)]="txtQuantity">
+                            <!-- <span style="vertical-align:middle; margin-left: .5em">{{txtQuantity}}</span> -->
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </p-toolbar>
+
+        </div>
+        <div class="card">
+            <p-fieldset legend="{{'LocationStock'| translate}}"   [transitionOptions]="'0ms'"
+                toggleable="true">
+            <app-genric-table [data]="NonTrackableProductsLocationQuantityList"               
+                [menuItems]="genericMenuItems" [columnsData]="productsQuantityColumn"
+                [globalFilterFields]="globalFilterFields2" [rowsPerPageOptions]="rowsPerPageOptions" [row]='50'>
+            </app-genric-table>
+        </p-fieldset>
+
+        </div>
+    </div>
+    <div class="p-col-7">
+        <div class="card">
+
+            <!-- <p-toolbar styleclass="p-mb-4"> -->
+
+            <div class="card c-card">
+
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-6">
+                        <label>{{'MANAGEDPRODUCT.PRODUCT'| translate}} </label>
+                        <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"
+                            [(ngModel)]="selectedProduct" [searchFn]="dataFunc"
+                            (ngModelChange)="BindProductLocationDetail(($event))">
+                            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                <span>{{item.label}}</span>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                    <div class="p-field g-col-4">
+                        <span>
+                            <i class="pi pi-search" style="font-size: 1.3rem !important;
+                                    margin: 33px 26px 0px 0px;" (click)="OpenProductDialog();"></i>
+                        </span>
+                    </div>
+                    <div class="p-field g-col-4">
+                        <button pButton pRipple type="button" *ngxPermissionsOnly="reportPermission.SingleProductLifeLine" icon="fa fa-tasks" label="{{'goto life line report'}}" (click)="GoToLifelineReport();"
+                        icon="fa fa-tasks" style="margin: 26px 26px 0px 0px;" class="p-button-raised"></button>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="card c-card">
+
+                <p-fieldset legend="{{'ProductLocation'| translate}}"  collapsed="true" [transitionOptions]="'0ms'"
+                toggleable="true">
+                <div class="p-grid">
+                <!-- <app-genric-table [data]="AllProductLocations" [columnsData]="productLocationColumns"
+                 [rowsPerPageOptions]="rowsPerPageOptions" [row]='5'>
+                </app-genric-table> -->
+                <p-table #dt [value]="AllProductLocations" 
+                [rows]="5"
+                [totalRecords]="AllProductLocations.length"              
+                [showCurrentPageReport]="true" dataKey="id" 
+                [paginator]="false" [rowHover]="true" styleClass="p-datatable-responsive-demo" [filterDelay]="0">
+
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th >{{'Product' | translate}} 
+                        </th>
+                        <th > {{'SSGENERIC.QUANTITY' | translate}} 
+                        </th>
+                        <th > {{'Location' | translate}} 
+                        </th>
+
+
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-product>
+                    <tr >
+                        <td >{{product.ProductVariant}}</td>
+                        <td>{{product.Quantity}}</td>
+                        <td><div *ngFor="let loc of product.Location.split(';')">
+                            {{loc || ''}}
+                          </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+            </p-table> 
+                </div>
+            </p-fieldset>
+            </div>
+            <!-- </p-toolbar> -->
+
+            <!-- <p-table #dt [value]="AllTrackableProductsLocationList" *ngIf="IsTrackable" [rows]="rows"
+                [totalRecords]="totalRecords" [(first)]="first"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [loading]="loading"
+                [showCurrentPageReport]="true" dataKey="id" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"
+                [paginator]="true" [rowHover]="true" styleClass="p-datatable-responsive-demo" [filterDelay]="0">
+
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 4.5rem;"> </th>
+                        <th pSortableColumn="TrackableForShoppingID"> {{'ID' | translate}} <p-sortIcon
+                                field="TrackableForShoppingID"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="productName">{{'Product' | translate}} <p-sortIcon field="productName">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="TrackableCode"> {{'TrackableCode' | translate}} <p-sortIcon
+                                field="TrackableCode"></p-sortIcon>
+                        </th>
+
+
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-Trackable>
+                    <tr [pContextMenuRow]="Trackable">
+                        <td>
+                            <p-checkbox [(ngModel)]="Trackable.isProductSelected" inputId="binary"
+                                (onChange)="TrackableCheckboxChange(Trackable,$event)"></p-checkbox>
+                        </td>
+                        <td>{{Trackable.TrackableForShoppingID}}</td>
+                        <td>{{Trackable.productName}}</td>
+                        <td>{{Trackable.TrackableCode}}</td>
+
+                    </tr>
+                </ng-template>
+
+            </p-table> -->
+            <!-- *ngIf="IsTrackable" -->
+            <app-genric-table *ngIf="IsTrackable" [data]="AllTrackableProductsLocationList"
+                (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+                (emitCheckbox)="TrackableCheckboxChange($event)" [columnsData]="trackableColumns"
+                [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]='50'>
+            </app-genric-table>
+            <!-- <p-table #dt [value]="AllNonTrackableProductsLocationList" *ngIf="!IsTrackable" [rows]="rows"
+                [totalRecords]="totalRecords" [(first)]="first"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [loading]="loading"
+                [showCurrentPageReport]="true" dataKey="id" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"
+                [paginator]="true" [rowHover]="true" styleClass="p-datatable-responsive-demo" [filterDelay]="0">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th pSortableColumn="ID">{{'ID' | translate}}<p-sortIcon field="ID"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="productName"> {{'productName' | translate}} <p-sortIcon
+                                field="productName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="Quantity"> {{'Quantity' | translate}} <p-sortIcon field="Quantity">
+                            </p-sortIcon>
+                        </th>
+
+
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-NonTrackable>
+                    <tr [pContextMenuRow]="NonTrackable">
+
+                        <td></td>
+                        <td>{{NonTrackable.ID}}</td>
+                        <td>{{NonTrackable.productName}} </td>
+                        <td>{{NonTrackable.TotalRemainingStock}}</td>
+
+                    </tr>
+                </ng-template>
+
+            </p-table> -->
+            <!--  -->
+            <app-genric-table *ngIf="!IsTrackable" [data]="AllNonTrackableProductsLocationList"
+                (emitRowClick)="NonTrackableCheckboxChange($event)" (emitMenuAction)="emitAction($event)"
+                [menuItems]="genericMenuItems" [columnsData]="nonTrackableColumns"
+                [globalFilterFields]="globalFilterFields1" [rowsPerPageOptions]="rowsPerPageOptions" [row]='50'>
+
+            </app-genric-table>
+
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Products" [(visible)]="IsOpenProductDialog" modal="modal" showEffect="fade"
+    [style]="{ width: '70vw' }">
+    <!-- [style]="{width: '50vw',height:'460px'}" -->
+    <!-- <app-product-dialog (onSelectValue)='selectValue($event)'></app-product-dialog> -->
+    <app-genric-table (emitRowClick)="selectValue($event)" [menuItems]="[]" [data]="ProductData"
+        [columnsData]="productsColumn">
+    </app-genric-table>
+
+</p-dialog>

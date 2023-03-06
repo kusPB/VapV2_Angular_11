@@ -1,0 +1,49 @@
+<p-toast></p-toast>
+<app-sale-invoice-report *ngIf="printingData1" [SaleDetails]="printingData1"></app-sale-invoice-report>
+<!-- PACKING LIST -->
+<app-sale-preview-report *ngIf="SaleDetails" [TotalQuantity]="TotalQuantity" [SaleDetails]="SaleDetails"></app-sale-preview-report>
+<!-- PACKING SLIP -->
+<app-vp-sale-packing-report *ngIf="printingData" [TotalQuantity]="TotalQuantity" [SaleDetails]="printingData"></app-vp-sale-packing-report>
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-2 toolbar-padding" >
+            <ng-template pTemplate="left">
+                <!-- <button pButton pRipple label="Create" (click)="AddSaleOrder();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button> -->
+                <button pButton pRipple label="{{'SALEINDEX.CREATE'| translate}}" *ngxPermissionsOnly="salesPermission.AddSale"
+                    (click)="AddSaleOrderNew();" icon="fas fa-plus" class="p-button-raised  p-mr-2"></button>
+                <button pButton pRipple label="{{'SALEINDEX.OPENNOTPRINTEDINVOICES'| translate}}"
+                    (click)="OpenAllNotPrinted();" icon="pi pi-file-o" class="p-button-warning  p-mr-2"></button>
+            </ng-template>  
+            <ng-template pTemplate="right">
+                <div class="p-field">
+                    <label for="name" class="p-sr-only">"{{'GENRIC.SEARCHBYDATE'| translate}}" </label>
+                    <p-dropdown placeholder="Select Search By Date" [options]="SearchByDateDropdown"
+                        (onChange)="onChangeDate($event)" [(ngModel)]="selectedSearchByDateID" autoWidth="false"
+                        [style]="{'width':'200px'}" required filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                </div>
+            </ng-template>
+        </p-toolbar>
+
+        <!-- <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        (emitHref)="Details($event)"
+        [data]="AllSalelist" [columnsData]="columns" [globalFilterFields]="globalFilterFields"
+            [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table> -->
+        <app-ss-generic-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" [data]="AllSalelist"
+            [globalFilterFields]="globalFilterFields" [rowGroup]="rowGroup" (emitHref)="Details($event)" (emitPrintSalePackingSlip)="PrintSalePackingSlip($event)" (emitPrintSalePackingList)="PrintSalePackingList($event)"[columnsData]="columns"
+            [totalRecords]="totalRecords" (getLazyData)="GetAllSaleDataWithLazyLoadinFunction($event)"
+             [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-ss-generic-table>
+
+    </div>
+</div>
+<p-dialog header="Select Dates" [(visible)]="isCustomDate" modal="modal"  showEffect="fade"
+    [style]="{width: '50vw',height:'700px'}">
+    <app-datepickerpopup (onSelectValue)='selectValue($event)'></app-datepickerpopup>
+</p-dialog>

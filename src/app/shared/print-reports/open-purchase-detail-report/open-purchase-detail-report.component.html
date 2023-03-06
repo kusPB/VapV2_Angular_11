@@ -1,0 +1,284 @@
+<button style="margin-left: 2px" *ngxPermissionsOnly="PurchasePermission.PurchaseInvoicePrint" pButton pRipple type="button" (click)="Print()" 
+    class="p-button p-button-success" icon="pi pi-print" title="Print" label="Print"></button>
+<div id="printA4" [hidden]="true" style="width: 95%;margin:0 auto;"  *ngIf="purchaseDetail">
+  <div style="width: 93%; margin: auto;">
+    <div style="width: 100%;display: table;">
+      <!-- <div style="width: 100%;">
+        <div style="float: left; margin: 10px 36px;">
+          <img src="https://emcparts.shop/image/cache/webp/catalog/logos/emc-logo-new-123x60-123x60.png" alt="*"
+            style="width: 120px;display: block;margin: auto;">
+        </div>
+        <div style="float: right;;">
+          <h3 style="font-family: sans-serif !important;margin: 28px 30px 0px 0px; font-size: 30px;">PURCHASE ORDER REPORT</h3>
+        </div>
+      </div>
+      <br>
+      <hr style="border-top: solid #d3d4d5; border-width: 3px 0 0 0; margin: 1rem 0;margin: 65px 15px 0 15px"> -->
+      <!-- <div style="float: right;;"> -->
+        <!-- <h3 style="font-family: sans-serif !important;margin: 28px 15px 0px 0px; font-size: 30px;">PURCHASE INVOICE</h3> -->
+      <!-- </div> -->
+      <div style="width: 100%;display: table;">
+        <div style="width: 63%;float: left;">
+
+          <div style="padding:10px 5px;display: table;">
+            <h4 style="font-family: sans-serif !important;color: #8d9092; margin: 5px 30px 0px 0px; font-size: 30px;">
+              PRE ORDER INVOICE</h4>
+            <!-- <div style="width: 100%;">
+              <p style="font-family: sans-serif !important;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.companyName}}
+                </span>
+              </p>
+            </div>
+            <br>
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.companyAddress}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  VAT NO:
+                  {{environmentData.vatNo}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  TELEPHONE:
+                  {{environmentData.telephone}}
+                </span>
+
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.email}}
+                </span>
+
+              </p>
+            </div>
+            <br>
+
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  {{environmentData.website}}
+                </span>
+
+              </p>
+            </div> -->
+          </div>
+
+        </div>
+
+        <div style="width: 35%;float: left;">
+          <div style="padding:10px 5px;display: table; width: 100%;">
+            <!-- <div style="width: 100%;">
+              <p style="font-family: sans-serif !important;font-size: 12px;margin:0;">
+                <span style="float: left;">
+                  <b>RECEIPT DATE::</b>
+                </span>
+                <span style="float: right;">
+                  {{purchaseDetail.PurchaseDate | date}}
+                </span>
+              </p>
+            </div>
+            <br> -->
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important;font-size: 11px;margin:0;">
+                <span style="float: left;">
+                  <b>PURCHASE DATE::</b>
+                </span>
+                <span style="float: right;">
+                  {{purchaseDetail.DueDate | date}}
+                </span>
+              </p>
+            </div>
+            <br>
+            <div style="width: 100%;">
+              <p style="font-family: sans-serif !important;font-size: 11px;margin:0;">
+                <span style="float: left;">
+                  <b>PURCHASE NUMBER:</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{purchaseDetail.SuppierInvoiceNo}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+            <!-- <div style="width: 100%;">
+              <p style="font-family: sans-serif !important;font-size: 11px;margin:0;">
+                <span style="float: left;">
+                  <b>Outlet:</b>
+                </span>
+                <span style="margin-left: 18px; float: right;">
+                  {{purchaseDetail.Outlet}}
+                </span>
+              </p>
+            </div>
+            <br>
+
+ -->
+           
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table style="width: 100%;margin-top: 10px; " cellspacing="0">
+      <tr style="border-top:none;page-break-inside:avoid;">
+        <th style="background-color: #E7EFEF;font-family: sans-serif !important; padding: 15px !important; border: 1px solid #d3d4d5; ">
+          Supplier address</th>
+      </tr>
+      <tr>
+        <td
+          style="font-family: sans-serif !important; text-align: left; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; font-size: 12px;">
+          {{purchaseDetail.Supplier}} <br>
+          {{purchaseDetail.supplierDetail?.PhoneNo || ''}}<br>
+          {{purchaseDetail.supplierDetail?.Address || ''}}<br>
+          {{purchaseDetail.supplierDetail?.customerEmail || ''}}<br>
+        </td>
+      </tr>
+    </table>
+
+    <table style="width: 100%;margin-top: 10px; " cellspacing="0">
+      <thead>
+        <tr style="border-top:none;page-break-inside:avoid;">
+          <th
+            style="background-color: #E7EFEF;font-family: sans-serif !important; padding: 15px !important; border: 1px solid #d3d4d5; text-align: left; padding-left: 5px !important;">
+            Product</th>
+          <th
+            style="background-color: #E7EFEF;font-family: sans-serif !important; padding: 10px !important; border: 1px solid #d3d4d5; text-align: left; border-left: none;  padding-left: 5px !important;">
+            Model No
+          </th>
+          <th
+            style="background-color: #E7EFEF;font-family: sans-serif !important; padding: 10px !important; border: 1px solid #d3d4d5; text-align: left; border-left: none;  padding-left: 5px !important;">
+            Price
+          </th>
+          <th
+          style="background-color: #E7EFEF;font-family: sans-serif !important; padding: 3px !important; border: 1px solid #d3d4d5; text-align: left; border-left: none;  padding-left: 5px !important;">
+          Qty
+        </th>
+        <th
+          style="background-color: #E7EFEF;font-family: sans-serif !important; padding: 3px !important; border: 1px solid #d3d4d5; text-align: left; border-left: none;  padding-left: 5px !important;">
+          Recv.Qty
+        </th>
+          <!-- <th
+            style="background-color: #E7EFEF;font-family: sans-serif !important; padding: 15px !important; border: 1px solid #d3d4d5; border-left: none;">
+            Discount%
+          </th>
+          <th
+            style="background-color: #E7EFEF;font-family: sans-serif !important; padding: 15px !important; border: 1px solid #d3d4d5; border-left:none;">
+            Discount
+          </th> -->
+          <th
+            style="background-color: #E7EFEF;font-family: sans-serif !important; padding: 10px !important; border: 1px solid #d3d4d5;  text-align: left; border-left:none;  padding-left: 5px !important;">
+            Total
+          </th>
+        </tr>
+
+      </thead>
+      <!-- ngFor="let item of printdata.SaleDetails; let i = index" -->
+      <tr *ngFor="let product of purchaseDetail.OpenPurchasesDetails">
+
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left; padding: 2px !important; border: 1px solid #d3d4d5;border-top: none; ">
+          {{product.Product}}
+        </td>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left; padding: 2px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none;">
+          {{product.BLabel}}
+        </td>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left; padding: 2px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none;">
+          <span>€ </span> {{product.ProductUnitPrice | number:'1.2-2' }}
+        </td>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left; padding: 2px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none; ">
+          {{product.Quantity}}
+        </td>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left; padding: 2px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none; ">
+          {{product.ReceivedQuantity}}
+        </td>
+        <!-- <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left; padding: 5px !important; border: 1px solid #d3d4d5;border-top: none; border-left: none;">
+          {{product.discPerc}}
+        </td>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left; padding: 5px !important; border-left:none;border: 1px solid #d3d4d5;border-top: none; border-left: none; ">
+          {{product.dTotalDiscount}}
+        </td> -->
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left; padding: 2px !important; border-left:none;border: 1px solid #d3d4d5;border-top: none; border-left: none; ">
+          <span>€ </span> {{product.dTotalAmount | number:'1.2-2' }}
+        </td>
+
+      <tr>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: right; padding-right: 10px;border: 1px solid #d3d4d5; padding: 2px;  border-top: none;"
+          colspan="3"> <b>Subtotal</b></td>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left;border-left:none;border: 1px solid #d3d4d5; padding: 2px;   border-left: none; border-top: none;"
+          colspan="1">
+          <span>€ </span> {{purchaseDetail.subTotal | number:'1.2-2' }}
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: right;padding-right: 10px;border: 1px solid #d3d4d5; padding: 2px;  border-top: none;"
+          colspan="3"> <b>Total Discount</b></td>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left;border-left:none;border: 1px solid #d3d4d5; padding: 2px;   border-left: none;border-top: none;"
+          colspan="1">
+          <span>€ </span> {{purchaseDetail.totalDiscount | number:'1.2-2' }}
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: right;padding-right: 10px;border: 1px solid #d3d4d5; padding: 2px; border-top: none;"
+          colspan="3"><b>Grand Total</b></td>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left;border-left:none;border: 1px solid #d3d4d5; padding: 2px; border-top: none;border-left:none;"
+          colspan="1">
+          <span>€ </span> {{purchaseDetail.grandTotal | number:'1.2-2' }}
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: right; padding-right: 10px;border: 1px solid #d3d4d5; padding: 2px; border-top: none;"
+          colspan="3"><b>Paid Amount</b></td>
+        <td
+          style="font-size: 13px;font-family: sans-serif !important; text-align: left;border-left:none;border: 1px solid #d3d4d5; padding: 2px; border-top: none;border-left:none;"
+          colspan="1">
+          <span>€ </span>  {{purchaseDetail.dTotalPaidValue | number:'1.2-2' }}
+        </td>
+      </tr>
+    </table>
+    <br>
+    <div style="width: 100%;">
+      <p style="font-family: sans-serif !important;font-size: 11px;margin:0;">
+        <span style="float: left;">
+          <b>Remarks:</b>
+        </span>
+        <span style="margin-left: 18px;">
+          {{purchaseDetail.sRemarks}}
+          <!-- sdfsdfsdfsdf -->
+        </span>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+<p-toast></p-toast>
+<p-dialog header="Product Image" [(visible)]="displayImage" modal="modal" showEffect="fade">
+    <img src="{{imgSrc}}" height="500" width="500">
+</p-dialog>
+<p-contextMenu #cm [model]="items"></p-contextMenu>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <!-- <p-toolbar styleClass="p-mb-4"> -->
+            <div class="card c-card">
+
+                <!-- <ng-template pTemplate="left"> -->
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-5">
+                        <label for="firstname1">{{'REPORTS.PRODUCTMODELS'| translate}}</label>                   
+                        <p-dropdown name="modelNumber" id=ProductName [options]="ProudctModelApiList"
+                        (onChange)="SearchByModel($event)" [(ngModel)]="selectedProductModelID" autoWidth="false"
+                        [style]="{'width':'30%'}" required filter="true" placeholder="Select Model Number">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- </ng-template> -->
+
+        <!-- </p-toolbar> -->
+        
+        <app-ss-generic-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" [data]="AllStockList"
+        [columnsData]="columns" [totalRecords]="totalRecords"
+        (getLazyData)="GetAllStockDataWithLazyLoadinFunction($event)" [rowsPerPageOptions]="rowsPerPageOptions"
+        [row]='25'>
+    </app-ss-generic-table>
+
+
+    </div>
+</div>
+<p-dialog header="Add to Wishlist" [(visible)]="isAddToWishlist" (onHide)="close()" modal="modal" showEffect="fade"
+    [style]="{width: '50vw'}">
+    <app-addwishlist-dialog #wishList [ProductVariantID]='selectedVariantIDforWishlist'
+        [ProductName]='selectedProductNameforWishlist' (ReturnCall)='CloseDialog($event)'></app-addwishlist-dialog>
+</p-dialog>

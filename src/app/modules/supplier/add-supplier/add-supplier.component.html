@@ -1,0 +1,482 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+<p-dialog header="Netherland Address API" [(visible)]="AddressNetherlandAPIDisplay" modal="modal" showEffect="fade"
+  [style]="{ width: '65vw' }">
+  <div class="p-grid">
+    <div class="p-field p-col-12 p-md-3">
+      <div class="p-field p-col-12">
+        <label for="postcode1"> Postal Code </label>
+        <span class="p-input-icon-left">
+          <i class="fas fa-address-book"></i>
+          <input type="text" name="postcode1" id="postcode1" [(ngModel)]="netherlandAPIPostalCode" required pInputText
+            placeholder="Enter PostalCode" />
+        </span>
+      </div>
+    </div>
+    <div class="p-field p-col-12 p-md-3">
+      <div class="p-field p-col-12">
+        <label for="houseno"> House No# </label>
+        <span class="p-input-icon-left">
+          <i class="fas fa-address-book"></i>
+          <input type="number" name="houseno" id="houseno" [(ngModel)]="netherlandAPIHouseNo"
+            (blur)="getAddressByPostalCode()" required pInputText placeholder="Enter HouseNo" />
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <label> Searched Addresses </label>
+    <p-table #dl [value]="SearchedAddressList" [rows]="5" [paginator]="true" dataKey="Id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+      <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between"></div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th>City</th>
+          <th>Province</th>
+          <th>ProvinceSC</th>
+          <th>Street</th>
+          <th>ZipCode</th>
+          <th>HouseNr</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-SearchAddress>
+        <tr>
+          <td>{{ SearchAddress.City !== null ? SearchAddress.City : "" }}</td>
+          <td>
+            {{ SearchAddress.Province !== null ? SearchAddress.Province : "" }}
+          </td>
+          <td>
+            {{
+            SearchAddress.ProvinceShortCode !== null
+            ? SearchAddress.ProvinceShortCode
+            : ""
+            }}
+          </td>
+          <td>
+            {{
+            SearchAddress.StreetName !== null ? SearchAddress.StreetName : ""
+            }}
+          </td>
+          <td>
+            {{ SearchAddress.ZipCode !== null ? SearchAddress.ZipCode : "" }}
+          </td>
+          <td>
+            {{
+            SearchAddress.HouseNumber !== null
+            ? SearchAddress.HouseNumber
+            : ""
+            }}
+          </td>
+          <td>
+            <button type="button" (click)="addToSecleted(SearchAddress)" pButton icon="fas fa-plus"
+              label="Add"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="card">
+    <label> Selected Addresses </label>
+    <p-table #dl1 [value]="SelectedAddressList" [rows]="5" [paginator]="true" dataKey="Id"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+      <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between"></div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th>City</th>
+          <th>Province</th>
+          <th>ProvinceSC</th>
+          <th>Street</th>
+          <th>ZipCode</th>
+          <th>HouseNr</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-SelectedAddress>
+        <tr>
+          <td>
+            {{ SelectedAddress.City !== null ? SelectedAddress.City : "" }}
+          </td>
+          <td>
+            {{
+            SelectedAddress.Province !== null ? SelectedAddress.Province : ""
+            }}
+          </td>
+          <td>
+            {{
+            SelectedAddress.ProvinceShortCode !== null
+            ? SelectedAddress.ProvinceShortCode
+            : ""
+            }}
+          </td>
+          <td>
+            {{
+            SelectedAddress.StreetName !== null
+            ? SelectedAddress.StreetName
+            : ""
+            }}
+          </td>
+          <td>
+            {{
+            SelectedAddress.ZipCode !== null ? SelectedAddress.ZipCode : ""
+            }}
+          </td>
+          <td>
+            {{
+            SelectedAddress.HouseNumber !== null
+            ? SelectedAddress.HouseNumber
+            : ""
+            }}
+          </td>
+          <td>
+            <button type="button" (click)="removeFromSecleted(SelectedAddress)" pButton icon="fas fa-remove-format"
+              label="Remove"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</p-dialog>
+<p-dialog header="Manual Address" [(visible)]="AddressManualDisplay" modal="modal" showEffect="fade"
+  [style]="{ width: '65vw' }">
+  <div class="p-grid">
+    <!-- <div class="p-field p-col-12 p-md-3 " > -->
+    <div class="p-col-12 p-md-3 p-lg-4">
+      <div class="p-col-12">
+        <label for="Country">
+          Country <span class="RequiredEror">*</span></label>
+        <p-dropdown id="Country" name="Country" placeholder="Select Country" [options]="CountryDropdown"
+          [(ngModel)]="selectedCountryID" autoWidth="false" [style]="{ width: '100%' }" required filter="true">
+          <ng-template let-item pTemplate="selectedItem">
+            <span style="vertical-align: middle; margin-left: 0.5em">{{
+              item.label
+              }}</span>
+          </ng-template>
+        </p-dropdown>
+      </div>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-4">
+      <div class="p-col-12">
+        <div for="state">State</div>
+        <div class="p-input-icon-left">
+          <i class="fas fa-address-book"></i>
+          <input type="text" name="state" id="state" [(ngModel)]="manualState" required pInputText
+            placeholder="Enter State Name" />
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-4">
+      <div class="p-col-12">
+        <div for="city">City</div>
+        <div class="p-input-icon-left">
+          <i class="fas fa-address-book"></i>
+          <input type="text" name="city" id="city" [(ngModel)]="manualCity" required pInputText
+            placeholder="Enter City Name" />
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-4">
+      <div class="p-col-12">
+        <div for="postalcode">Postal Code</div>
+        <div class="p-input-icon-left">
+          <i class="fas fa-address-book"></i>
+          <input type="text" name="postalcode" id="postalcode" [(ngModel)]="manualPostalCode" required pInputText
+            placeholder="Enter Postal Code" />
+        </div>
+      </div>
+    </div>
+    <div class="p-col-12 p-md-3 p-lg-4">
+      <div class="p-col-12">
+        <div for="address">Street Address</div>
+        <div class="p-input-icon-left">
+          <i class="fas fa-address-book"></i>
+          <input type="text" name="address" id="address" [(ngModel)]="manualStreetAddress" required pInputText
+            placeholder="Enter Address" />
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+<p-dialog header="Multiple Address" [(visible)]="multipleAddressDisplay" modal="modal" showEffect="fade"
+  [style]="{ width: '40vw'}">
+ 
+  <div class="p-grid">
+    <!-- <div class="p-col-12"> -->
+      <div class="p-col-4" >
+        <div for="Country">Country <span class="RequiredEror">*</span></div>
+        <p-dropdown id="Country" name="Country" placeholder="Select Country" [options]="CountryDropdownNew"
+          [(ngModel)]="selectedCountryIDNew" autoWidth="false" [style]="{ width: '78%' }" filter="true">
+          <ng-template let-item pTemplate="selectedItem">
+            <span style="vertical-align: middle; margin-left: 0.5em">{{
+              item.label
+              }}</span>
+          </ng-template>
+        </p-dropdown>
+      </div>
+    <!-- </div> -->
+    <!-- <div class="p-col-12"> -->
+      <div class="p-col-4">
+        <div for="state">PostCode</div>
+          <p-autoComplete [(ngModel)]="selectedPostCode" [suggestions]="predicatedPostCodes" (completeMethod)="filterPostCodes($event)" (onSelect)="onPostalCodeSelect($event)"
+          field="name" [minLength]="3"   ></p-autoComplete>
+      </div>
+    <!-- </div> -->
+    <!-- <div class="p-col-12"> -->
+      <div class="p-col-4">
+        <div for="city">City</div>
+          <p-autoComplete [(ngModel)]="selectedCity" [suggestions]="predicatedCities" (completeMethod)="filterCities($event)"
+          field="name" [minLength]="3"   ></p-autoComplete>
+      </div>
+    <!-- </div> -->
+    <!-- <div class="p-col-12"> -->
+      <div class="p-col-4" >
+        <div for="postalcode">Street Name</div> 
+          <p-autoComplete [(ngModel)]="selectedStreet" [suggestions]="predicatedStreet" (completeMethod)="filterStreet($event)"
+          field="name" [minLength]="3"   ></p-autoComplete>
+      </div>
+      <div class="p-col-4">
+        <div for="address">House No</div>
+          <input type="text" name="address" id="address" [(ngModel)]="selectedHouse" pInputText
+            placeholder="Enter house No" />
+      </div>
+      <div class="p-field p-col-4" style="margin-top: 1.1rem;">
+          <button pButton (click)="AddAddressClick()" label="Add" icon="fas fa-plus"
+            class="p-button-raised"></button>
+      </div>
+    <!-- </div> -->
+    <!-- <div class="p-col-12"> -->
+      <!-- <div class="p-col-12" style="margin-left: 5px">
+        <div for="address">Street Address</div>
+        <div class="p-input-icon-left">
+          <i class="fas fa-address-book"></i>
+          <input type="text" name="address" id="address" [(ngModel)]="manualStreetAddress" required pInputText
+            placeholder="Enter Address"  style="width: 20vw" />
+        </div>
+      </div> -->
+    <!-- </div> -->
+    <div class="card">
+      <label> Selected Addresses </label>
+      <p-table #dl [value]="SelectedAddressListNew" [rows]="5" [paginator]="true" dataKey="Id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+          <div class="p-d-flex p-ai-center p-jc-between"></div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Country</th>
+            <th>PostCode</th>
+            <th>City</th>
+            <th>Street</th>
+            <th>HouseNr</th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-SelectedAddress>
+          <tr>
+            <td>
+              {{
+              SelectedAddress.Province !== null ? SelectedAddress.Province : ""
+              }}
+            </td>
+            <td>
+              {{
+              SelectedAddress.ZipCode !== null ? SelectedAddress.ZipCode : ""
+              }}
+            </td>
+            <td>
+              {{ SelectedAddress.City !== null ? SelectedAddress.City : "" }}
+            </td>
+            
+            <td>
+              {{
+              SelectedAddress.StreetName !== null
+              ? SelectedAddress.StreetName
+              : ""
+              }}
+            </td>          
+            <td>
+              {{
+              SelectedAddress.HouseNumber !== null ? SelectedAddress.HouseNumber : ""
+              }}
+            </td>
+            <td>
+              <button pButton pRipple type="button" icon="pi pi-times"
+                            class="p-button-rounded p-button-danger p-mr-2 p-mb-2"
+                            (click)="removeFromSecletedMultiple(SelectedAddress);">
+              </button>            
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</p-dialog>
+<div class="">
+  <div class="p-col-12 p-p-0 p-m-0 p-shadow-2">
+    <div class="card">
+      <div class="card">
+        <div class="p-grid">
+          <div class="p-col-6">
+              <h5>Profile Image</h5>
+              <p-fileUpload name="demo[]" (onSelect)="onUpload($event)" #form (onClear)="onClear(form)"
+                  accept="image/*" maxFileSize="1000000" customUpload="true">
+                  <ng-template pTemplate="content">
+                      <ul *ngIf="uploadedFiles.length">
+                          <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                      </ul>
+                  </ng-template>
+              </p-fileUpload>
+          </div>
+          <div class="p-col-6">
+              <h5></h5>
+              <p *ngIf="supplier.Image!=null && supplier.Image!=''">
+                  <img [src]="imageBasePath + supplier.Image" alt="Image Not Found" Height="140" width="140"
+                      class="p-shadow-2" />
+              </p>
+          </div>
+      </div>
+      </div>
+      <div class="p-fluid p-formgrid p-grid p-pl-2 p-pr-2 p-pt-3 p-pb-3">
+        <div class="p-field p-col-12 p-md-6">
+          <p-fieldset legend="Primary Information" [transitionOptions]="'0ms'" toggleable="true">
+            <div class="p-grid">
+              <div class="p-field p-col-12 p-md-6">
+                <label for="firstname">
+                  First Name <span class="RequiredEror">*</span>
+                </label>
+                <span class="p-input-icon-left">
+                  <i class="fas fa-user"></i>
+                  <input type="text" name="firstname" id="firstname" [(ngModel)]="supplier.FirstName" required
+                    pInputText placeholder="Enter First Name" />
+                </span>
+              </div>
+              <div class="p-field p-col-12 p-md-6">
+                <label for="lastname">
+                  Last Name <span class="RequiredEror">*</span>
+                </label>
+                <span class="p-input-icon-left">
+                  <i class="fas fa-user"></i>
+                  <input type="text" name="lastname" id="lastname" [(ngModel)]="supplier.LastName" required pInputText
+                    placeholder="Enter Last Name" />
+                </span>
+              </div>
+              <div class="p-field p-col-12 p-md-6">
+                <label for="emailaddress">
+                  Email Address <span class="RequiredEror">*</span>
+                </label>
+                <span class="p-input-icon-left">
+                  <i class="fas fa-address-book"></i>
+                  <input type="email" name="emailaddress" id="address" [(ngModel)]="supplier.EmailAddress" required
+                    pInputText placeholder="Enter Email Address" />
+                </span>
+              </div>
+              <div class="p-field p-col-12 p-md-6">
+                <label for="phoneno">
+                  Phone No. <span class="RequiredEror">*</span>
+                </label>
+                <span class="p-input-icon-left">
+                  <i class="fas fa-phone"></i>
+                  <input type="text" name="phoneno" id="phoneno" [(ngModel)]="supplier.PhoneNo" required pInputText
+                    placeholder="Enter PhoneNo." />
+                </span>
+              </div>
+              <div class="p-field p-col-12 p-md-6">
+                <label for="username">
+                  Company <span class="RequiredEror">*</span>
+                </label>
+                <span class="p-input-icon-left">
+                  <i class="fas fa-building"></i>
+                  <input type="text" name="companyname" id="companyname" [(ngModel)]="supplier.sCompanyName" required
+                    pInputText placeholder="Enter Company Name" />
+                </span>
+              </div>
+              <div class="p-field p-col-12 p-md-6">
+                <label for="website">
+                  Website <span class="RequiredEror">*</span>
+                </label>
+                <span class="p-input-icon-left">
+                  <i class="fas fa-address-book"></i>
+                  <input type="text" name="website" id="website" [(ngModel)]="supplier.Website" required pInputText
+                    placeholder="Enter Website" />
+                </span>
+              </div>
+            </div>
+          </p-fieldset>
+        </div>
+        <div class="p-field p-col-12 p-md-6">
+          <div class="p-grid">
+            <div class="p-col-12 p-mb-4">
+              <p-fieldset legend="Physical Address" [transitionOptions]="'0ms'" toggleable="true">
+                <div class="p-grid">
+                  <!-- <div class="p-field p-col-12 p-md-6 p-mt-5">
+                    <span class="p-buttonset RequiredEror">
+                      <button pButton pRipple (click)="NetherlandAPIClick()" label="Netherland API" icon="fas fa-plus"
+                        class="p-button-raised p p-mr-2"></button>
+                      *</span>
+                  </div> -->
+                  <div class="p-field p-col-12 p-md-6 p-mt-5">
+                    <span class="p-buttonset RequiredEror">
+                      <button pButton pRipple (click)="MultipleAPIClick()" label="Multiple Addresses" icon="fas fa-plus"
+                        class="p-button-raised p p-mr-2"></button>
+                      *</span>
+                  </div>
+                  <div class="p-field p-col-12 p-md-6 p-mt-5">
+                    <span class="p-buttonset RequiredEror">
+                      <button pButton pRipple (click)="ManualInputClick()" label="Manual Input" icon="fas fa-plus"
+                        class="p-button-raised p p-mr-2"></button>
+                      *</span>
+                  </div>
+                </div>
+              </p-fieldset>
+            </div>
+            <div class="p-col-12">
+              <p-fieldset legend="Remarks" [transitionOptions]="'0ms'" toggleable="true">
+                <div class="p-grid">                 
+                <div  *ngIf="IsAddForm" class="p-field p-col-3">
+                  <div class="p-field-checkbox p-mt-5">
+                    <p-checkbox name="IsCustomer" id="IsCustomer" [binary]="true" [(ngModel)]="supplier.IsCustomer">
+                    </p-checkbox>
+                    <label for="ny">Customer Also</label>
+                  </div>
+                </div>
+                <div class="p-field p-col-9">
+                  <label for="remarks"> Remarks </label>
+                  <span class="p-input-icon-left">
+                    <i class="pi pi-comments"></i>
+                    <input type="text" name="remarks" id="remarks" [(ngModel)]="supplier.sRemarks" required pInputText
+                      placeholder="Enter Remarks" />
+                  </span>
+                </div>   
+                </div>
+
+              </p-fieldset>
+            </div>
+          </div>
+
+        </div>
+        <!-- <div class="p-field p-col-12 p-md-6">
+
+        </div> -->
+      </div>
+      <p-toolbar>
+        <div class="p-toolbar-group-left"></div>
+
+        <div class="p-toolbar-group-right">
+          <span class="p-buttonset">
+            <button pButton pRipple label="Cancel" icon="pi pi-times" [routerLink]="['/supplier/supplier-index']"
+              class="p-button-raised p-button-secondary p-mr-2"></button>
+          </span>
+          <span class="p-buttonset">
+            <button pButton pRipple label="{{ SupplierButtonLabel }}" icon="{{ buttonIcon }}"
+              (click)="SaveUpdateSupplierDetails()" class="p-button-raised p p-mr-2"></button>
+          </span>
+        </div>
+      </p-toolbar>
+    </div>
+  </div>
+</div>

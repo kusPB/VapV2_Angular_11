@@ -1,0 +1,223 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<p-toast></p-toast>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <!-- <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button pButton pRipple label="Save" (click)="SaveTrackable();" icon="fas fa-plus"
+                    class="p-button-raised  p-mr-2"></button>
+
+
+
+            </ng-template>
+
+        </p-toolbar> -->
+        <!-- <p-toolbar styleclass="p-mb-4"> -->
+
+
+
+        <!-- </p-toolbar> -->
+
+        <!-- <p-toolbar styleclass="p-mb-4"> -->
+
+        <div class="card c-card">
+            <div class="p-fluid p-formgrid p-grid">
+                   <div class="p-field p-col-5">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-11">
+                            <label>{{'MANAGEDPRODUCT.PRODUCT'| translate}} </label>
+                            <ng-select [items]="filteredProduct" [virtualScroll]="true" bindLabel="label"
+                                [(ngModel)]="selectedProduct" [searchFn]="dataFunc"
+                                (ngModelChange)="BindProductStockDetail(($event))">
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.label}}</span>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                        <div class="p-col-1">
+                            <i class="pi pi-search search-pi" (click)="OpenProductDialog();"></i>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="p-field p-col-1">
+                    <label for="lastname1">{{'MANAGEDPRODUCT.STOCK'| translate}}:</label>
+                    <p>{{headquaterStock || 0}}</p>
+                </div>
+                <div class="p-field p-col-2">
+                    <label for="lastname1">{{'MANAGEDPRODUCT.CHECKINTO'| translate}}:</label>
+                    <p-dropdown dataKey="value" placeholder="Select Outlet" [options]="OutletDropdown"
+                        [(ngModel)]="selectedOutletID" autoWidth="false" [style]="{'width':'200px'}" required
+                        filter="true">
+                        <ng-template let-item pTemplate="selectedItem">
+                            <span style="vertical-align:middle; margin-left: .5em">{{item.label}}</span>
+                        </ng-template>
+
+                    </p-dropdown>
+
+                </div>
+                <div class="p-field p-col-2">
+                    <label for="firstname5">{{'MANAGEDPRODUCT.ASSIGNEDQUANTITY'| translate}}</label>
+                    <input id="firstname5" type="text" pInputText [(ngModel)]="quantity" disabled="disabled"
+                        style="width: 91%;">
+                </div>
+                <div class="p-field p-col-1">
+                    <label for="lastname1">{{'MANAGEDPRODUCT.OUTLETSTOCK'| translate}}:</label>
+
+                    <p>{{outletStock || 0}}</p>
+
+                </div>
+
+                <!-- <div class="p-field p-col-2">
+                    <label for="lastname1">CheckIn To:</label>
+                    <p>{{outlet || 'N/A'}}</p>
+                </div> -->
+                <div class="p-field p-col-1 p-mt-4">
+                    <button pButton pRipple label="{{'MANAGEDPRODUCT.SAVE'| translate}}" (click)="SaveTrackable();" icon="fas fa-plus"
+                        class="p-button-raised  p-mr-2"></button>
+                </div>
+
+            </div>
+        </div>
+        <!-- <div class="card c-card">
+
+            <div class="p-fluid p-formgrid p-grid">
+
+                <div class="p-field p-col-5">
+                    <label for="firstname5">Product Assigned Quantity</label>
+                    <input id="firstname5" type="text" pInputText [(ngModel)]="quantity" disabled="disabled"
+                        style="width: 91%;">
+                </div>
+                <div class="p-field p-col-2">
+                    <label for="lastname1">Selected Outlet Stock:</label>
+
+                    <p>{{outletStock || 0}}</p>
+
+                </div>
+                <div class="p-field p-col-2">
+                    <label for="lastname1">Head Quarter Stock:</label>
+                    <p>{{headquaterStock || 0}}</p>
+                </div>
+                <div class="p-field p-col-2">
+                    <label for="lastname1">CheckIn To:</label>
+                    <p>{{outlet || 'N/A'}}</p>
+                </div>
+                <div class="p-field p-col-1 p-mt-4">
+                    <button pButton pRipple label="Save" (click)="SaveTrackable();" icon="fas fa-plus"
+                        class="p-button-raised  p-mr-2"></button>
+                </div>
+            </div>
+        </div> -->
+        <!-- </p-toolbar> -->
+        <!-- [(selection)]="selectedOneProduct"  [loading]="loading"-->
+        <div class="table-border">
+            <p-table #dt [value]="AllTrackbleStockDetailsItemList" *ngIf="IsTrackable" [rows]="rows"
+                [totalRecords]="totalRecords" [(first)]="first"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true" dataKey="id" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"
+                [paginator]="true" [rowHover]="true" styleClass="p-datatable-responsive-demo" [filterDelay]="0">
+
+
+                <ng-template pTemplate="header">
+                    <tr>
+
+                        <th style="width: 4.5rem;"></th>
+                        <th pSortableColumn="Name"> Location <p-sortIcon field="Name"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="Description"> TrackableCode <p-sortIcon field="Description"></p-sortIcon>
+                        </th>
+
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="body" let-Trackable>
+                    <tr [pContextMenuRow]="Trackable">
+                        <td>
+                            <p-checkbox [(ngModel)]="Trackable.productChecked" binary="true" inputId="binary"
+                                (onChange)="TrackableCheckboxChange(Trackable,$event)"></p-checkbox>
+                        </td>
+
+                        <td>{{Trackable.Location}}</td>
+                        <td>{{Trackable.TrackableCode}}</td>
+
+                    </tr>
+                </ng-template>
+
+            </p-table>
+        </div>
+        <p-table #dt [value]="AllNonTrackbleStockDetailsItemList" *ngIf="!IsTrackable" [rows]="rows"
+            [totalRecords]="totalRecords" [(first)]="first"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [loading]="loading"
+            [showCurrentPageReport]="true" dataKey="id" [rowsPerPageOptions]=" [25, 50, 100, 200, 500, 1000, 5000]"
+            [paginator]="true" [rowHover]="true" styleClass="p-datatable-responsive-demo" [filterDelay]="0">
+
+            <ng-template pTemplate="header">
+                <tr>
+
+                    <!-- <th style="width: 4.5rem;" ></th> -->
+                    <th pSortableColumn="productChecked"> {{'MANAGEDPRODUCT.SELECT'| translate}} <p-sortIcon field="productChecked"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Location"> {{'MANAGEDPRODUCT.LOCATION'| translate}} <p-sortIcon field="Location"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="Quantity"> {{'MANAGEDPRODUCT.QUANTITY'| translate}} <p-sortIcon field="Quantity"></p-sortIcon>
+                    </th>
+                    <!-- <th pSortableColumn="SelectedQuantity"> Selected Quantity <p-sortIcon field="SelectedQuantity"></p-sortIcon></th> -->
+                    <th>{{'MANAGEDPRODUCT.SELECTEDQUANTITY'| translate}}</th>
+
+                </tr>
+
+            </ng-template>
+            <ng-template pTemplate="body" let-NonTrackable>
+                <tr [pContextMenuRow]="NonTrackable">
+                    <td>
+                        <!-- [(ngModel)]="IsNonTrackableChecked" -->
+                        <p-checkbox binary="true" [(ngModel)]="NonTrackable.productChecked" inputId="binary"
+                            (click)="NonTrackableCheckboxChange(NonTrackable,false)"></p-checkbox>
+                    </td>
+
+                    <td>{{NonTrackable.Location}}</td>
+                    <td>{{NonTrackable.Quantity}}</td>
+                    <td pEditableColumn>
+                        <p-inputNumber id="firstname5" type="number" [ngModel]="!NonTrackable.productChecked ? 0 : NonTrackable.SelectedQuantity ? NonTrackable.SelectedQuantity : NonTrackable.Quantity"
+                            [disabled]="!NonTrackable.productChecked"
+                            (onInput)="onChangeProductQuantity(NonTrackable, $event.value)"></p-inputNumber>
+                    </td>
+
+                </tr>
+            </ng-template>
+
+        </p-table>
+        <!-- (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems" 
+        (emitSwitch)="UpdateProductQualityStatusFunction($event)" 
+     (getLazyData)="GetAllProductWithLazyLoadinFunction($event)"-->
+        <!-- <div class="table-border" *ngIf="!IsTrackable">
+            <app-ss-generic-table [data]="AllNonTrackbleStockDetailsItemList" [columnsData]="columns"
+                [rowsPerPageOptions]="rowsPerPageOptions" [row]='25' [filterGlobal]="filterGlobal"
+                (emitCheckbox)="NonTrackableCheckboxChange(false,$event)" [multiSelect]="multiSelect">
+            </app-ss-generic-table>
+        </div> -->
+
+
+    </div>
+</div>
+
+<p-dialog header="Products" [(visible)]="IsOpenProductDialog" modal="modal" showEffect="fade"
+    [style]="{ width: '70vw' }">
+    <app-genric-table (emitRowClick)="selectValue($event)" [menuItems]="[]" [data]="ProductData"
+        [columnsData]="productsColumn" (emitCheckbox)="TrackableCheckboxChange(false,$event)">
+    </app-genric-table>
+
+</p-dialog>

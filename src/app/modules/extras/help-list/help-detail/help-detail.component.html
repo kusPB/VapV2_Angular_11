@@ -1,0 +1,40 @@
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+  <div class="card">
+    <div class="p-grid">
+      <div class="p-col" style="text-align: left;">
+        <h5>{{help.Heading}}</h5>
+      </div>
+    </div>
+    <div class="p-grid">
+      <div class="p-col" style="text-align: left;">
+        <p>{{help.Description}}</p>
+      </div>
+    </div>
+    
+    <p-timeline [value]="help.HelpDetails" align="alternate" styleClass="customized-timeline">
+      <ng-template pTemplate="marker" let-event>
+          <span class="custom-marker p-shadow-2" [style.backgroundColor]="event.Color">
+              <i [ngClass]="event.Icon"></i>
+          </span>
+      </ng-template>
+      <ng-template pTemplate="content" let-event>
+          <p-card [header]="event.Description">
+            <img *ngIf="event.Image" [src]="baseImagePath+event.Image" (click)="popUpImageFuction(baseImagePath+event.Image ?  baseImagePath+event.Image : '../../../../assets/layout/images/no-image.png')" [alt]="event.name" width="200" class="p-shadow-2" />
+            <p>{{event.DetailDescription}}</p>
+
+          </p-card>
+      </ng-template>
+  </p-timeline>
+  </div>
+</div>
+<p-galleria [(value)]="imgSrc" [(visible)]="displayImage" [containerStyle]="{'max-width': '850px'}" [numVisible]="7"
+  [circular]="true" [fullScreen]="true" [showItemNavigators]="true" [showThumbnails]="false" [baseZIndex]="100000">
+  <ng-template pTemplate="item" let-item>
+    <img [src]="item" style="width: 100%; display: block;" />
+  </ng-template>
+  <ng-template pTemplate="thumbnail" let-item>
+    <div class="p-grid p-nogutter p-justify-center">
+      <img [src]="item" style="display: block;" />
+    </div>
+  </ng-template>
+</p-galleria>

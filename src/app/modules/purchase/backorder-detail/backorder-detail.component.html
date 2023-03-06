@@ -1,0 +1,109 @@
+<!-- <button style="margin-left: 2px" pButton pRipple type="button" (click)="Print()" 
+    class="p-button p-button-success" icon="pi pi-print" title="Print" label="Print"></button> -->
+<app-backorder-detail-report [purchaseDetail]="purchaseDetail"></app-backorder-detail-report>
+<button style="margin-left: 2px" pButton pRipple type="button" routerLink="/purchase/back-order-report"
+  class="p-button p-button-secondary" icon="pi pi-times" title="Close" label="Close"></button>
+<div id="printArea" #screen>
+
+  <p-panel header="Back Order Information">
+    <div class="p-grid">
+      <div class="p-col">
+        <label>Supplier:</label>
+        {{purchaseDetail.Supplier}}<br>
+        {{purchaseDetail.supplierDetail?.PhoneNo || ''}}<br>
+        {{purchaseDetail.supplierDetail?.customerEmail || ''}}<br>
+        {{purchaseDetail.supplierDetail?.Address || ''}}<br>
+      </div>
+      <div class="p-col">
+        <label>Receipt Date:</label>
+        {{purchaseDetail.PurchaseDate | date}}
+        <br>
+
+        <label>Order Date:</label>
+        {{purchaseDetail.DueDate | date}}
+      </div>
+      <div class="p-col">
+        <label>Supplier Invoice No:</label>
+
+        {{purchaseDetail.SuppierInvoiceNo}}
+        <br>
+        <label>Order No:</label>
+        {{purchaseDetail.ID}}
+        <br>
+        <label>Exchange Rate:</label>
+        {{purchaseDetail.ExchangeRate}}
+
+        <!-- {{purchaseDetail.}} -->
+      </div>
+      <!-- <div class="p-col">
+      <label>Outlet:</label>
+      {{purchaseDetail.Outlet}}
+    </div> -->
+      <div class="p-col">
+        <label>Remarks:</label>
+        {{purchaseDetail.sRemarks}}
+      </div>
+    </div>
+  </p-panel>
+  <br><br>
+  <p-panel header="Purchase Detail Information">
+    <p-table [value]="purchaseDetail.PurchasesDetails">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Product</th>
+          <th>Model No</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+          <th>Discount%</th>
+          <th>Discount</th>
+          <th>Total</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td>{{product.Product}}</td>
+          <td>{{product.BLabel}}</td>
+          <td>{{product.Quantity}}</td>
+          <td><span >€ </span> {{product.ProductUnitPrice | number:'1.2-2' }}</td>
+          <td>{{product.discPerc}}</td>
+          <td><span >€ </span> {{product.dTotalDiscount | number:'1.2-2' }}</td>
+          <td><span >€ </span> {{product.dTotalAmount | number:'1.2-2' }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+  <br>
+  <div class="p-grid">
+    <div class="p-col-8">
+      <!-- <label>Supplier</label>
+      {{purchaseDetail.Supplier}}<br> -->
+    </div>
+
+
+    <div class="p-col-4">
+
+      <p-card>
+        <div class="p-grid">
+          <div class="p-col">SubTotal</div>
+          <div class="p-col"><span >€ </span> {{purchaseDetail.subTotal | number:'1.2-2' }}</div>
+        </div>
+        <div class="p-grid">
+          <div class="p-col">Total Discount</div>
+          <div class="p-col"><span >€ </span> {{purchaseDetail.totalDiscount | number:'1.2-2' }}</div>
+        </div>
+        <div class="p-grid">
+          <div class="p-col">
+            <h4><b>Grand Total</b></h4>
+          </div>
+          <div class="p-col">
+            <h4><b><span >€ </span>{{purchaseDetail.grandTotal | number:'1.2-2' }}</b></h4>
+          </div>
+        </div>
+        <!-- <div class="p-grid">
+        <div class="p-col">Paid Amount</div>
+        <div class="p-col"><span>€ </span>{{purchaseDetail.dTotalPaidValue | number:'1.2-2' }}</div>
+      </div> -->
+      </p-card>
+    </div>
+  </div>
+</div>

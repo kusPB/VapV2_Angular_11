@@ -1,0 +1,102 @@
+<div class="progress-spinner" *ngIf="IsSpinner">
+    <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- product variant-->
+
+<p-overlayPanel #op1>
+    <img src="assets/demo/images/nature/nature1.jpg" alt="Nature 1" />
+</p-overlayPanel>
+
+
+<p-toast></p-toast>
+
+<div class="p-col-12 p-m-0 p-p-0  p-shadow-2">
+    <div class="card">
+        <!-- <h4>Row Expand</h4> -->
+        <p-toolbar styleClass="p-mb-4">
+            <ng-template pTemplate="left">
+
+                <button pButton pRipple label="{{'MANAGEDPRODUCT.ADDSHOPCATEGORY'| translate}}" (click)="AddShopCategory();" icon="fas fa-plus"
+                    class="p-button-raised  p-mr-2"></button>
+                <button pButton pRipple label="{{'MANAGEDPRODUCT.ADDMULTIPLE'| translate}}" (click)="AddMultipleShopCategory();" icon="fas fa-plus" class="p-button-raised p-mr-2"></button>
+
+
+            </ng-template>
+
+        </p-toolbar>
+        <div class="card c-card" styleclass="p-mb-4" *ngIf="IsAdd">
+            <!-- <div> -->
+                <h5>{{'MANAGEDPRODUCT.SHOPCATEGORY'| translate}}</h5>
+                <div class="p-fluid p-formgrid p-grid">
+
+                    <div class="p-field p-col-6">
+                        <label>{{'MANAGEDPRODUCT.SHOPCATEGORIES'| translate}}</label>
+                        <ng-select [items]="filteredShopCategories" [virtualScroll]="true" bindLabel="Description"
+                            [(ngModel)]="selectedShop" [searchFn]="dataFunc">
+                            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                <span>{{item.Description}}</span>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                    <div class="p-field p-col-2">
+                        <label for="firstname1">{{'MANAGEDPRODUCT.NAME'| translate}}</label>
+                        <input id="firstname5" type="text" pInputText [(ngModel)]="shopCategory.Name">
+                    </div>
+
+                    <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                        <button pButton pRipple type="button" icon="fas fa-plus" label="{{'MANAGEDPRODUCT.SAVE'| translate}}"
+                            (click)="SaveUpdateShopCategoryDetails();" icon="fas fa-plus"
+                            class="p-button-raised p-mr-2"></button>
+
+                    </div>
+                    <div class="p-field" style="margin-right: 1rem;margin-top: 1.7rem">
+                        <button pButton pRipple label="{{'MANAGEDPRODUCT.CLOSE'| translate}}" icon="fas fa-times" class="p-button-raised p-mr-2"
+                            (click)="CloseAddSection();"></button>
+                    </div>
+                </div>
+
+            <!-- </div> -->
+
+            </div>
+
+        <app-genric-table (emitMenuAction)="emitAction($event)" [menuItems]="genericMenuItems"
+            (emitSwitch)="UpdateShopCateogryStatus($event)" [data]="AllShopCategoriesList" [columnsData]="columns"
+            [globalFilterFields]="globalFilterFields" [rowsPerPageOptions]="rowsPerPageOptions" [row]='25'>
+        </app-genric-table>
+
+
+    </div>
+</div>
+<p-dialog
+  header="Add Multiple shop Categories"
+  [(visible)]="AttachDocumentPopDisplayForShop"
+  modal="modal"
+  showEffect="fade"
+  [style]="{ width: '30vw' }"
+>
+  <div class="p-grid">
+    <div class="p-col-12">
+      <div class="card">
+        <h5>Document</h5>
+       
+        <p-fileUpload
+        name="myfile[]" 
+        mode="advanced"
+        customUpload="true"
+        (uploadHandler)="myUploaderForShop($event)"
+        accept="text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          maxFileSize="1000000"
+        >
+          <ng-template pTemplate="content">
+            <ul *ngIf="uploadedFilesShop.length">
+              <li *ngFor="let file of uploadedFilesShop">
+                {{ file.name }} - {{ file.size }} bytes
+              </li>
+            </ul>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+    </div>
+  </div>
+</p-dialog>

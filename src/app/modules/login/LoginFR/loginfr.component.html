@@ -1,0 +1,49 @@
+
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Vaplong</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+     <!-- <link rel="icon" type="image/png" href="images/icons/favicon.ico"/> -->
+	<link rel="stylesheet" type="text/css" href="../../../../assets/layout/LoginFR/css/main.css">
+
+</head>
+<body>
+	
+	<div class="limiter">		
+		<div class="container-login100">
+			<div class="wrap-login100">
+				
+				<div class="login100-form-title" style="background-image: url(../../../../assets/layout/LoginFR/images/image4.jpeg);">
+					<span class="login100-form-title-1">
+						Sign In
+					</span>				
+				</div>
+				<form class="login100-form validate-form">					
+					<div class="wrap-input100 validate-input m-b-26">
+						<label class="label-input100" for="name">Username</label>
+						<input class="input100" type="text" placeholder="User Name" [(ngModel)]="loginmodel.UserName">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-18">
+						<label class="label-input100" for="password">Password</label>
+						<input type="password" class="input100"  pPassword id="password" placeholder="Password" [(ngModel)]="loginmodel.Password" />
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" type="submit" (click)="loginuser();">
+							Sign In
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="progress-spinner" *ngIf="IsSpinner">
+		<p-progressSpinner></p-progressSpinner>
+	</div>
+</body>
+</html>
